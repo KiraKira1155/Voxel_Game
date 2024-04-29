@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 320159575c2303443bc8cc65a5b0430e, type: 3}
+  m_Name: Shovel
+  m_EditorClassIdentifier: 
+  toolDatas:
+  - _name: wodden_shovel
+    _texture: {fileID: 2800000, guid: 7cf75a02aacc6ab4396b304a1b71c147, type: 3}
+    _attribute: 0
+    _rarity: 1
+    _damage: 1.5
+    _durability: 128
+    _reuseTime: 1
+  - _name: stone_shovel
+    _texture: {fileID: 2800000, guid: 77738992951428e43b62e725ca2f9ef9, type: 3}
+    _attribute: 0
+    _rarity: 2
+    _damage: 2
+    _durability: 256
+    _reuseTime: 1
+  - _name: iron_shovel
+    _texture: {fileID: 2800000, guid: 87c1704603ea1a345bcb2bed3f355144, type: 3}
+    _attribute: 0
+    _rarity: 3
+    _damage: 3
+    _durability: 512
+    _reuseTime: 1
+  - _name: golden_shovel
+    _texture: {fileID: 2800000, guid: e0aca8327ca510d47a789a143abe5144, type: 3}
+    _attribute: 0
+    _rarity: 2
+    _damage: 2.5
+    _durability: 64
+    _reuseTime: 1

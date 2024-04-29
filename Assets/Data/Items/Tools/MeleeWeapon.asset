@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 320159575c2303443bc8cc65a5b0430e, type: 3}
+  m_Name: MeleeWeapon
+  m_EditorClassIdentifier: 
+  toolDatas:
+  - _name: wooden_sword
+    _texture: {fileID: 2800000, guid: a826f85f114a9b54299879c39a9e3d53, type: 3}
+    _attribute: 0
+    _rarity: 1
+    _damage: 2.5
+    _durability: 80
+    _reuseTime: 1.4
+  - _name: stone_sword
+    _texture: {fileID: 2800000, guid: a5efdff9fae5fd847a6a799dee8adde1, type: 3}
+    _attribute: 0
+    _rarity: 2
+    _damage: 3
+    _durability: 160
+    _reuseTime: 1.4
+  - _name: iron_sword
+    _texture: {fileID: 2800000, guid: 5920cc96c1925b845b16b25160bff4cc, type: 3}
+    _attribute: 0
+    _rarity: 3
+    _damage: 4.5
+    _durability: 300
+    _reuseTime: 1.4
+  - _name: golden_sword
+    _texture: {fileID: 2800000, guid: 4dbb52af29e718b45a46d31554362199, type: 3}
+    _attribute: 0
+    _rarity: 2
+    _damage: 3.5
+    _durability: 50
+    _reuseTime: 1.4

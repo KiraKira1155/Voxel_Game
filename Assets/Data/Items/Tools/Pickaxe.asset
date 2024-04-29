@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 320159575c2303443bc8cc65a5b0430e, type: 3}
+  m_Name: Pickaxe
+  m_EditorClassIdentifier: 
+  toolDatas:
+  - _name: wodden_pickaxe
+    _texture: {fileID: 2800000, guid: e76803cc18d38084e9486e3d80260743, type: 3}
+    _attribute: 0
+    _rarity: 1
+    _damage: 1.5
+    _durability: 160
+    _reuseTime: 1
+  - _name: stone_pickaxe
+    _texture: {fileID: 2800000, guid: 878ceba1527e12c49b7fdc76d08f82ed, type: 3}
+    _attribute: 0
+    _rarity: 2
+    _damage: 2
+    _durability: 288
+    _reuseTime: 1
+  - _name: iron_pickaxe
+    _texture: {fileID: 2800000, guid: 3bf6560cd50b1c14db4d3c39fab2df4f, type: 3}
+    _attribute: 0
+    _rarity: 10
+    _damage: 3
+    _durability: 576
+    _reuseTime: 1
+  - _name: golden_pickaxe
+    _texture: {fileID: 2800000, guid: 0b25c08e70ccf634bba7427f16895cd1, type: 3}
+    _attribute: 0
+    _rarity: 2
+    _damage: 2.5
+    _durability: 96
+    _reuseTime: 1

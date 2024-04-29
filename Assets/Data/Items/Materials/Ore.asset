@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c7557dc76737d9488320943bb77e211, type: 3}
+  m_Name: Ore
+  m_EditorClassIdentifier: 
+  materialDatas:
+  - _name: charcoal
+    _texture: {fileID: 2800000, guid: 388c0c8d47f712c4b8b9e55ff4581162, type: 3}
+    _stackMaxSize: 64
+  - _name: coal
+    _texture: {fileID: 2800000, guid: 02c9f4d38c135c0488e9beac42f57372, type: 3}
+    _stackMaxSize: 64
+  - _name: raw_iron
+    _texture: {fileID: 2800000, guid: 4ed75ea21427ca14ea1f60b40d43d8d8, type: 3}
+    _stackMaxSize: 64
+  - _name: iron_ingot
+    _texture: {fileID: 2800000, guid: f3575b06daae26a48b91657bcdeb821d, type: 3}
+    _stackMaxSize: 64
+  - _name: raw_copper
+    _texture: {fileID: 2800000, guid: 0221b5efbd331e64aa301a55a78bab73, type: 3}
+    _stackMaxSize: 64
+  - _name: copper_ingot
+    _texture: {fileID: 2800000, guid: 85ff066a57597364288e80f131344c40, type: 3}
+    _stackMaxSize: 64
+  - _name: raw_gold
+    _texture: {fileID: 2800000, guid: fa6da4b5acf84424e942c20baedd5944, type: 3}
+    _stackMaxSize: 64
+  - _name: gold_ingot
+    _texture: {fileID: 2800000, guid: f5de07a4ebbba8b4a89e857083522e76, type: 3}
+    _stackMaxSize: 64
