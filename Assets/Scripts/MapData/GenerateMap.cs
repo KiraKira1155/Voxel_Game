@@ -7,22 +7,42 @@ public class GenerateMap
 {
     private int biomeNum;
     private float seed;
-    private const float temperatureScale = 0.05f;
     private float[,] voxelNoise = new float[VoxelData.Width, VoxelData.Width];
+    
+    private const float mapScale = 0.1f;
+    private const short temperatureMapSize = 2048;
+    private const short precipitationMapSize = 2897;
+    private const short vegetationMapSize = 4096;
+    private byte[,] temperatureMap = new byte[temperatureMapSize, temperatureMapSize]; //64チャンク毎
+    private byte[,] precipitationMap = new byte[precipitationMapSize, precipitationMapSize];  //32チャンク毎
+    private byte[,] vegetationMap = new byte[vegetationMapSize, vegetationMapSize];  //16チャンク毎
 
     private BiomeAttributes[] biome;
+    [SerializeField] private int[] tempetatureMapDebug;
+    [SerializeField] private int[] precipitationMapDebug;
+    [SerializeField] private int[] vegetationMapDebug;
 
     //biome[]に対応した陸地レベルを生成
     //(256- 64 + 64 / 2=)160以上で最高レベル
     [SerializeField] private int[] terrestrialLv;
+
+    System.Random rand = new System.Random(ConfigManager.thisWorldSeed);
 
     public void Init()
     {
         biomeNum = World.I.biome.Length;
         biome = World.I.biome;
         seed = ConfigManager.seed;
-        InitTerrestrialLvForBiome(); 
-        InitVoxelPerlinNoise();
+        GenerateMapData();
+        //InitTerrestrialLvForBiome(); 
+        //InitVoxelPerlinNoise();
+    }
+
+    private void GenerateMapData()
+    {
+        GenarateTemperatureMap();
+        GenaratePrecipitationMap();
+        GenarateVegetationMap();
     }
 
     /// <summary>
@@ -38,11 +58,13 @@ public class GenerateMap
         return Mathf.FloorToInt(biome[biomeType].terrainHeight * GetVoxelPerBiomeHight(coord, biome[biomeType].terrainScale)) + biome[biomeType].solidGroundHight;
     }
 
-    public int GetBiomeType(ChunkCoord chunkCoord, Vector2 voxelPos)
+    public byte GetBiomeType(ChunkCoord chunkCoord, Vector2 voxelPos)
     {
-        for (int i = 0; i < biomeNum; i++)
+        for (byte i = 0; i < biomeNum; i++)
         {
-            if (biome[i].temperatureLv == GetTemperatureLv(chunkCoord, voxelPos))
+            if (biome[i].temperatureLv == GetTemperatureLv(chunkCoord) &&
+                biome[i].precipitationLv == GetPrecipitationLv(chunkCoord) &&
+                biome[i].vegetationLv == GetVegetationLv(chunkCoord))
             {
                 return i;
             }
@@ -50,60 +72,89 @@ public class GenerateMap
         return 0;
     }
 
-    private int GetTerrestrialLv(int solidGroundHight)
+    private byte GetTerrestrialLv(int solidGroundHight)
     {
-        int x = solidGroundHight;
-        if (x >= 160)
+        byte x = 10;
+        if (solidGroundHight >= 120)
             x = 7;
-        else if (x >= 136)
+        else if (solidGroundHight >= 112)
             x = 6;
-        else if (x >= 112)
+        else if (solidGroundHight >= 104)
             x = 5;
-        else if (x >= 88)
+        else if (solidGroundHight >= 96)
             x = 4;
-        else if (x >= 64)
+        else if (solidGroundHight >= 88)
             x = 3;
-        else if (x >= 54)
+        else if (solidGroundHight >= 80)
             x = 2;
-        else if (x >= 40)
+        else if (solidGroundHight >= 72)
             x = 1;
-        else if (x >= 26)
+        else if (solidGroundHight >= 64)
             x = 0;
-        else
-            x = -1;
 
         return x;
     }
-    
-    /// <summary>
-    /// Y=64の基本温度Lvの生成
-    /// </summary>
-    /// <returns>
-    /// パーリンノイズで生成した６段階の温度レベルが返ってくる
-    /// <para>生成にはチャンク座標とシード値、ボクセル座標が関係</para>
-    /// </returns>
-    private int GetTemperatureLv(ChunkCoord coord, Vector2 voxelPos)
-    {
-        Vector2 chunkPerlin = ChunkPerlinNoise(coord);
-        float voxelScale = voxelNoise[(int)voxelPos.x, (int)voxelPos.y];
-        return TemperatureLv(Mathf.PerlinNoise((chunkPerlin.x + voxelScale + coord.x * seed)　* temperatureScale, (chunkPerlin.y + voxelScale + coord.z * seed) * temperatureScale));
-    }
 
-    private int TemperatureLv(float getTemperatureLv)
+    private byte TemperatureLv(float noise)
     {
-        if (getTemperatureLv > 0.9f)
+        if (noise > 0.9f)
             return 5;
-        else if(getTemperatureLv > 0.75f)
+        else if(noise > 0.75f)
             return 4;
-        else if(getTemperatureLv > 0.55f)
+        else if(noise > 0.55f)
             return 3;
-        else if (getTemperatureLv > 0.25f)
+        else if (noise > 0.25f)
             return 2;
-        else if (getTemperatureLv > 0.10f)
+        else if (noise > 0.10f)
             return 1;
         else
             return 0;
 
+    }
+    private byte PrecipitationLv(float noise)
+    {
+        if (noise > 0.92f)
+            return 4;
+        else if (noise > 0.8f)
+            return 3;
+        else if (noise > 0.45f)
+            return 2;
+        else if (noise > 0.15f)
+            return 1;
+        else
+            return 0;
+
+    }
+    private byte VegetationLv(float noise)
+    {
+        if (noise > 0.85f)
+            return 4;
+        else if (noise > 0.63f)
+            return 3;
+        else if (noise > 0.37f)
+            return 2;
+        else if (noise > 0.15f)
+            return 1;
+        else
+            return 0;
+
+    }
+    private byte ContinentalnessLv(float noise)
+    {
+        if (noise > 0.885f)
+            return 6;
+        else if (noise > 0.745f)
+            return 5;
+        else if (noise > 0.585)
+            return 4;
+        else if (noise > 0.415)
+            return 3;
+        else if (noise > 0.235f)
+            return 2;
+        else if (noise > 0.085f)
+            return 1;
+        else
+            return 0;
     }
 
     /// <summary>
@@ -152,7 +203,93 @@ public class GenerateMap
             for(int y = 0;y < VoxelData.Width; y++)
             {
                 voxelNoise[x, y] = Mathf.PerlinNoise((x + seed) * 0.01f, (y + seed) * 0.01f);
-                Debug.Log(voxelNoise[x, y]);
             }
+    }
+
+    /// <summary>
+    /// ワールドの気温マップ生成
+    /// <para>
+    /// 64チャンクに１回使用
+    /// </para>
+    /// </summary>
+    private void GenarateTemperatureMap()
+    {
+        float x = (float)rand.NextDouble() * seed * mapScale;
+        float y = (float)rand.NextDouble() * seed * mapScale;
+        for (int i= 0; i < temperatureMapSize; i++)
+            for(int j= 0; j < temperatureMapSize; j++)
+            {
+                temperatureMap[i, j] = TemperatureLv(Mathf.PerlinNoise(i * 0.00000001f + x * (4194304 - i), (i - 4194304) * 0.00000001f + y * i));
+                tempetatureMapDebug[temperatureMap[i, j]]++;
+            }
+    }
+
+    private byte GetTemperatureLv(ChunkCoord coord)
+    {
+        int x = Mathf.FloorToInt(coord.x / 64);
+        int z = Mathf.FloorToInt(coord.z / 64);
+        return temperatureMap[x,z];
+    }
+
+    /// <summary>
+    /// ワールドの降水量マップ生成
+    /// <para>
+    /// 32チャンクに１回使用
+    /// </para>
+    /// </summary>
+    private void GenaratePrecipitationMap()
+    {
+        float x = (float)rand.NextDouble() * seed * mapScale;
+        float y = (float)rand.NextDouble() * seed * mapScale;
+        for (int i = 0; i < precipitationMapSize; i++)
+            for (int j = 0; j < precipitationMapSize; j++)
+            {
+                precipitationMap[i, j] = PrecipitationLv(Mathf.PerlinNoise(i * 0.00000001f + x * (8392609 - i), (i - 8392609) * 0.00000001f + y * i));
+                precipitationMapDebug[precipitationMap[i, j]]++;
+            }
+    }
+    private byte GetPrecipitationLv(ChunkCoord coord)
+    {
+        int x = Mathf.FloorToInt(coord.x / 32);
+        int z = Mathf.FloorToInt(coord.z / 32);
+        return precipitationMap[x, z];
+    }
+
+    /// <summary>
+    /// ワールドの植生マップ生成
+    /// <para>
+    /// 16チャンクに１回使用
+    /// </para>
+    /// </summary>
+    private void GenarateVegetationMap()
+    {
+        float x = (float)rand.NextDouble() * seed * mapScale;
+        float y = (float)rand.NextDouble() * seed * mapScale;
+        for (int i = 0; i < vegetationMapSize; i++)
+            for (int j = 0; j < vegetationMapSize; j++)
+            {
+                vegetationMap[i, j] = VegetationLv(Mathf.PerlinNoise(i * 0.00000001f + x * (16777216 - i), (i - 16777216) * 0.00000001f + y * i));
+                vegetationMapDebug[vegetationMap[i, j]]++;
+            }
+    }
+    private byte GetVegetationLv(ChunkCoord coord)
+    {
+        int x = Mathf.FloorToInt(coord.x / 16);
+        int z = Mathf.FloorToInt(coord.z / 16);
+        return vegetationMap[x, z];
+    }
+
+    /// <summary>
+    /// 大陸性の生成
+    /// </summary>
+    private void GenerateContinentalness()
+    {
+
+    }
+    private byte GetContinentalnessLv(ChunkCoord coord)
+    {
+        int x = Mathf.FloorToInt(coord.x / 6);
+        int z = Mathf.FloorToInt(coord.z / 6);
+        return vegetationMap[x, z];
     }
 }

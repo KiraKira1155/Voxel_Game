@@ -11,8 +11,8 @@ public class ConfigManager
     [SerializeField] private bool creative;
     public static int thisWorldSeed { get; private set; }
     public static float seed { get; private set; }
-    public static int WorldSizeInChunks { get; private set; } = 10000;
-    public static int ViewDistanceInChunk { get; private set; } = 15;
+    public static short WorldSizeInChunks { get; private set; } = 16384;
+    public static byte ViewDistanceInChunk { get; private set; } = 15;
 
     public static int HorizontalSpeed { get; private set; }
     public static int VerticalSpeed { get; private set; }
