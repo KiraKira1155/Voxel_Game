@@ -1293,14 +1293,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generateMap:
+    tempetatureMapDebug: 000000000000000000000000000000000000000000000000
+    precipitationMapDebug: 0000000000000000000000000000000000000000
+    vegetationMapDebug: 0000000000000000000000000000000000000000
+    continentalnessMapDebug: 00000000000000000000000000000000000000000000000000000000
     terrestrialLv: 
   biome:
-  - {fileID: 11400000, guid: 08a884d06dbf44440bc61e3da285e556, type: 2}
-  - {fileID: 11400000, guid: a52dc8a495f0ab142a99700da13b73ff, type: 2}
-  - {fileID: 11400000, guid: 5c3daa03d787434409d8a50b37e91752, type: 2}
-  - {fileID: 11400000, guid: ceb6beb03934fab478fad1266a19015e, type: 2}
-  - {fileID: 11400000, guid: 6a581ef2000c9aa4794b29baf8b6115a, type: 2}
-  - {fileID: 11400000, guid: f04a94c49b7203c48a8622b5763b311b, type: 2}
+  - {fileID: 11400000, guid: 5d9910fe3d9c7394493b4ed164704176, type: 2}
+  - {fileID: 11400000, guid: e31fbfb4dfa8cf34aa31ddf158e2e937, type: 2}
+  - {fileID: 11400000, guid: 99100593037724c47a2a5addaffb8428, type: 2}
   spawnPosition: {x: 0, y: 0, z: 0}
   material: {fileID: 2100000, guid: a0b8710d82ae3214bb54c4914b7d52c8, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 451584097eda4764cb81d4f86430ee6c, type: 2}

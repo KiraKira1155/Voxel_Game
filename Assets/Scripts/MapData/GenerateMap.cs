@@ -13,14 +13,17 @@ public class GenerateMap
     private const short temperatureMapSize = 2048;
     private const short precipitationMapSize = 2897;
     private const short vegetationMapSize = 4096;
+    private const short continentalnessMapSize = 6689;
     private byte[,] temperatureMap = new byte[temperatureMapSize, temperatureMapSize]; //64チャンク毎
     private byte[,] precipitationMap = new byte[precipitationMapSize, precipitationMapSize];  //32チャンク毎
     private byte[,] vegetationMap = new byte[vegetationMapSize, vegetationMapSize];  //16チャンク毎
+    private byte[,] continentalnessMap = new byte[continentalnessMapSize, continentalnessMapSize];  //6チャンク毎
 
     private BiomeAttributes[] biome;
     [SerializeField] private int[] tempetatureMapDebug;
     [SerializeField] private int[] precipitationMapDebug;
     [SerializeField] private int[] vegetationMapDebug;
+    [SerializeField] private int[] continentalnessMapDebug;
 
     //biome[]に対応した陸地レベルを生成
     //(256- 64 + 64 / 2=)160以上で最高レベル
@@ -34,6 +37,10 @@ public class GenerateMap
         biome = World.I.biome;
         seed = ConfigManager.seed;
         GenerateMapData();
+
+        for(int x = 1000; x < 1020;x++)
+            for (int y = 1000; y < 1020; y++)
+                Debug.Log(temperatureMap[x, y]);
         //InitTerrestrialLvForBiome(); 
         //InitVoxelPerlinNoise();
     }
@@ -43,6 +50,7 @@ public class GenerateMap
         GenarateTemperatureMap();
         GenaratePrecipitationMap();
         GenarateVegetationMap();
+        GenerateContinentalnessMap();
     }
 
     /// <summary>
@@ -95,36 +103,68 @@ public class GenerateMap
         return x;
     }
 
+    /// <summary>
+    /// 温度レベル
+    /// </summary>
+    /// <param name="noise"></param>
+    /// <returns>
+    /// 0～5の整数値
+    /// <para>
+    /// 0から順に 13% 18% 27% 23% 12% 7%
+    /// </para>
+    /// </returns>
     private byte TemperatureLv(float noise)
     {
-        if (noise > 0.9f)
+        if (noise > 0.93f)
             return 5;
-        else if(noise > 0.75f)
+        else if(noise > 0.81f)
             return 4;
-        else if(noise > 0.55f)
+        else if(noise > 0.58f)
             return 3;
-        else if (noise > 0.25f)
+        else if (noise > 0.31f)
             return 2;
-        else if (noise > 0.10f)
+        else if (noise > 0.13f)
             return 1;
         else
             return 0;
 
     }
+
+    /// <summary>
+    /// 降水量レベル
+    /// </summary>
+    /// <param name="noise"></param>
+    /// <returns>
+    /// 0～4の整数値
+    /// <para>
+    /// 0から順に 22% 29% 27% 17% 5%
+    /// </para>
+    /// </returns>
     private byte PrecipitationLv(float noise)
     {
-        if (noise > 0.92f)
+        if (noise > 0.95f)
             return 4;
-        else if (noise > 0.8f)
+        else if (noise > 0.78f)
             return 3;
-        else if (noise > 0.45f)
+        else if (noise > 0.51f)
             return 2;
-        else if (noise > 0.15f)
+        else if (noise > 0.22f)
             return 1;
         else
             return 0;
 
     }
+
+    /// <summary>
+    /// 植生レベル
+    /// </summary>
+    /// <param name="noise"></param>
+    /// <returns>
+    /// 0～4の整数値
+    /// <para>
+    /// 0から順に 15% 22% 26% 22% 15%
+    /// </para>
+    /// </returns>
     private byte VegetationLv(float noise)
     {
         if (noise > 0.85f)
@@ -139,19 +179,34 @@ public class GenerateMap
             return 0;
 
     }
+
+    /// <summary>
+    /// 大陸性
+    /// 海と陸地を分けるのに使用
+    /// </summary>
+    /// <param name="noise"></param>
+    /// <returns>
+    /// 0～6の整数値
+    /// <para>
+    /// 0～2が海（数字が低いほど深く）他は陸地
+    /// </para>
+    /// <para>
+    /// 0から順に 海(50%) 16.5% % 21% 12.5% 陸地(50%) 18.5% 17.5% 9.5% 4.5%
+    /// </para>
+    /// </returns>
     private byte ContinentalnessLv(float noise)
     {
-        if (noise > 0.885f)
+        if (noise > 0.955f)
             return 6;
-        else if (noise > 0.745f)
+        else if (noise > 0.86f)
             return 5;
-        else if (noise > 0.585)
+        else if (noise > 0.685f)
             return 4;
-        else if (noise > 0.415)
+        else if (noise > 0.5f)
             return 3;
-        else if (noise > 0.235f)
+        else if (noise > 0.375f)
             return 2;
-        else if (noise > 0.085f)
+        else if (noise > 0.165f)
             return 1;
         else
             return 0;
@@ -214,13 +269,13 @@ public class GenerateMap
     /// </summary>
     private void GenarateTemperatureMap()
     {
-        float x = (float)rand.NextDouble() * seed * mapScale;
-        float y = (float)rand.NextDouble() * seed * mapScale;
+        float x = (float)rand.NextDouble() * seed * mapScale + 0.001f;
+        float y = (float)rand.NextDouble() * seed * mapScale + 0.001f;
         for (int i= 0; i < temperatureMapSize; i++)
             for(int j= 0; j < temperatureMapSize; j++)
             {
-                temperatureMap[i, j] = TemperatureLv(Mathf.PerlinNoise(i * 0.00000001f + x * (4194304 - i), (i - 4194304) * 0.00000001f + y * i));
-                tempetatureMapDebug[temperatureMap[i, j]]++;
+                temperatureMap[i, j] = TemperatureLv(Mathf.PerlinNoise((i + seed) * 0.0001f + (temperatureMapSize - i) * x, (j + seed) * 0.0001f + (temperatureMapSize - j) * y));
+                tempetatureMapDebug[temperatureMap[i, j]] += 1;
             }
     }
 
@@ -239,12 +294,12 @@ public class GenerateMap
     /// </summary>
     private void GenaratePrecipitationMap()
     {
-        float x = (float)rand.NextDouble() * seed * mapScale;
-        float y = (float)rand.NextDouble() * seed * mapScale;
+        float x = (float)rand.NextDouble() * seed * mapScale + 0.001f;
+        float y = (float)rand.NextDouble() * seed * mapScale + 0.001f;
         for (int i = 0; i < precipitationMapSize; i++)
             for (int j = 0; j < precipitationMapSize; j++)
             {
-                precipitationMap[i, j] = PrecipitationLv(Mathf.PerlinNoise(i * 0.00000001f + x * (8392609 - i), (i - 8392609) * 0.00000001f + y * i));
+                precipitationMap[i, j] = PrecipitationLv(Mathf.PerlinNoise((i + seed) * 0.0001f + (precipitationMapSize - i) * x, (j + seed) * 0.0001f + (precipitationMapSize - j) * y));
                 precipitationMapDebug[precipitationMap[i, j]]++;
             }
     }
@@ -263,12 +318,12 @@ public class GenerateMap
     /// </summary>
     private void GenarateVegetationMap()
     {
-        float x = (float)rand.NextDouble() * seed * mapScale;
-        float y = (float)rand.NextDouble() * seed * mapScale;
+        float x = (float)rand.NextDouble() * seed * mapScale + 0.001f;
+        float y = (float)rand.NextDouble() * seed * mapScale + 0.001f;
         for (int i = 0; i < vegetationMapSize; i++)
             for (int j = 0; j < vegetationMapSize; j++)
             {
-                vegetationMap[i, j] = VegetationLv(Mathf.PerlinNoise(i * 0.00000001f + x * (16777216 - i), (i - 16777216) * 0.00000001f + y * i));
+                vegetationMap[i, j] = VegetationLv(Mathf.PerlinNoise((i + seed) * 0.0001f + (vegetationMapSize - i) * x, (j + seed) * 0.0001f + (vegetationMapSize - j) * y));
                 vegetationMapDebug[vegetationMap[i, j]]++;
             }
     }
@@ -282,14 +337,21 @@ public class GenerateMap
     /// <summary>
     /// 大陸性の生成
     /// </summary>
-    private void GenerateContinentalness()
+    private void GenerateContinentalnessMap()
     {
-
+        float x = (float)rand.NextDouble() * seed * mapScale + 0.001f;
+        float y = (float)rand.NextDouble() * seed * mapScale + 0.001f;
+        for (int i = 0; i < continentalnessMapSize; i++)
+            for (int j = 0; j < continentalnessMapSize; j++)
+            {
+                continentalnessMap[i, j] = ContinentalnessLv(Mathf.PerlinNoise((i + seed) * 0.0001f + (continentalnessMapSize - i) * x, (j + seed) * 0.0001f + (continentalnessMapSize - j) * y));
+                continentalnessMapDebug[continentalnessMap[i, j]]++;
+            }
     }
     private byte GetContinentalnessLv(ChunkCoord coord)
     {
         int x = Mathf.FloorToInt(coord.x / 6);
         int z = Mathf.FloorToInt(coord.z / 6);
-        return vegetationMap[x, z];
+        return continentalnessMap[x, z];
     }
 }

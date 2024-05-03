@@ -7,12 +7,13 @@ using UnityEngine;
 public class BiomeAttributes : ScriptableObject
 {
     [Tooltip("y=64の時の温度" +
-        "\n2が中央位のイメージ、4が砂漠")]
-    [Range(0, 5)]
+        "\n1より下は氷雪地帯、2が温帯のイメージ、4が猛暑")]
+    [Range(0, 4)]
     public int temperatureLv;
 
-    [Tooltip("湿度レベル")]
-    [Range(0, 4)]
+    [Tooltip("降水量レベル" +
+        "\n0が乾燥地帯、3が豪雨地帯")]
+    [Range(0, 3)]
     public int precipitationLv;
 
     [Tooltip("植生レベル" +

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db9fc2babea467b40881dde08b90e8ad, type: 3}
   m_Name: Desert
   m_EditorClassIdentifier: 
-  temperatureLv: 6
+  temperatureLv: 4
   precipitationLv: 0
   vegetationLv: 0
   solidGroundHight: 64
