@@ -8,6 +8,7 @@ public class World : Singleton<World>
     public GenerateMap generateMap = new GenerateMap();
     public float seed { get; private set; }
     public BiomeAttributes[] biome;
+    public OceanBiomeAttributes[] oceanBiome;
 
     [SerializeField] private Vector3 spawnPosition;
 
@@ -75,7 +76,7 @@ public class World : Singleton<World>
         int spawmXZ = WorldSizeInVoxels / 2;
         ChunkCoord chunk = new ChunkCoord(new Vector3(spawmXZ, 0, spawmXZ));
         Vector2 voxelPos = chunks[chunk.x, chunk.z].GetVoxelPos(new Vector2(spawmXZ, spawmXZ));
-        int biomeType = generateMap.GetBiomeType(chunk, voxelPos);
+        int biomeType = generateMap.GetBiomeType(chunk, voxelPos).Item1;
         float spawnY = generateMap.GetSolidGroundHight(chunk, biomeType);
         return new Vector3(spawmXZ, spawnY, spawmXZ);
     }

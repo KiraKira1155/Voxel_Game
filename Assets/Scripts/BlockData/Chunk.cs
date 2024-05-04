@@ -61,7 +61,7 @@ public class Chunk
         for (int x = 0; x < Width; x++)
             for (int z = 0; z < Width; z++)
             {
-				biomeMap[x, z] = World.I.generateMap.GetBiomeType(coord, new Vector2(x, z));
+				biomeMap[x, z] = World.I.generateMap.GetBiomeType(coord, new Vector2(x, z)).Item1;
 				heightMap[x, z] = World.I.generateMap.GetSolidGroundHight(coord, biomeMap[x, z]);
             }
 

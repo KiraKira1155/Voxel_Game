@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [System.Serializable]
@@ -20,6 +21,7 @@ public class GenerateMap
     private byte[,] continentalnessMap = new byte[continentalnessMapSize, continentalnessMapSize];  //6チャンク毎
 
     private BiomeAttributes[] biome;
+    private OceanBiomeAttributes[] oceanBiome;
     [SerializeField] private int[] tempetatureMapDebug;
     [SerializeField] private int[] precipitationMapDebug;
     [SerializeField] private int[] vegetationMapDebug;
@@ -35,12 +37,9 @@ public class GenerateMap
     {
         biomeNum = World.I.biome.Length;
         biome = World.I.biome;
+        oceanBiome = World.I.oceanBiome;
         seed = ConfigManager.seed;
         GenerateMapData();
-
-        for(int x = 1000; x < 1020;x++)
-            for (int y = 1000; y < 1020; y++)
-                Debug.Log(temperatureMap[x, y]);
         //InitTerrestrialLvForBiome(); 
         //InitVoxelPerlinNoise();
     }
@@ -66,18 +65,61 @@ public class GenerateMap
         return Mathf.FloorToInt(biome[biomeType].terrainHeight * GetVoxelPerBiomeHight(coord, biome[biomeType].terrainScale)) + biome[biomeType].solidGroundHight;
     }
 
-    public byte GetBiomeType(ChunkCoord chunkCoord, Vector2 voxelPos)
+    /// <summary>
+    /// チャンクのバイオームタイプ
+    /// </summary>
+    /// <param name="chunkCoord"></param>
+    /// <param name="voxelPos"></param>
+    /// <returns>
+    /// 第1戻り値がバイオームの種類
+    /// <para>
+    /// 第2戻り値がtrueなら海、falseなら陸地のバイオーム
+    /// </para>
+    /// </returns>
+    public (byte, bool) GetBiomeType(ChunkCoord chunkCoord, Vector2 voxelPos)
     {
-        for (byte i = 0; i < biomeNum; i++)
-        {
-            if (biome[i].temperatureLv == GetTemperatureLv(chunkCoord) &&
-                biome[i].precipitationLv == GetPrecipitationLv(chunkCoord) &&
-                biome[i].vegetationLv == GetVegetationLv(chunkCoord))
+        if(BiomeTypeOcean(chunkCoord))
+            for (byte i = 0; i < biomeNum; i++)
             {
-                return i;
+                if (biome[i].temperatureLv == GetTemperatureLv(chunkCoord) &&
+                    biome[i].precipitationLv == GetPrecipitationLv(chunkCoord) &&
+                    biome[i].vegetationLv == GetVegetationLv(chunkCoord))
+                {
+                    return (i, true);
+                }
             }
+        else
+            for (byte i = 0; i < biomeNum; i++)
+            {
+                if (biome[i].temperatureLv == GetTemperatureLv(chunkCoord) &&
+                    biome[i].precipitationLv == GetPrecipitationLv(chunkCoord) &&
+                    biome[i].vegetationLv == GetVegetationLv(chunkCoord))
+                {
+                    return (i, false);
+                }
+            }
+
+        return (0, true);
+    }
+
+    private bool BiomeTypeOcean(ChunkCoord chunkCoord)
+    {
+
+        switch (GetContinentalnessLv(chunkCoord))
+        {
+            case 0:
+            case 1:
+            case 2:
+                return true;
+
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+                return false;
         }
-        return 0;
+
+        return true;
     }
 
     private byte GetTerrestrialLv(int solidGroundHight)
@@ -104,7 +146,7 @@ public class GenerateMap
     }
 
     /// <summary>
-    /// 温度レベル
+    /// 気温レベル
     /// </summary>
     /// <param name="noise"></param>
     /// <returns>
@@ -278,7 +320,13 @@ public class GenerateMap
                 tempetatureMapDebug[temperatureMap[i, j]] += 1;
             }
     }
-
+    /// <summary>
+    /// 気温レベル
+    /// </summary>
+    /// <param name="coord"></param>
+    /// <returns>
+    /// 0～5の整数値
+    /// </returns>
     private byte GetTemperatureLv(ChunkCoord coord)
     {
         int x = Mathf.FloorToInt(coord.x / 64);
@@ -303,6 +351,13 @@ public class GenerateMap
                 precipitationMapDebug[precipitationMap[i, j]]++;
             }
     }
+    /// <summary>
+    /// 降水量レベル
+    /// </summary>
+    /// <param name="coord"></param>
+    /// <returns>
+    /// 0～4の整数値
+    /// </returns>
     private byte GetPrecipitationLv(ChunkCoord coord)
     {
         int x = Mathf.FloorToInt(coord.x / 32);
@@ -327,6 +382,13 @@ public class GenerateMap
                 vegetationMapDebug[vegetationMap[i, j]]++;
             }
     }
+    /// <summary>
+    /// 植生レベル
+    /// </summary>
+    /// <param name="coord"></param>
+    /// <returns>
+    /// 0～4の整数値
+    /// </returns>
     private byte GetVegetationLv(ChunkCoord coord)
     {
         int x = Mathf.FloorToInt(coord.x / 16);
@@ -348,6 +410,13 @@ public class GenerateMap
                 continentalnessMapDebug[continentalnessMap[i, j]]++;
             }
     }
+    /// <summary>
+    /// 大陸性レベル
+    /// </summary>
+    /// <param name="coord"></param>
+    /// <returns>
+    /// 0～6の整数値
+    /// </returns>
     private byte GetContinentalnessLv(ChunkCoord coord)
     {
         int x = Mathf.FloorToInt(coord.x / 6);
