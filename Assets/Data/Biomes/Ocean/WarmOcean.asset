@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 696084d2c6d410147b19db5aaff11101, type: 3}
   m_Name: WarmOcean
   m_EditorClassIdentifier: 
-  temperatureLv: 0
-  continentalness: 0
+  temperatureLv: 4
+  continentalness: 2
   terrainHeight: 0
   topBlocks: 0
   middleLayer: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DeepLukewarmOcean
   m_EditorClassIdentifier: 
   temperatureLv: 3
-  continentalness: 1
+  continentalness: 0
   terrainHeight: 0
   topBlocks: 0
   middleLayer: 0
