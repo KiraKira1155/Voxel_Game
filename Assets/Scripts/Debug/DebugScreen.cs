@@ -48,6 +48,7 @@ public class DebugScreen : Singleton<DebugScreen>
         debugText.Append(NewLine());
         debugText.Append(DebugBlockType());
         debugText.Append(NewLine());
+        debugText.Append(DebugBiome());
         text.text = debugText.ToString();
     }
 
@@ -93,6 +94,15 @@ public class DebugScreen : Singleton<DebugScreen>
         return
         string.Format("ChunkCoordX: {0}\nChunkCoordZ: {1}"
             , (playerCoord.x - worldSizeChunks).ToString(), (playerCoord.z - worldSizeChunks).ToString());
+    }
+
+    private string DebugBiome()
+    {
+        Vector3 playerPos = PlayerManager.I.transform.position;
+        ChunkCoord playerCoord = new ChunkCoord(playerPos);
+        return
+        string.Format("Biome: {0}"
+            , World.I.generateMap.GetBiomeType(playerCoord, new Vector2()).ToString());
     }
 
     private string DebugSeed()

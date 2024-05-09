@@ -23,7 +23,7 @@ public class EnumGameData
 
         ore
     }
-    public enum Attribute
+    public enum WeaponAttribute
     {
         nihility,
         fire,
@@ -35,22 +35,51 @@ public class EnumGameData
         life,
         death
     }
+
+    public enum BlockType
+    {
+        cube
+    }
+
     public enum BlockID
     {
         air,
         bedrock,
-        stone,
-        grass,
-        sand,
         dirt,
-        oakLog,
-        oakPlanks,
-        bricks,
-        cobblestone,
-        furnace,
-        glass,
+        grass,
+        coarseDirt,
+        snow,
+        SnowDirt,
+        sand,
+        redSand,
+        gravel,
+        stone,
+        cobble,
+        deepslate,
+        cobbleDeepslate,
+        andesite,
+        granite,
+        diorite,
         coalOre,
-        oakLeaf
+        ironOre,
+        goldOre,
+        diamondOre,
+        redstoneOre,
+        copperOre,
+        emeraldOre,
+        ancientDebris,
+        coalBlock,
+        ironBlock,
+        goldBlock,
+        diamondBlock,
+        redstoneBlock,
+        copperBlock,
+        emeraldBlock,
+        NetheriteBlock,
+        log,
+        leaf,
+        glass
+
     }
     public enum ItemID
     {

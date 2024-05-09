@@ -15,7 +15,7 @@ MonoBehaviour:
   temperatureLv: 4
   precipitationLv: 0
   vegetationLv: 0
-  solidGroundHight: 60
+  solidGroundHight: 64
   terrainHeight: 10
   terrainScale: 0.4
   topBlocks: 3

@@ -11,7 +11,7 @@ public class ToolAttributes : ScriptableObject
 public interface IToolData : IItemData
 {
     EnumGameData.ItemType itemType();
-    EnumGameData.Attribute attribute();
+    EnumGameData.WeaponAttribute attribute();
     int rarity();
     float damage();
     float reuseTime();
@@ -23,14 +23,14 @@ public class ToolData : IToolData
 {
     [SerializeField] private string _name;
     [SerializeField] private Texture _texture;
-    [SearchableEnum][SerializeField] private EnumGameData.Attribute _attribute;
+    [SearchableEnum][SerializeField] private EnumGameData.WeaponAttribute _attribute;
     [Range(1, 10)][SerializeField] private int _rarity;
     [Range(1, 100)][SerializeField] private float _damage;
     [Tooltip("-1‚ÍA‘Ï‹v‚ª–³ŒÀ")]
     [Range(-1, 10000)][SerializeField] private int _durability;
     [Range(0, 10)][SerializeField] private float _reuseTime;
 
-    public EnumGameData.Attribute attribute()
+    public EnumGameData.WeaponAttribute attribute()
     {
         return _attribute;
     }

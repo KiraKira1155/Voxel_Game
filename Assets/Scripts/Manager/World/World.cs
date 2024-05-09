@@ -77,7 +77,12 @@ public class World : Singleton<World>
         ChunkCoord chunk = new ChunkCoord(new Vector3(spawmXZ, 0, spawmXZ));
         Vector2 voxelPos = chunks[chunk.x, chunk.z].GetVoxelPos(new Vector2(spawmXZ, spawmXZ));
         int biomeType = generateMap.GetBiomeType(chunk, voxelPos).Item1;
-        float spawnY = generateMap.GetSolidGroundHight(chunk, biomeType);
+        bool ocean = generateMap.GetBiomeType(chunk, voxelPos).Item2;
+        float spawnY;
+        if (ocean)
+            spawnY = generateMap.GetSolidOceanGroundHight(chunk, biomeType);
+        else
+            spawnY = generateMap.GetSolidGroundHight(chunk, biomeType);
         return new Vector3(spawmXZ, spawnY, spawmXZ);
     }
 
@@ -385,13 +390,13 @@ public class World : Singleton<World>
     }
 
     //É`ÉÉÉìÉNÇÃèâä˙ê∂ê¨óp
-    public int GetVoxel(Vector3 voxelPos, int biomeType, int terrainHeight)
+    public int GetVoxel(Vector3 voxelPos, int biomeType, bool ocean, int terrainHeight)
     {
         voxelPos.y = Mathf.FloorToInt(voxelPos.y);
 
         int voxelValue;
 
-        voxelValue = PopulateVoxel(voxelPos, terrainHeight, biomeType);
+        voxelValue = PopulateVoxel(voxelPos, biomeType, ocean, terrainHeight);
         if (voxelPos.y == terrainHeight)
         {
         }
@@ -403,7 +408,7 @@ public class World : Singleton<World>
         return voxelValue;
     }
 
-    private int PopulateVoxel(Vector3 pos, int terrainHight, int biomeType)
+    private int PopulateVoxel(Vector3 pos, int biomeType, bool ocean, int terrainHight)
     {
         /* IMMUTABLE PASS */
 
@@ -418,14 +423,28 @@ public class World : Singleton<World>
         /* BASIC TERRAIN PASS */
         int voxelValue;
 
-        if (pos.y == terrainHight)
-            voxelValue = (int)biome[biomeType].topBlocks;
-        else if (pos.y < terrainHight && pos.y > terrainHight - 4)
-            voxelValue = (int)biome[biomeType].middleLayer;
-        else if (pos.y > terrainHight)
-            return (int)EnumGameData.BlockID.air;
+        if (ocean)
+        {
+            if (pos.y == terrainHight)
+                voxelValue = (int)oceanBiome[biomeType].topBlocks;
+            else if (pos.y < terrainHight && pos.y > terrainHight - 4)
+                voxelValue = (int)oceanBiome[biomeType].middleLayer;
+            else if (pos.y > terrainHight)
+                return (int)EnumGameData.BlockID.air;
+            else
+                voxelValue = (int)oceanBiome[biomeType].basicsBlocks;
+        }
         else
-            voxelValue = (int)biome[biomeType].basicsBlocks;
+        {
+            if (pos.y == terrainHight)
+                voxelValue = (int)biome[biomeType].topBlocks;
+            else if (pos.y < terrainHight && pos.y > terrainHight - 4)
+                voxelValue = (int)biome[biomeType].middleLayer;
+            else if (pos.y > terrainHight)
+                return (int)EnumGameData.BlockID.air;
+            else
+                voxelValue = (int)biome[biomeType].basicsBlocks;
+        }
 
         return voxelValue;
     }

@@ -1299,9 +1299,21 @@ MonoBehaviour:
     continentalnessMapDebug: 00000000000000000000000000000000000000000000000000000000
     terrestrialLv: 
   biome:
+  - {fileID: 11400000, guid: 596c593b1ba62bc44a936f2da044f48e, type: 2}
   - {fileID: 11400000, guid: 5d9910fe3d9c7394493b4ed164704176, type: 2}
   - {fileID: 11400000, guid: e31fbfb4dfa8cf34aa31ddf158e2e937, type: 2}
   - {fileID: 11400000, guid: 99100593037724c47a2a5addaffb8428, type: 2}
+  oceanBiome:
+  - {fileID: 11400000, guid: 00f8a7060ce6e594399c0348ffca5481, type: 2}
+  - {fileID: 11400000, guid: 724ffe4adaa226b43a34f9859c4d3bbc, type: 2}
+  - {fileID: 11400000, guid: bdd91f285c5d7a646aa2cb88023cf09b, type: 2}
+  - {fileID: 11400000, guid: 9a17b0f3f7ca4cd4eb97fe8977d847f8, type: 2}
+  - {fileID: 11400000, guid: 84c976eea5dca2f419e070ba2d2c2c61, type: 2}
+  - {fileID: 11400000, guid: e282a505fce84b944b8e5f483011bead, type: 2}
+  - {fileID: 11400000, guid: 62a9512b6910fcd48ab97f771138be85, type: 2}
+  - {fileID: 11400000, guid: ba88947f1b2ba4046ab701a5788754b3, type: 2}
+  - {fileID: 11400000, guid: 69734c2b62999c441a8b0a7575ab6a66, type: 2}
+  - {fileID: 11400000, guid: 7322cde8e4e9ed14082f38a7e0224509, type: 2}
   spawnPosition: {x: 0, y: 0, z: 0}
   material: {fileID: 2100000, guid: a0b8710d82ae3214bb54c4914b7d52c8, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 451584097eda4764cb81d4f86430ee6c, type: 2}
@@ -3008,6 +3020,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blocktype:
   - _name: Air
+    blockType: 0
+    _gravity: 0
     _isSolid: 0
     _isTransparent: 1
     _stackMaxSize: 0
@@ -3024,6 +3038,8 @@ MonoBehaviour:
     leftFaceTexture: 0
     rightFaceTexture: 0
   - _name: Bedrock
+    blockType: 0
+    _gravity: 0
     _isSolid: 1
     _isTransparent: 0
     _stackMaxSize: 64
@@ -3033,13 +3049,177 @@ MonoBehaviour:
     _perfectMiner: 0
     _efficientTool: 0
     dropItem: []
+    backFaceTexture: 0
+    frontFaceTexture: 0
+    topFaceTexture: 0
+    bottomFaceTexture: 0
+    leftFaceTexture: 0
+    rightFaceTexture: 0
+  - _name: Dirt
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 0.4
+    _needRarity: 0
+    _needTool: 0
+    _perfectMiner: 0
+    _efficientTool: 6
+    dropItem: []
+    backFaceTexture: 11
+    frontFaceTexture: 11
+    topFaceTexture: 11
+    bottomFaceTexture: 11
+    leftFaceTexture: 11
+    rightFaceTexture: 11
+  - _name: Grass
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 0.4
+    _needRarity: 0
+    _needTool: 0
+    _perfectMiner: 0
+    _efficientTool: 6
+    dropItem: []
+    backFaceTexture: 1
+    frontFaceTexture: 1
+    topFaceTexture: 2
+    bottomFaceTexture: 11
+    leftFaceTexture: 1
+    rightFaceTexture: 1
+  - _name: Coarse Dirt
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 0.45
+    _needRarity: 0
+    _needTool: 0
+    _perfectMiner: 0
+    _efficientTool: 6
+    dropItem: []
+    backFaceTexture: 7
+    frontFaceTexture: 7
+    topFaceTexture: 7
+    bottomFaceTexture: 7
+    leftFaceTexture: 7
+    rightFaceTexture: 7
+  - _name: Snow
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 0.15
+    _needRarity: 0
+    _needTool: 0
+    _perfectMiner: 0
+    _efficientTool: 6
+    dropItem: []
+    backFaceTexture: 4
+    frontFaceTexture: 4
+    topFaceTexture: 4
+    bottomFaceTexture: 4
+    leftFaceTexture: 4
+    rightFaceTexture: 4
+  - _name: Snow Dirt
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 0.45
+    _needRarity: 0
+    _needTool: 0
+    _perfectMiner: 0
+    _efficientTool: 6
+    dropItem: []
+    backFaceTexture: 3
+    frontFaceTexture: 3
+    topFaceTexture: 4
+    bottomFaceTexture: 11
+    leftFaceTexture: 3
+    rightFaceTexture: 3
+  - _name: Sand
+    blockType: 0
+    _gravity: 1
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 0.45
+    _needRarity: 0
+    _needTool: 0
+    _perfectMiner: 0
+    _efficientTool: 6
+    dropItem: []
+    backFaceTexture: 8
+    frontFaceTexture: 8
+    topFaceTexture: 8
+    bottomFaceTexture: 8
+    leftFaceTexture: 8
+    rightFaceTexture: 8
+  - _name: Red Sand
+    blockType: 0
+    _gravity: 1
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 0.45
+    _needRarity: 0
+    _needTool: 0
+    _perfectMiner: 0
+    _efficientTool: 6
+    dropItem: []
     backFaceTexture: 9
     frontFaceTexture: 9
     topFaceTexture: 9
     bottomFaceTexture: 9
     leftFaceTexture: 9
     rightFaceTexture: 9
+  - _name: Gravel
+    blockType: 0
+    _gravity: 1
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 0.45
+    _needRarity: 0
+    _needTool: 0
+    _perfectMiner: 1
+    _efficientTool: 6
+    dropItem: []
+    backFaceTexture: 10
+    frontFaceTexture: 10
+    topFaceTexture: 10
+    bottomFaceTexture: 10
+    leftFaceTexture: 10
+    rightFaceTexture: 10
   - _name: Stone
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1.5
+    _needRarity: 1
+    _needTool: 1
+    _perfectMiner: 1
+    _efficientTool: 4
+    dropItem: []
+    backFaceTexture: 12
+    frontFaceTexture: 12
+    topFaceTexture: 12
+    bottomFaceTexture: 12
+    leftFaceTexture: 12
+    rightFaceTexture: 12
+  - _name: Cobble
+    blockType: 0
+    _gravity: 0
     _isSolid: 1
     _isTransparent: 0
     _stackMaxSize: 64
@@ -3049,61 +3229,457 @@ MonoBehaviour:
     _perfectMiner: 0
     _efficientTool: 4
     dropItem: []
-    backFaceTexture: 0
-    frontFaceTexture: 0
-    topFaceTexture: 0
-    bottomFaceTexture: 0
-    leftFaceTexture: 0
-    rightFaceTexture: 0
-  - _name: Grass
+    backFaceTexture: 15
+    frontFaceTexture: 15
+    topFaceTexture: 15
+    bottomFaceTexture: 15
+    leftFaceTexture: 15
+    rightFaceTexture: 15
+  - _name: Deepslate
+    blockType: 0
+    _gravity: 0
     _isSolid: 1
     _isTransparent: 0
     _stackMaxSize: 64
-    _destructionTime: 0.45
-    _needRarity: 0
-    _needTool: 0
-    _perfectMiner: 0
-    _efficientTool: 6
+    _destructionTime: 2.25
+    _needRarity: 1
+    _needTool: 1
+    _perfectMiner: 1
+    _efficientTool: 4
     dropItem: []
-    backFaceTexture: 2
-    frontFaceTexture: 2
-    topFaceTexture: 7
-    bottomFaceTexture: 1
-    leftFaceTexture: 2
-    rightFaceTexture: 2
-  - _name: Sand
+    backFaceTexture: 13
+    frontFaceTexture: 13
+    topFaceTexture: 14
+    bottomFaceTexture: 14
+    leftFaceTexture: 13
+    rightFaceTexture: 13
+  - _name: Cobble Deepslate
+    blockType: 0
+    _gravity: 0
     _isSolid: 1
     _isTransparent: 0
     _stackMaxSize: 64
-    _destructionTime: 0.45
-    _needRarity: 0
-    _needTool: 0
+    _destructionTime: 2.25
+    _needRarity: 1
+    _needTool: 1
     _perfectMiner: 0
-    _efficientTool: 6
+    _efficientTool: 4
     dropItem: []
-    backFaceTexture: 10
-    frontFaceTexture: 10
-    topFaceTexture: 10
-    bottomFaceTexture: 10
-    leftFaceTexture: 10
-    rightFaceTexture: 10
-  - _name: Dirt
+    backFaceTexture: 16
+    frontFaceTexture: 16
+    topFaceTexture: 16
+    bottomFaceTexture: 16
+    leftFaceTexture: 16
+    rightFaceTexture: 16
+  - _name: Andesite
+    blockType: 0
+    _gravity: 0
     _isSolid: 1
     _isTransparent: 0
     _stackMaxSize: 64
-    _destructionTime: 0.45
-    _needRarity: 0
-    _needTool: 0
+    _destructionTime: 1.5
+    _needRarity: 1
+    _needTool: 1
     _perfectMiner: 0
-    _efficientTool: 6
+    _efficientTool: 4
     dropItem: []
-    backFaceTexture: 1
-    frontFaceTexture: 1
-    topFaceTexture: 1
-    bottomFaceTexture: 1
-    leftFaceTexture: 1
-    rightFaceTexture: 1
-  - _name: OakLog
+    backFaceTexture: 17
+    frontFaceTexture: 17
+    topFaceTexture: 17
+    bottomFaceTexture: 17
+    leftFaceTexture: 17
+    rightFaceTexture: 17
+  - _name: Granite
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1.5
+    _needRarity: 1
+    _needTool: 1
+    _perfectMiner: 0
+    _efficientTool: 4
+    dropItem: []
+    backFaceTexture: 18
+    frontFaceTexture: 18
+    topFaceTexture: 18
+    bottomFaceTexture: 18
+    leftFaceTexture: 18
+    rightFaceTexture: 18
+  - _name: Diorite
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1.5
+    _needRarity: 1
+    _needTool: 1
+    _perfectMiner: 0
+    _efficientTool: 4
+    dropItem: []
+    backFaceTexture: 19
+    frontFaceTexture: 19
+    topFaceTexture: 19
+    bottomFaceTexture: 19
+    leftFaceTexture: 19
+    rightFaceTexture: 19
+  - _name: Coal Ore
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 2.25
+    _needRarity: 1
+    _needTool: 1
+    _perfectMiner: 1
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 20
+    frontFaceTexture: 20
+    topFaceTexture: 20
+    bottomFaceTexture: 20
+    leftFaceTexture: 20
+    rightFaceTexture: 20
+  - _name: Iron Ore
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1.5
+    _needRarity: 2
+    _needTool: 1
+    _perfectMiner: 1
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 21
+    frontFaceTexture: 21
+    topFaceTexture: 21
+    bottomFaceTexture: 21
+    leftFaceTexture: 21
+    rightFaceTexture: 21
+  - _name: Gold Ore
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1
+    _needRarity: 3
+    _needTool: 1
+    _perfectMiner: 1
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 22
+    frontFaceTexture: 22
+    topFaceTexture: 22
+    bottomFaceTexture: 22
+    leftFaceTexture: 22
+    rightFaceTexture: 22
+  - _name: Diamond Ore
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1
+    _needRarity: 3
+    _needTool: 1
+    _perfectMiner: 1
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 23
+    frontFaceTexture: 23
+    topFaceTexture: 23
+    bottomFaceTexture: 23
+    leftFaceTexture: 23
+    rightFaceTexture: 23
+  - _name: Redstone Ore
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1
+    _needRarity: 3
+    _needTool: 1
+    _perfectMiner: 1
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 24
+    frontFaceTexture: 24
+    topFaceTexture: 24
+    bottomFaceTexture: 24
+    leftFaceTexture: 24
+    rightFaceTexture: 24
+  - _name: Copper Ore
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1.25
+    _needRarity: 2
+    _needTool: 1
+    _perfectMiner: 1
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 25
+    frontFaceTexture: 25
+    topFaceTexture: 25
+    bottomFaceTexture: 25
+    leftFaceTexture: 25
+    rightFaceTexture: 25
+  - _name: Emerald Ore
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1
+    _needRarity: 3
+    _needTool: 1
+    _perfectMiner: 1
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 26
+    frontFaceTexture: 26
+    topFaceTexture: 26
+    bottomFaceTexture: 26
+    leftFaceTexture: 26
+    rightFaceTexture: 26
+  - _name: Ancient Debris
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 3
+    _needRarity: 4
+    _needTool: 1
+    _perfectMiner: 0
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 27
+    frontFaceTexture: 27
+    topFaceTexture: 28
+    bottomFaceTexture: 28
+    leftFaceTexture: 27
+    rightFaceTexture: 27
+  - _name: Coal Block
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 2.75
+    _needRarity: 1
+    _needTool: 1
+    _perfectMiner: 0
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 29
+    frontFaceTexture: 29
+    topFaceTexture: 29
+    bottomFaceTexture: 29
+    leftFaceTexture: 29
+    rightFaceTexture: 29
+  - _name: Iron Block
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 2
+    _needRarity: 2
+    _needTool: 1
+    _perfectMiner: 0
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 30
+    frontFaceTexture: 30
+    topFaceTexture: 30
+    bottomFaceTexture: 30
+    leftFaceTexture: 30
+    rightFaceTexture: 30
+  - _name: Gold Block
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1.5
+    _needRarity: 3
+    _needTool: 1
+    _perfectMiner: 0
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 31
+    frontFaceTexture: 31
+    topFaceTexture: 31
+    bottomFaceTexture: 31
+    leftFaceTexture: 31
+    rightFaceTexture: 31
+  - _name: Diamond Block
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1.5
+    _needRarity: 3
+    _needTool: 1
+    _perfectMiner: 0
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 32
+    frontFaceTexture: 32
+    topFaceTexture: 32
+    bottomFaceTexture: 32
+    leftFaceTexture: 32
+    rightFaceTexture: 32
+  - _name: Redstone Block
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1.5
+    _needRarity: 3
+    _needTool: 1
+    _perfectMiner: 0
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 33
+    frontFaceTexture: 33
+    topFaceTexture: 33
+    bottomFaceTexture: 33
+    leftFaceTexture: 33
+    rightFaceTexture: 33
+  - _name: Copper Block
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1.75
+    _needRarity: 2
+    _needTool: 1
+    _perfectMiner: 0
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 34
+    frontFaceTexture: 34
+    topFaceTexture: 34
+    bottomFaceTexture: 34
+    leftFaceTexture: 34
+    rightFaceTexture: 34
+  - _name: Emerald Block
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 1.5
+    _needRarity: 3
+    _needTool: 1
+    _perfectMiner: 0
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 35
+    frontFaceTexture: 35
+    topFaceTexture: 35
+    bottomFaceTexture: 35
+    leftFaceTexture: 35
+    rightFaceTexture: 35
+  - _name: Netherite Block
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 0
+    _stackMaxSize: 64
+    _destructionTime: 3.5
+    _needRarity: 4
+    _needTool: 1
+    _perfectMiner: 0
+    _efficientTool: 4
+    dropItem:
+    - _itemID: 0
+      _probability: 0
+      dropMinNum: 1
+      dropMaxNum: 6
+    backFaceTexture: 36
+    frontFaceTexture: 36
+    topFaceTexture: 36
+    bottomFaceTexture: 36
+    leftFaceTexture: 36
+    rightFaceTexture: 36
+  - _name: LOGLOGLOH
+    blockType: 0
+    _gravity: 0
     _isSolid: 1
     _isTransparent: 0
     _stackMaxSize: 64
@@ -3119,107 +3695,9 @@ MonoBehaviour:
     bottomFaceTexture: 6
     leftFaceTexture: 5
     rightFaceTexture: 5
-  - _name: OakPlanks
-    _isSolid: 1
-    _isTransparent: 0
-    _stackMaxSize: 64
-    _destructionTime: 1.8
-    _needRarity: 0
-    _needTool: 0
-    _perfectMiner: 0
-    _efficientTool: 5
-    dropItem: []
-    backFaceTexture: 4
-    frontFaceTexture: 4
-    topFaceTexture: 4
-    bottomFaceTexture: 4
-    leftFaceTexture: 4
-    rightFaceTexture: 4
-  - _name: Bricks
-    _isSolid: 1
-    _isTransparent: 0
-    _stackMaxSize: 64
-    _destructionTime: 1.5
-    _needRarity: 1
-    _needTool: 1
-    _perfectMiner: 0
-    _efficientTool: 4
-    dropItem: []
-    backFaceTexture: 11
-    frontFaceTexture: 11
-    topFaceTexture: 11
-    bottomFaceTexture: 11
-    leftFaceTexture: 11
-    rightFaceTexture: 11
-  - _name: Cobblestone
-    _isSolid: 1
-    _isTransparent: 0
-    _stackMaxSize: 64
-    _destructionTime: 1.5
-    _needRarity: 1
-    _needTool: 1
-    _perfectMiner: 0
-    _efficientTool: 4
-    dropItem: []
-    backFaceTexture: 8
-    frontFaceTexture: 8
-    topFaceTexture: 8
-    bottomFaceTexture: 8
-    leftFaceTexture: 8
-    rightFaceTexture: 8
-  - _name: Furnace
-    _isSolid: 1
-    _isTransparent: 0
-    _stackMaxSize: 64
-    _destructionTime: 1.5
-    _needRarity: 1
-    _needTool: 1
-    _perfectMiner: 0
-    _efficientTool: 4
-    dropItem: []
-    backFaceTexture: 13
-    frontFaceTexture: 12
-    topFaceTexture: 15
-    bottomFaceTexture: 15
-    leftFaceTexture: 13
-    rightFaceTexture: 13
-  - _name: Glass
-    _isSolid: 1
-    _isTransparent: 1
-    _stackMaxSize: 64
-    _destructionTime: 1
-    _needRarity: 1
-    _needTool: 0
-    _perfectMiner: 1
-    _efficientTool: 4
-    dropItem: []
-    backFaceTexture: 3
-    frontFaceTexture: 3
-    topFaceTexture: 3
-    bottomFaceTexture: 3
-    leftFaceTexture: 3
-    rightFaceTexture: 3
-  - _name: CoalOre
-    _isSolid: 1
-    _isTransparent: 0
-    _stackMaxSize: 64
-    _destructionTime: 1.7
-    _needRarity: 1
-    _needTool: 1
-    _perfectMiner: 1
-    _efficientTool: 4
-    dropItem:
-    - _itemID: 0
-      _probability: 0
-      dropMinNum: 1
-      dropMaxNum: 6
-    backFaceTexture: 3
-    frontFaceTexture: 3
-    topFaceTexture: 3
-    bottomFaceTexture: 3
-    leftFaceTexture: 3
-    rightFaceTexture: 3
   - _name: OakLeaf
+    blockType: 0
+    _gravity: 0
     _isSolid: 1
     _isTransparent: 1
     _stackMaxSize: 64
@@ -3235,6 +3713,24 @@ MonoBehaviour:
     bottomFaceTexture: 0
     leftFaceTexture: 0
     rightFaceTexture: 0
+  - _name: Glass
+    blockType: 0
+    _gravity: 0
+    _isSolid: 1
+    _isTransparent: 1
+    _stackMaxSize: 64
+    _destructionTime: 1
+    _needRarity: 1
+    _needTool: 0
+    _perfectMiner: 1
+    _efficientTool: 4
+    dropItem: []
+    backFaceTexture: 3
+    frontFaceTexture: 3
+    topFaceTexture: 3
+    bottomFaceTexture: 3
+    leftFaceTexture: 3
+    rightFaceTexture: 3
 --- !u!114 &1813773303 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7839868316637719785, guid: 27a9e31f0a834614ba3ab3adfac03a26, type: 3}

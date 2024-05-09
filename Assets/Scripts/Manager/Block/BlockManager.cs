@@ -21,6 +21,8 @@ public class BlockManager : Singleton<BlockManager>
 public class BlockType
 {
     [SerializeField] private string _name;
+    [SearchableEnum][SerializeField] private EnumGameData.BlockType blockType;
+    [SerializeField] private bool _gravity;
     [SerializeField] private bool _isSolid;
     [SerializeField] private bool _isTransparent;
     [SerializeField] private int _stackMaxSize;

@@ -25,7 +25,7 @@ public class BiomeAttributes : ScriptableObject
     [Tooltip("地形の最低高度" +
         "\nterrainHeighを足した平均値でレベルが決定")]
     [Range(64, 256)]
-    public short solidGroundHight;
+    public short solidGroundHight = 64;
 
     [Tooltip("地形の高度幅" +
         "\nsolidGroundHightと足して256は越えないように注意")]

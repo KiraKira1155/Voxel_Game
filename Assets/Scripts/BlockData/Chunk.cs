@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 using static VoxelData;
 public class Chunk
 {
@@ -19,7 +21,8 @@ public class Chunk
 	public Vector3 position;
 
 	public int[,,] voxelMap = new int[Width, Hight, Width];
-	public int[,] biomeMap = new int[Width, Width];
+	public bool[,] OceanMap = new bool[Width, Width];
+    public int[,] biomeMap = new int[Width, Width];
     public int[,] heightMap = new int[Width, Width];
 
     public Queue<VoxelMod> modifications = new Queue<VoxelMod>();
@@ -61,15 +64,18 @@ public class Chunk
         for (int x = 0; x < Width; x++)
             for (int z = 0; z < Width; z++)
             {
-				biomeMap[x, z] = World.I.generateMap.GetBiomeType(coord, new Vector2(x, z)).Item1;
-				heightMap[x, z] = World.I.generateMap.GetSolidGroundHight(coord, biomeMap[x, z]);
+				(biomeMap[x, z], OceanMap[x, z]) = World.I.generateMap.GetBiomeType(coord, new Vector2(x, z));
+                if (OceanMap[x, z])
+                    heightMap[x, z] = World.I.generateMap.GetSolidOceanGroundHight(coord, biomeMap[x, z]);
+                else
+                    heightMap[x, z] = World.I.generateMap.GetSolidGroundHight(coord, biomeMap[x, z]);
             }
 
         for (int y = 0; y < Hight; y++)
 			for (int x = 0; x < Width; x++)
 				for (int z = 0; z < Width; z++)
 				{
-					voxelMap[x, y, z] = World.I.GetVoxel(new Vector3(x, y, z) + position, biomeMap[x, z], heightMap[x, z]);
+                    voxelMap[x, y, z] = World.I.GetVoxel(new Vector3(x, y, z) + position, biomeMap[x, z], OceanMap[x, z], heightMap[x, z]);
 				}
 
 		isVoxelMapPopulated = true;

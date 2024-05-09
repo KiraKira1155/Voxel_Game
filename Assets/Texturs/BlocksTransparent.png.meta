@@ -25,7 +25,7 @@ TextureImporter:
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMipmapLimit: 1
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -45,7 +45,7 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 16
@@ -69,11 +69,11 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 64
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
-    compressionQuality: 100
+    compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
@@ -110,11 +110,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Blocks 1_0
+      name: BlocksTransparent_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 48
+        y: 240
         width: 16
         height: 16
       alignment: 0
@@ -124,18 +124,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 583f50dcfd514604abba34f77b34b135
-      internalID: -1075488197
+      spriteID: 7fea0adf20ced4b42ae4a305149cecb6
+      internalID: -2146378838
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Blocks 1_1
+      name: BlocksTransparent_1
       rect:
         serializedVersion: 2
         x: 16
-        y: 48
+        y: 240
         width: 16
         height: 16
       alignment: 0
@@ -145,18 +145,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 739613852fcdf474ebbb95995310693f
-      internalID: 667093290
+      spriteID: 51c14045ab4d2d9419c69f2b90790a5c
+      internalID: 1658104111
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Blocks 1_2
+      name: BlocksTransparent_2
       rect:
         serializedVersion: 2
         x: 32
-        y: 48
+        y: 240
         width: 16
         height: 16
       alignment: 0
@@ -166,18 +166,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 29ca57fc8d4030041bc119e36f54b5ec
-      internalID: -1182755319
+      spriteID: 0192d1c61925a11428c507cddd1d45b7
+      internalID: 1985861726
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Blocks 1_3
+      name: BlocksTransparent_3
       rect:
         serializedVersion: 2
         x: 48
-        y: 48
+        y: 240
         width: 16
         height: 16
       alignment: 0
@@ -187,18 +187,270 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ea5d459c0552da24884be5cfba449a66
-      internalID: -42198491
+      spriteID: 1cb913956abd2cc46ab9b0ad07be4578
+      internalID: -880325947
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Blocks 1_4
+      name: BlocksTransparent_4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 240
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ce232c739045b148bc8cc67bfef6d54
+      internalID: 700091218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlocksTransparent_5
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 240
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bb0ac43551126c341aa8579828c025a1
+      internalID: 1309682533
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlocksTransparent_6
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 240
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ee5f8d50749ede4fa08dd6c0c04b083
+      internalID: 1516533664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlocksTransparent_7
+      rect:
+        serializedVersion: 2
+        x: 112
+        y: 240
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63390410ccd5e2747a22b1dba7767082
+      internalID: 2110925171
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlocksTransparent_8
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 240
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfdb10f733ff48f4ba3868935ccad83a
+      internalID: 617581966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlocksTransparent_9
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 240
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cf029c50b2a63e4eab4b2d7321c332c
+      internalID: -1689412303
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlocksTransparent_10
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 240
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3de4db148ab688d4b86ffc96172b4ef8
+      internalID: 595193161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlocksTransparent_11
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 240
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49972a5116cef624e870162389288320
+      internalID: 1846685691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlocksTransparent_12
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 240
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 420a0c407d23c51488cea2214bfaf5e8
+      internalID: 1838994007
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlocksTransparent_13
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 240
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f9ae4e755fb16804591bd53d785a7af6
+      internalID: -64298888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlocksTransparent_14
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 240
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 91c4e848af176fb47b47dc6fb20e7ae6
+      internalID: -535395809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlocksTransparent_15
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 240
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2dc7f62573589404aa3a687a6dfc4135
+      internalID: -913488671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BlocksTransparent_16
       rect:
         serializedVersion: 2
         x: 0
-        y: 32
+        y: 224
         width: 16
         height: 16
       alignment: 0
@@ -208,18 +460,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d9be38ae86d83e7428445ebaa87db00c
-      internalID: -944723623
+      spriteID: e47e877527db61744a546090b722e011
+      internalID: -173895253
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Blocks 1_5
+      name: BlocksTransparent_17
       rect:
         serializedVersion: 2
         x: 16
-        y: 32
+        y: 224
         width: 16
         height: 16
       alignment: 0
@@ -229,18 +481,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 85bf5d968cae46944a30746e0ec42087
-      internalID: 536860836
+      spriteID: 2068bb73ccb158d4599e9821fda83c26
+      internalID: -1185414512
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Blocks 1_6
+      name: BlocksTransparent_18
       rect:
         serializedVersion: 2
         x: 32
-        y: 32
+        y: 224
         width: 16
         height: 16
       alignment: 0
@@ -250,18 +502,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ef43945821d7fba4f9d5a984f0d192a8
-      internalID: -1216811728
+      spriteID: 5d36e1a043b38a3419ad608b99207bd8
+      internalID: 2138610921
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Blocks 1_7
+      name: BlocksTransparent_19
       rect:
         serializedVersion: 2
         x: 48
-        y: 32
+        y: 224
         width: 16
         height: 16
       alignment: 0
@@ -271,176 +523,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: abf0b9480f3b0ff43bf10fda67d0fe74
-      internalID: -521289501
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blocks 1_8
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 16
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 850f9a6207e3c514db1c4353c1bdbddb
-      internalID: 217379405
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blocks 1_9
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 16
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a03968fe420693646b1c007455c8ae54
-      internalID: 2065885357
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blocks 1_10
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 16
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a4b32c86d0d4624488d37025229b74bc
-      internalID: -484000083
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blocks 1_11
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 16
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 223b2ad7c37f2ab4692e3cfb8ab7125e
-      internalID: -1634167088
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blocks 1_12
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7c162c3c4df033944b496d79bc13260c
-      internalID: 850688128
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blocks 1_13
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 039d502a6c953a04d96191c8f445b8ce
-      internalID: 1518044808
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blocks 1_14
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ec11f9b6190706d40aa81040e01ad323
-      internalID: -1933502127
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Blocks 1_15
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 62ee54b28467ae04bad812f13b131207
-      internalID: -1486742990
+      spriteID: ad766fc0a04849f41af706440b3dac72
+      internalID: -1463689739
       vertices: []
       indices: 
       edges: []
@@ -448,7 +532,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 38ce3790055b90d429d5f08de0ac0fcf
+    spriteID: cc04afe078a6864499ac514c32066813
     internalID: 0
     vertices: []
     indices: 
@@ -456,22 +540,26 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Blocks 1_0: -1075488197
-      Blocks 1_1: 667093290
-      Blocks 1_10: -484000083
-      Blocks 1_11: -1634167088
-      Blocks 1_12: 850688128
-      Blocks 1_13: 1518044808
-      Blocks 1_14: -1933502127
-      Blocks 1_15: -1486742990
-      Blocks 1_2: -1182755319
-      Blocks 1_3: -42198491
-      Blocks 1_4: -944723623
-      Blocks 1_5: 536860836
-      Blocks 1_6: -1216811728
-      Blocks 1_7: -521289501
-      Blocks 1_8: 217379405
-      Blocks 1_9: 2065885357
+      BlocksTransparent_0: -2146378838
+      BlocksTransparent_1: 1658104111
+      BlocksTransparent_10: 595193161
+      BlocksTransparent_11: 1846685691
+      BlocksTransparent_12: 1838994007
+      BlocksTransparent_13: -64298888
+      BlocksTransparent_14: -535395809
+      BlocksTransparent_15: -913488671
+      BlocksTransparent_16: -173895253
+      BlocksTransparent_17: -1185414512
+      BlocksTransparent_18: 2138610921
+      BlocksTransparent_19: -1463689739
+      BlocksTransparent_2: 1985861726
+      BlocksTransparent_3: -880325947
+      BlocksTransparent_4: 700091218
+      BlocksTransparent_5: 1309682533
+      BlocksTransparent_6: 1516533664
+      BlocksTransparent_7: 2110925171
+      BlocksTransparent_8: 617581966
+      BlocksTransparent_9: -1689412303
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

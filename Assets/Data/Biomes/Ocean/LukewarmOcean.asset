@@ -15,6 +15,7 @@ MonoBehaviour:
   temperatureLv: 3
   continentalness: 1
   terrainHeight: 0
-  topBlocks: 0
+  terrainScale: 0
+  topBlocks: 11
   middleLayer: 0
-  basicsBlocks: 0
+  basicsBlocks: 2

@@ -1,20 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [System.Serializable]
 public class GenerateMap
 {
     private int biomeNum;
+    private int oceanBiomeNum;
     private float seed;
     private float[,] voxelNoise = new float[VoxelData.Width, VoxelData.Width];
     
     private const float mapScale = 0.1f;
-    private const short temperatureMapSize = 2048;
-    private const short precipitationMapSize = 2897;
-    private const short vegetationMapSize = 4096;
-    private const short continentalnessMapSize = 6689;
+    private const short temperatureMapSize = 1024;
+    private const short precipitationMapSize = 1500;
+    private const short vegetationMapSize = 2048;
+    private const short continentalnessMapSize = 3350;
     private byte[,] temperatureMap = new byte[temperatureMapSize, temperatureMapSize]; //64チャンク毎
     private byte[,] precipitationMap = new byte[precipitationMapSize, precipitationMapSize];  //32チャンク毎
     private byte[,] vegetationMap = new byte[vegetationMapSize, vegetationMapSize];  //16チャンク毎
@@ -37,6 +37,8 @@ public class GenerateMap
     {
         biomeNum = World.I.biome.Length;
         biome = World.I.biome;
+        Debug.Log(biome[0].name);
+        oceanBiomeNum = World.I.oceanBiome.Length;
         oceanBiome = World.I.oceanBiome;
         seed = ConfigManager.seed;
         GenerateMapData();
@@ -65,6 +67,25 @@ public class GenerateMap
         return Mathf.FloorToInt(biome[biomeType].terrainHeight * GetVoxelPerBiomeHight(coord, biome[biomeType].terrainScale)) + biome[biomeType].solidGroundHight;
     }
 
+    public int GetSolidOceanGroundHight(ChunkCoord coord, int biomeType)
+    {
+        int solidGroundHight()
+        {
+            switch(oceanBiome[biomeType].continentalness)
+            {
+                case 0:
+                    return 24;
+
+                case 1:
+                    return 43;
+                
+                default:
+                    return 55;
+            }
+        }
+        return Mathf.FloorToInt(oceanBiome[biomeType].terrainHeight * GetVoxelPerBiomeHight(coord, oceanBiome[biomeType].terrainScale)) + solidGroundHight();
+    }
+
     /// <summary>
     /// チャンクのバイオームタイプ
     /// </summary>
@@ -78,48 +99,64 @@ public class GenerateMap
     /// </returns>
     public (byte, bool) GetBiomeType(ChunkCoord chunkCoord, Vector2 voxelPos)
     {
-        if(BiomeTypeOcean(chunkCoord))
-            for (byte i = 0; i < biomeNum; i++)
+        if (BiomeTypeOcean(chunkCoord))
+        {
+            for (byte i = 0; i < oceanBiomeNum; i++)
             {
-                if (biome[i].temperatureLv == GetTemperatureLv(chunkCoord) &&
-                    biome[i].precipitationLv == GetPrecipitationLv(chunkCoord) &&
-                    biome[i].vegetationLv == GetVegetationLv(chunkCoord))
+                if (oceanBiome[i].temperatureLv == GetTemperatureLv(chunkCoord) &&
+                    oceanBiome[i].continentalness == GetContinentalnessLv(chunkCoord))
                 {
                     return (i, true);
                 }
             }
+            return (0, true);
+        }
         else
+        {
             for (byte i = 0; i < biomeNum; i++)
             {
-                if (biome[i].temperatureLv == GetTemperatureLv(chunkCoord) &&
+                if (oceanBiome[i].temperatureLv == GetTemperatureLv(chunkCoord) &&
                     biome[i].precipitationLv == GetPrecipitationLv(chunkCoord) &&
-                    biome[i].vegetationLv == GetVegetationLv(chunkCoord))
+                    biome[i].vegetationLv == GetVegetationLv(chunkCoord) )
                 {
                     return (i, false);
                 }
             }
+            return (0, false);
+        }
 
-        return (0, true);
     }
 
     private bool BiomeTypeOcean(ChunkCoord chunkCoord)
     {
-
+        bool ocean;
         switch (GetContinentalnessLv(chunkCoord))
         {
             case 0:
+                ocean = true;
+                break;
             case 1:
+                ocean = true;
+                break;
             case 2:
-                return true;
+                ocean = true;
+                break;
 
             case 3:
+                ocean = false;
+                break;
             case 4:
+                ocean = false;
+                break;
             case 5:
-            case 6:
-                return false;
+                ocean = false;
+                break;
+            default:
+                ocean = false;
+                break;
         }
-
-        return true;
+        
+        return ocean;
     }
 
     private byte GetTerrestrialLv(int solidGroundHight)
@@ -318,6 +355,7 @@ public class GenerateMap
             {
                 temperatureMap[i, j] = TemperatureLv(Mathf.PerlinNoise((i + seed) * 0.0001f + (temperatureMapSize - i) * x, (j + seed) * 0.0001f + (temperatureMapSize - j) * y));
                 tempetatureMapDebug[temperatureMap[i, j]] += 1;
+
             }
     }
     /// <summary>

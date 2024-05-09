@@ -1,14 +1,16 @@
 using System.Linq;
 using UnityEditor;
+#if UNITY_EDITOR
 using UnityEditor.IMGUI.Controls;
+#endif
 using UnityEngine;
 
 public class SearchableEnumAttribute : PropertyAttribute
 {
 }
 
-#if UNITY_EDITOR
 
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(SearchableEnumAttribute))]
 public class SearchableEnumDrawer : PropertyDrawer
 {

@@ -6,7 +6,7 @@ public static class VoxelData
 {
 	public static readonly short Width = 16;
 	public static readonly short Hight = 260;
-	public static readonly int TextureAtlasSizeInBlocks = 4;
+	public static readonly byte TextureAtlasSizeInBlocks = 16;
 	public static int WorldSizeInVoxels
 	{
 		get { return ConfigManager.WorldSizeInChunks * Width; }

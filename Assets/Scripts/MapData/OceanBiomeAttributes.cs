@@ -21,6 +21,9 @@ public class OceanBiomeAttributes : ScriptableObject
     [Tooltip("地形の高度幅")]
     public short terrainHeight;
 
+    [Tooltip("数字が小さいほどなめらかな地形になる")]
+    public float terrainScale;
+
     [SearchableEnum] public EnumGameData.BlockID topBlocks;
     [SearchableEnum] public EnumGameData.BlockID middleLayer;
     [SearchableEnum] public EnumGameData.BlockID basicsBlocks;
