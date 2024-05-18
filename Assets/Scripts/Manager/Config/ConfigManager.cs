@@ -9,6 +9,9 @@ public class ConfigManager
     [SerializeField] public int setSeed;
     [ReadOnly] private float _seed;
     [SerializeField] private bool creative;
+
+    public static bool successGenerateMap = false;
+    public static bool successGenerateWorld = false;
     public static int thisWorldSeed { get; private set; }
     public static float seed { get; private set; }
     public static short WorldSizeInChunks { get; private set; } = 8192;

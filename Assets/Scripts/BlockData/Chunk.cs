@@ -27,8 +27,6 @@ public class Chunk
 	private bool IsOcean;
     private int[,] heightMap = new int[Width, Width];
 
-    public Queue<VoxelMod> modifications = new Queue<VoxelMod>();
-
     private bool _isActive;
     public bool isVoxelMapPopulated { get; private set; } = false;
 
@@ -70,15 +68,15 @@ public class Chunk
 
 	private void PopulateVoxelMap()
     {
-		(BiomeNum, IsOcean) = World.I.generateMap.GetBiomeType(coord);
+		(BiomeNum, IsOcean) = GenerateMap.I.GetBiomeType(coord);
         for (int x = 0; x < Width; x++)
             for (int z = 0; z < Width; z++)
             {
 				(biomeMap[x, z], OceanMap[x, z]) = (BiomeNum, IsOcean);
                 if (OceanMap[x, z])
-                    heightMap[x, z] = World.I.generateMap.GetSolidOceanGroundHight(new Vector2(position.x + x, position.z + z), biomeMap[x, z]);
+                    heightMap[x, z] = GenerateMap.I.GetSolidOceanGroundHight(new Vector2(position.x + x, position.z + z), biomeMap[x, z]);
                 else
-                    heightMap[x, z] = World.I.generateMap.GetSolidGroundHight(new Vector2(position.x + x, position.z + z), biomeMap[x, z]);
+                    heightMap[x, z] = GenerateMap.I.GetSolidGroundHight(new Vector2(position.x + x, position.z + z), biomeMap[x, z]);
             }
 
         for (int y = 0; y < Hight; y++)
@@ -93,13 +91,6 @@ public class Chunk
 
     public void UpdateChunk()
     {
-        while (modifications.Count > 0)
-		{
-			VoxelMod v = modifications.Dequeue();
-			Vector3 pos = v.position - position;
-			voxelMap[(int)pos.x, (int)pos.y, (int)pos.z] = (int)v.blockID;
-        }
-
         ClearMeshData();
 
         for (int y = 0; y < Hight; y++)

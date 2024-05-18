@@ -1277,7 +1277,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1606437569}
   m_Father: {fileID: 1478984700}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &790947862
@@ -1292,11 +1293,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b35d253f34d80e14fb13fd89f45f7bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  generateMap:
-    terrestrialLv: 
-    DebugOceanTrue: 0
-    DebugOceanFalse: 0
-    DebugBiome: 
   biome:
   - {fileID: 11400000, guid: 2fe8d29a88a835b4d98f57ddc192194b, type: 2}
   - {fileID: 11400000, guid: e0a1654d3c2034e4aa3fa98c33df283b, type: 2}
@@ -2529,6 +2525,7 @@ MonoBehaviour:
   item: {fileID: 1942029394}
   block: {fileID: 1803107397}
   dropItem: {fileID: 870690527}
+  generateMap: {fileID: 1606437570}
 --- !u!4 &1478984700
 Transform:
   m_ObjectHideFlags: 0
@@ -2701,6 +2698,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1478984700}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1606437568
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1606437569}
+  - component: {fileID: 1606437570}
+  m_Layer: 0
+  m_Name: GenerateMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1606437569
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606437568}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 790947861}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1606437570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606437568}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff1380e06e6e77e43a91d6e196fc90bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  successGenerateMap: 0
+  terrestrialLv: 
+  DebugOceanTrue: 0
+  DebugOceanFalse: 0
+  DebugBiome: 
 --- !u!1 &1627222578
 GameObject:
   m_ObjectHideFlags: 0

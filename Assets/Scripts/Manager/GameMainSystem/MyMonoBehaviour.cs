@@ -12,10 +12,14 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
     [SerializeField] private ItemManager item;
     [SerializeField] private BlockManager block;
     [SerializeField] private DropItemManager dropItem;
+    [SerializeField] private GenerateMap generateMap;
 
     KeyConfig keyConfig = new KeyConfig();
 
     private bool init = false;
+    private bool successStart = false;
+    private bool successUpdate = false;
+    private bool successFixedUpdate = false;
 
     private void Awake()
     {
@@ -29,29 +33,69 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
             player.DoAwake();
             debugScreen.DoAwake();
             debugScreen.gameObject.SetActive(false);
+
+            generateMap.DoAwake();
+
+            world.DoAwake();
         }
     }
 
     private void Start()
     {
-        world.DoStart();
-        player.DoStart();
+        StartCoroutine(DoStart());
     }
 
     private void Update()
     {
-        world.DoUpdate();
-        player.DoUpdate();
+        if (successUpdate)
+        {
+            world.DoUpdate();
+            player.DoUpdate();
 
 
-        if (KeyConfig.GetKeyUp(KeyConfig.KeyName.DebugScreen))
-            debugScreen.gameObject.SetActive(!debugScreen.gameObject.activeSelf);
-        if (debugScreen.gameObject.activeSelf)
-            debugScreen.DoUpdate();
+            if (KeyConfig.GetKeyUp(KeyConfig.KeyName.DebugScreen))
+                debugScreen.gameObject.SetActive(!debugScreen.gameObject.activeSelf);
+            if (debugScreen.gameObject.activeSelf)
+                debugScreen.DoUpdate();
+        }
+        else
+        {
+            StartCoroutine(DoUpdate());
+        }
     }
 
     private void FixedUpdate()
     {
-        player.DoFixedUpDate();
+        if (successFixedUpdate)
+        {
+            player.DoFixedUpDate();
+        }
+        else
+        {
+            StartCoroutine(DoFixedUpdate());
+        }
+    }
+
+    IEnumerator DoStart()
+    {
+        yield return new WaitUntil(() => ConfigManager.successGenerateWorld);
+        successStart = true;
+
+        world.DoStart();
+        player.DoStart();
+    }
+    IEnumerator DoUpdate()
+    {
+        yield return new WaitUntil(() => ConfigManager.successGenerateWorld);
+        yield return new WaitUntil(() => successStart);
+        successUpdate = true;
+    }
+
+    IEnumerator DoFixedUpdate()
+    {
+        yield return new WaitUntil(() => ConfigManager.successGenerateWorld);
+        yield return new WaitUntil(() => successStart);
+        yield return new WaitUntil(() => successUpdate);
+        successFixedUpdate = true;
     }
 }
