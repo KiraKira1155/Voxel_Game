@@ -12,20 +12,18 @@ public class GenerateMap
     
     private const float mapScale = 0.1f;
     private const short temperatureMapSize = 1024;
-    private const short precipitationMapSize = 1500;
-    private const short vegetationMapSize = 2048;
-    private const short continentalnessMapSize = 3350;
-    private byte[,] temperatureMap = new byte[temperatureMapSize, temperatureMapSize]; //64チャンク毎
-    private byte[,] precipitationMap = new byte[precipitationMapSize, precipitationMapSize];  //32チャンク毎
-    private byte[,] vegetationMap = new byte[vegetationMapSize, vegetationMapSize];  //16チャンク毎
-    private byte[,] continentalnessMap = new byte[continentalnessMapSize, continentalnessMapSize];  //6チャンク毎
+    private const short precipitationMapSize = 2048;
+    private const short vegetationMapSize = 4096;
+    private const short continentalnessMapSize = 2048;
+    private byte[,] temperatureMap;
+    private byte[,] precipitationMap;
+    private byte[,] vegetationMap;
+    private byte[,] continentalnessMap;
+
+    private (byte, bool)[,] biomeMap = new (byte, bool)[ConfigManager.WorldSizeInChunks, ConfigManager.WorldSizeInChunks];
 
     private BiomeAttributes[] biome;
     private OceanBiomeAttributes[] oceanBiome;
-    [SerializeField] private int[] tempetatureMapDebug;
-    [SerializeField] private int[] precipitationMapDebug;
-    [SerializeField] private int[] vegetationMapDebug;
-    [SerializeField] private int[] continentalnessMapDebug;
 
     //biome[]に対応した陸地レベルを生成
     //(256- 64 + 64 / 2=)160以上で最高レベル
@@ -33,14 +31,19 @@ public class GenerateMap
 
     System.Random rand = new System.Random(ConfigManager.thisWorldSeed);
 
+    [SerializeField] int DebugOceanTrue;
+    [SerializeField] int DebugOceanFalse;
+    [SerializeField] int[] DebugBiome;
+
     public void Init()
     {
         biomeNum = World.I.biome.Length;
         biome = World.I.biome;
-        Debug.Log(biome[0].name);
         oceanBiomeNum = World.I.oceanBiome.Length;
         oceanBiome = World.I.oceanBiome;
         seed = ConfigManager.seed;
+
+        DebugBiome = new int[biomeNum];
         GenerateMapData();
         //InitTerrestrialLvForBiome(); 
         //InitVoxelPerlinNoise();
@@ -48,10 +51,48 @@ public class GenerateMap
 
     private void GenerateMapData()
     {
+        temperatureMap = new byte[temperatureMapSize, temperatureMapSize];
+        precipitationMap = new byte[precipitationMapSize, precipitationMapSize];
+        vegetationMap = new byte[vegetationMapSize, vegetationMapSize];
+        continentalnessMap = new byte[continentalnessMapSize, continentalnessMapSize];
+
         GenarateTemperatureMap();
         GenaratePrecipitationMap();
         GenarateVegetationMap();
         GenerateContinentalnessMap();
+
+        for (int x = (ConfigManager.WorldSizeInChunks / 2) - 100; x < (ConfigManager.WorldSizeInChunks / 2) + 100; x++)
+            for (int z = (ConfigManager.WorldSizeInChunks / 2) - 100; z < (ConfigManager.WorldSizeInChunks / 2) + 100; z++)
+                biomeMap[x,z] = GenerateBiomeMap(new ChunkCoord(x, z));
+        
+        temperatureMap = null;
+        precipitationMap = null;
+        vegetationMap = null;
+        continentalnessMap = null;
+    }
+
+    private void Debug()
+    {
+        //int ocean = 0;
+        //int continant = 0;
+        //int[] biome = new int[biomeNum];
+
+        //for (int x = 0; x < ConfigManager.WorldSizeInChunks; x++)
+        //    for (int z = 0; z < ConfigManager.WorldSizeInChunks; z++)
+        //    {
+        //        ChunkCoord chunk = new ChunkCoord(x, z);
+        //        if (GetBiomeType(chunk).Item2)
+        //            ocean++;
+        //        else
+        //        {
+        //            continant++;
+        //            biome[GetBiomeType(chunk).Item1]++;
+        //        }
+        //    }
+
+        //DebugOceanTrue = ocean;
+        //DebugOceanFalse = continant;
+        //biome.CopyTo(DebugBiome, 0);
     }
 
     /// <summary>
@@ -62,12 +103,12 @@ public class GenerateMap
     /// <returns>
     /// チャンク座標とバイオームの種類からブロックが存在する最高高度を返す
     /// </returns>
-    public int GetSolidGroundHight(ChunkCoord coord, int biomeType)
+    public int GetSolidGroundHight(Vector2 position, byte biomeType)
     {
-        return Mathf.FloorToInt(biome[biomeType].terrainHeight * GetVoxelPerBiomeHight(coord, biome[biomeType].terrainScale)) + biome[biomeType].solidGroundHight;
+        return Mathf.FloorToInt(biome[biomeType].terrainHeight * GetVoxelPerBiomeHight(position, biome[biomeType].terrainScale)) + 64;
     }
 
-    public int GetSolidOceanGroundHight(ChunkCoord coord, int biomeType)
+    public int GetSolidOceanGroundHight(Vector2 position, byte biomeType)
     {
         int solidGroundHight()
         {
@@ -83,7 +124,7 @@ public class GenerateMap
                     return 55;
             }
         }
-        return Mathf.FloorToInt(oceanBiome[biomeType].terrainHeight * GetVoxelPerBiomeHight(coord, oceanBiome[biomeType].terrainScale)) + solidGroundHight();
+        return Mathf.FloorToInt(oceanBiome[biomeType].terrainHeight * GetVoxelPerBiomeHight(position, oceanBiome[biomeType].terrainScale)) + solidGroundHight();
     }
 
     /// <summary>
@@ -97,8 +138,14 @@ public class GenerateMap
     /// 第2戻り値がtrueなら海、falseなら陸地のバイオーム
     /// </para>
     /// </returns>
-    public (byte, bool) GetBiomeType(ChunkCoord chunkCoord, Vector2 voxelPos)
+    public (byte, bool) GetBiomeType(ChunkCoord chunkCoord)
     {
+        return biomeMap[chunkCoord.x, chunkCoord.z];
+    }
+
+    private (byte, bool) GenerateBiomeMap(ChunkCoord chunkCoord)
+    {
+        Queue<byte> candidateBiome = new Queue<byte>();
         if (BiomeTypeOcean(chunkCoord))
         {
             for (byte i = 0; i < oceanBiomeNum; i++)
@@ -115,16 +162,21 @@ public class GenerateMap
         {
             for (byte i = 0; i < biomeNum; i++)
             {
-                if (oceanBiome[i].temperatureLv == GetTemperatureLv(chunkCoord) &&
-                    biome[i].precipitationLv == GetPrecipitationLv(chunkCoord) &&
-                    biome[i].vegetationLv == GetVegetationLv(chunkCoord) )
+                if (biome[i].temperatureLv == GetTemperatureLv(chunkCoord))
                 {
-                    return (i, false);
+                    if (biome[i].vegetationLv == GetVegetationLv(chunkCoord))
+                    {
+                        candidateBiome.Enqueue(i);
+                        if (biome[i].precipitationLv == GetPrecipitationLv(chunkCoord))
+                        {
+                            return (i, false);
+                        }
+                    }
                 }
             }
-            return (0, false);
-        }
 
+            return (candidateBiome.Dequeue(), false);
+        }
     }
 
     private bool BiomeTypeOcean(ChunkCoord chunkCoord)
@@ -187,22 +239,20 @@ public class GenerateMap
     /// </summary>
     /// <param name="noise"></param>
     /// <returns>
-    /// 0～5の整数値
+    /// 0～4の整数値
     /// <para>
-    /// 0から順に 13% 18% 27% 23% 12% 7%
+    /// 0から順に 5% 21% 30% 27% 17%
     /// </para>
     /// </returns>
     private byte TemperatureLv(float noise)
-    {
-        if (noise > 0.93f)
-            return 5;
-        else if(noise > 0.81f)
+    {   
+        if(noise > 0.83f)
             return 4;
-        else if(noise > 0.58f)
+        else if(noise > 0.56f)
             return 3;
-        else if (noise > 0.31f)
+        else if (noise > 0.26f)
             return 2;
-        else if (noise > 0.13f)
+        else if (noise > 0.05f)
             return 1;
         else
             return 0;
@@ -214,20 +264,18 @@ public class GenerateMap
     /// </summary>
     /// <param name="noise"></param>
     /// <returns>
-    /// 0～4の整数値
+    /// 0～3の整数値
     /// <para>
-    /// 0から順に 22% 29% 27% 17% 5%
+    /// 0から順に 27% 29% 25% 19%
     /// </para>
     /// </returns>
     private byte PrecipitationLv(float noise)
     {
-        if (noise > 0.95f)
-            return 4;
-        else if (noise > 0.78f)
+        if (noise > 0.81f)
             return 3;
-        else if (noise > 0.51f)
+        else if (noise > 0.56f)
             return 2;
-        else if (noise > 0.22f)
+        else if (noise > 0.27f)
             return 1;
         else
             return 0;
@@ -298,10 +346,9 @@ public class GenerateMap
     {
 
     }
-    private float GetVoxelPerBiomeHight(ChunkCoord coord, float scale)
+    private float GetVoxelPerBiomeHight(Vector2 position, float scale)
     {
-        Vector2 chunkPerlin = ChunkPerlinNoise(coord);
-        return Mathf.PerlinNoise((chunkPerlin.x + seed) * scale, (chunkPerlin.y + seed) * scale);
+        return Mathf.PerlinNoise(((position.x + 0.01f) / VoxelData.Width) * scale + seed, ((position.y + 0.01f) / VoxelData.Width) * scale + seed);
     }
 
     /// <summary>
@@ -326,7 +373,6 @@ public class GenerateMap
         terrestrialLv = new int[biomeNum];
         foreach (var type in biome)
         {
-            terrestrialLv[x] = GetTerrestrialLv((type.solidGroundHight + type.solidGroundHight + type.terrainHeight) / 2);
             x++;
         }
     }
@@ -354,8 +400,6 @@ public class GenerateMap
             for(int j= 0; j < temperatureMapSize; j++)
             {
                 temperatureMap[i, j] = TemperatureLv(Mathf.PerlinNoise((i + seed) * 0.0001f + (temperatureMapSize - i) * x, (j + seed) * 0.0001f + (temperatureMapSize - j) * y));
-                tempetatureMapDebug[temperatureMap[i, j]] += 1;
-
             }
     }
     /// <summary>
@@ -367,8 +411,8 @@ public class GenerateMap
     /// </returns>
     private byte GetTemperatureLv(ChunkCoord coord)
     {
-        int x = Mathf.FloorToInt(coord.x / 64);
-        int z = Mathf.FloorToInt(coord.z / 64);
+        int x = Mathf.FloorToInt(coord.x / 8);
+        int z = Mathf.FloorToInt(coord.z / 8);
         return temperatureMap[x,z];
     }
 
@@ -386,7 +430,6 @@ public class GenerateMap
             for (int j = 0; j < precipitationMapSize; j++)
             {
                 precipitationMap[i, j] = PrecipitationLv(Mathf.PerlinNoise((i + seed) * 0.0001f + (precipitationMapSize - i) * x, (j + seed) * 0.0001f + (precipitationMapSize - j) * y));
-                precipitationMapDebug[precipitationMap[i, j]]++;
             }
     }
     /// <summary>
@@ -398,8 +441,8 @@ public class GenerateMap
     /// </returns>
     private byte GetPrecipitationLv(ChunkCoord coord)
     {
-        int x = Mathf.FloorToInt(coord.x / 32);
-        int z = Mathf.FloorToInt(coord.z / 32);
+        int x = Mathf.FloorToInt(coord.x / 4);
+        int z = Mathf.FloorToInt(coord.z / 4);
         return precipitationMap[x, z];
     }
 
@@ -417,7 +460,6 @@ public class GenerateMap
             for (int j = 0; j < vegetationMapSize; j++)
             {
                 vegetationMap[i, j] = VegetationLv(Mathf.PerlinNoise((i + seed) * 0.0001f + (vegetationMapSize - i) * x, (j + seed) * 0.0001f + (vegetationMapSize - j) * y));
-                vegetationMapDebug[vegetationMap[i, j]]++;
             }
     }
     /// <summary>
@@ -429,8 +471,8 @@ public class GenerateMap
     /// </returns>
     private byte GetVegetationLv(ChunkCoord coord)
     {
-        int x = Mathf.FloorToInt(coord.x / 16);
-        int z = Mathf.FloorToInt(coord.z / 16);
+        int x = Mathf.FloorToInt(coord.x / 2);
+        int z = Mathf.FloorToInt(coord.z / 2);
         return vegetationMap[x, z];
     }
 
@@ -445,7 +487,6 @@ public class GenerateMap
             for (int j = 0; j < continentalnessMapSize; j++)
             {
                 continentalnessMap[i, j] = ContinentalnessLv(Mathf.PerlinNoise((i + seed) * 0.0001f + (continentalnessMapSize - i) * x, (j + seed) * 0.0001f + (continentalnessMapSize - j) * y));
-                continentalnessMapDebug[continentalnessMap[i, j]]++;
             }
     }
     /// <summary>
@@ -457,8 +498,8 @@ public class GenerateMap
     /// </returns>
     private byte GetContinentalnessLv(ChunkCoord coord)
     {
-        int x = Mathf.FloorToInt(coord.x / 6);
-        int z = Mathf.FloorToInt(coord.z / 6);
+        int x = Mathf.FloorToInt(coord.x / 4);
+        int z = Mathf.FloorToInt(coord.z / 4);
         return continentalnessMap[x, z];
     }
 }

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   temperatureLv: 4
   continentalness: 2
-  terrainHeight: 0
-  terrainScale: 0
-  topBlocks: 11
+  terrainHeight: 6
+  terrainScale: 0.23
+  topBlocks: 9
   middleLayer: 0
   basicsBlocks: 2

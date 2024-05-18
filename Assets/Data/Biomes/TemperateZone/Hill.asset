@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db9fc2babea467b40881dde08b90e8ad, type: 3}
   m_Name: Hill
   m_EditorClassIdentifier: 
-  temperatureLv: 4
-  precipitationLv: 0
+  temperatureLv: 2
+  precipitationLv: 2
   vegetationLv: 0
-  solidGroundHight: 64
-  terrainHeight: 30
+  solidGroundHight: 70
+  terrainHeight: 15
   terrainScale: 0.3
   topBlocks: 3
-  middleLayer: 5
-  basicsBlocks: 2
+  middleLayer: 2
+  middleLayerWidth: 6

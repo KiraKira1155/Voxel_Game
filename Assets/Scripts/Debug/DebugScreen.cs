@@ -102,7 +102,7 @@ public class DebugScreen : Singleton<DebugScreen>
         ChunkCoord playerCoord = new ChunkCoord(playerPos);
         return
         string.Format("Biome: {0}"
-            , World.I.generateMap.GetBiomeType(playerCoord, new Vector2()).ToString());
+            , World.I.generateMap.GetBiomeType(playerCoord).ToString());
     }
 
     private string DebugSeed()

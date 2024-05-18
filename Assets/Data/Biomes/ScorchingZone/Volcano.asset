@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db9fc2babea467b40881dde08b90e8ad, type: 3}
-  m_Name: Null
+  m_Name: Volcano
   m_EditorClassIdentifier: 
-  temperatureLv: 2
-  precipitationLv: 0
-  vegetationLv: 0
-  solidGroundHight: 64
-  terrainHeight: 0
-  terrainScale: 0.2
-  topBlocks: 2
-  middleLayer: 2
-  basicsBlocks: 2
+  temperatureLv: 4
+  precipitationLv: 3
+  vegetationLv: 4
+  solidGroundHight: 105
+  terrainHeight: 40
+  terrainScale: 0.5
+  topBlocks: 16
+  middleLayer: 11
+  middleLayerWidth: 6

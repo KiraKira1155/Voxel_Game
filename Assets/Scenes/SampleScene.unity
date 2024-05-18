@@ -944,8 +944,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4280163870
+  m_fontColor: {r: 0.11698109, g: 0.11698109, b: 0.11698109, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1293,16 +1293,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generateMap:
-    tempetatureMapDebug: 000000000000000000000000000000000000000000000000
-    precipitationMapDebug: 0000000000000000000000000000000000000000
-    vegetationMapDebug: 0000000000000000000000000000000000000000
-    continentalnessMapDebug: 00000000000000000000000000000000000000000000000000000000
     terrestrialLv: 
+    DebugOceanTrue: 0
+    DebugOceanFalse: 0
+    DebugBiome: 
   biome:
-  - {fileID: 11400000, guid: 596c593b1ba62bc44a936f2da044f48e, type: 2}
-  - {fileID: 11400000, guid: 5d9910fe3d9c7394493b4ed164704176, type: 2}
-  - {fileID: 11400000, guid: e31fbfb4dfa8cf34aa31ddf158e2e937, type: 2}
+  - {fileID: 11400000, guid: 2fe8d29a88a835b4d98f57ddc192194b, type: 2}
+  - {fileID: 11400000, guid: e0a1654d3c2034e4aa3fa98c33df283b, type: 2}
+  - {fileID: 11400000, guid: ffdcb870507f3044b8ec8765d223681a, type: 2}
+  - {fileID: 11400000, guid: 061258fb0bcd5404580367035d135bc6, type: 2}
+  - {fileID: 11400000, guid: 1a51b4705b641d84eb86029457bfc0ce, type: 2}
+  - {fileID: 11400000, guid: 8edb385545989fa46aee69e83e8886f1, type: 2}
+  - {fileID: 11400000, guid: 6e8ca2f8a104a7942809a4fec5b085ee, type: 2}
+  - {fileID: 11400000, guid: 98149f4e39922544ab1fbb9b99d4c26b, type: 2}
+  - {fileID: 11400000, guid: 5dbcd64470fd5b148ab00d75d3d5c129, type: 2}
+  - {fileID: 11400000, guid: fc67c3e2c4c8dba488923a6594a19e03, type: 2}
+  - {fileID: 11400000, guid: 55380f8d9b4acaa43bc82a3a2864c5b3, type: 2}
+  - {fileID: 11400000, guid: f0f4db6e7c3aa9c4895734fd6a8468aa, type: 2}
+  - {fileID: 11400000, guid: b2af8c467f7176b4f8cee4604e4e0a44, type: 2}
+  - {fileID: 11400000, guid: e822253000935d5479bbd9b99d3c36ae, type: 2}
+  - {fileID: 11400000, guid: 482feaf77d7f47b4d8d733ef3b036a04, type: 2}
+  - {fileID: 11400000, guid: 5bd636992984096408355fc66bb9c3ab, type: 2}
+  - {fileID: 11400000, guid: 91912c956389b3b438cc476b973760b9, type: 2}
+  - {fileID: 11400000, guid: 00606a96bc10e1048a65d7c99a6f251c, type: 2}
+  - {fileID: 11400000, guid: 6c882dd3f0874ee4aa9e821cf998c69d, type: 2}
+  - {fileID: 11400000, guid: f6297f97aba35d84cb144801c07c9a9f, type: 2}
+  - {fileID: 11400000, guid: 2fc178c5eac56274c8d9a78aadc63d06, type: 2}
+  - {fileID: 11400000, guid: 07669a53d8a1f2044a5c4da658b29bb5, type: 2}
+  - {fileID: 11400000, guid: 93fe1826ca2857644ada3518d90012fe, type: 2}
   - {fileID: 11400000, guid: 99100593037724c47a2a5addaffb8428, type: 2}
+  - {fileID: 11400000, guid: 229e1d3238f8a1340bee6919c934944f, type: 2}
+  - {fileID: 11400000, guid: 2e28e43456c2cf04a8e60ae23fe38d7d, type: 2}
+  - {fileID: 11400000, guid: 6523e363e9802c14993ab6a9fcf9ec02, type: 2}
+  - {fileID: 11400000, guid: d6c77e9e692035744af3ace91bd23749, type: 2}
+  - {fileID: 11400000, guid: 7230c265910abcd44984a95aa9ead0bc, type: 2}
+  - {fileID: 11400000, guid: ff297620489950842872a9227197f496, type: 2}
+  - {fileID: 11400000, guid: d4bb58fe3e7a7ef49b114984aad3c4e1, type: 2}
+  - {fileID: 11400000, guid: 5d862777e7d68424a8e2b8f9127d41d6, type: 2}
+  - {fileID: 11400000, guid: f2c8041cbedcf4f42a43bb1735eae858, type: 2}
+  - {fileID: 11400000, guid: 8e70c11b68bcf2041a02d48318beac2d, type: 2}
+  - {fileID: 11400000, guid: f6a13b773d867cb4dabb8ebecf63fe0d, type: 2}
+  - {fileID: 11400000, guid: d8e17eafb24abeb4b9ed103bfaa74af8, type: 2}
+  - {fileID: 11400000, guid: 5c764e52ecc2499469adead74ea1fbb0, type: 2}
+  - {fileID: 11400000, guid: da3b70de6afa6554f94cdb3bd68c0387, type: 2}
+  - {fileID: 11400000, guid: ff6e41b68a9b51a4d80ccbbcbf84af20, type: 2}
+  - {fileID: 11400000, guid: 588396bc3a25dd24f8b77d8b33ac7332, type: 2}
+  - {fileID: 11400000, guid: aba99a73e72dcd64f9f37bd36fbf910e, type: 2}
+  - {fileID: 11400000, guid: 6e2b1545e48771540ac9c439da69c073, type: 2}
+  - {fileID: 11400000, guid: e51ca57fa24214b4a9e7e2b9200d4125, type: 2}
+  - {fileID: 11400000, guid: e98d2913a4f6ad24ab7a2a236a041a93, type: 2}
+  - {fileID: 11400000, guid: 68c4f5665f53c8e49bdcb5755d07e617, type: 2}
+  - {fileID: 11400000, guid: c79d8ef581a21ec479312455d2a6ce9c, type: 2}
   oceanBiome:
   - {fileID: 11400000, guid: 00f8a7060ce6e594399c0348ffca5481, type: 2}
   - {fileID: 11400000, guid: 724ffe4adaa226b43a34f9859c4d3bbc, type: 2}
@@ -3707,12 +3748,12 @@ MonoBehaviour:
     _perfectMiner: 1
     _efficientTool: 0
     dropItem: []
-    backFaceTexture: 0
-    frontFaceTexture: 0
-    topFaceTexture: 0
-    bottomFaceTexture: 0
-    leftFaceTexture: 0
-    rightFaceTexture: 0
+    backFaceTexture: 1
+    frontFaceTexture: 1
+    topFaceTexture: 1
+    bottomFaceTexture: 1
+    leftFaceTexture: 1
+    rightFaceTexture: 1
   - _name: Glass
     blockType: 0
     _gravity: 0
@@ -3725,12 +3766,12 @@ MonoBehaviour:
     _perfectMiner: 1
     _efficientTool: 4
     dropItem: []
-    backFaceTexture: 3
-    frontFaceTexture: 3
-    topFaceTexture: 3
-    bottomFaceTexture: 3
-    leftFaceTexture: 3
-    rightFaceTexture: 3
+    backFaceTexture: 0
+    frontFaceTexture: 0
+    topFaceTexture: 0
+    bottomFaceTexture: 0
+    leftFaceTexture: 0
+    rightFaceTexture: 0
 --- !u!114 &1813773303 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7839868316637719785, guid: 27a9e31f0a834614ba3ab3adfac03a26, type: 3}

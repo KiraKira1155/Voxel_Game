@@ -49,7 +49,7 @@ public class EnumGameData
         grass,
         coarseDirt,
         snow,
-        SnowDirt,
+        snowDirt,
         sand,
         redSand,
         gravel,
@@ -75,7 +75,7 @@ public class EnumGameData
         redstoneBlock,
         copperBlock,
         emeraldBlock,
-        NetheriteBlock,
+        netheriteBlock,
         log,
         leaf,
         glass

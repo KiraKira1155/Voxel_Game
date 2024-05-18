@@ -8,7 +8,7 @@ public class BiomeAttributes : ScriptableObject
 {
     [Tooltip("y=64の時の温度" +
         "\n1より下は氷雪地帯、2が温帯のイメージ、4が猛暑" +
-        "\\n1より下はY64で水が氷る\"")]
+        "\n1より下はY64で水が氷る\"")]
     [Range(0, 4)]
     public byte temperatureLv;
 
@@ -22,13 +22,8 @@ public class BiomeAttributes : ScriptableObject
     [Range(0, 4)]
     public byte vegetationLv;
 
-    [Tooltip("地形の最低高度" +
-        "\nterrainHeighを足した平均値でレベルが決定")]
-    [Range(64, 256)]
-    public short solidGroundHight = 64;
-
     [Tooltip("地形の高度幅" +
-        "\nsolidGroundHightと足して256は越えないように注意")]
+        "\n64と足して256は越えないように注意")]
     public short terrainHeight;
 
     [Tooltip("数字が小さいほどなめらかな地形になる")]
@@ -36,7 +31,7 @@ public class BiomeAttributes : ScriptableObject
 
     [SearchableEnum] public EnumGameData.BlockID topBlocks;
     [SearchableEnum] public EnumGameData.BlockID middleLayer;
-    [SearchableEnum] public EnumGameData.BlockID basicsBlocks;
+    public byte middleLayerWidth;
 }
 
 [System.Serializable]

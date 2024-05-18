@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.XR;
 using static VoxelData;
+
 public class Chunk
 {
 	private ChunkCoord coord;
@@ -18,12 +18,14 @@ public class Chunk
 	Material[] materials = new Material[2];
 	List<int> transparentTriangles = new List<int>();
 
-	public Vector3 position;
+	public Vector3 position {  get; private set; }
 
-	public int[,,] voxelMap = new int[Width, Hight, Width];
-	public bool[,] OceanMap = new bool[Width, Width];
-    public int[,] biomeMap = new int[Width, Width];
-    public int[,] heightMap = new int[Width, Width];
+	private int[,,] voxelMap = new int[Width, Hight, Width];
+    private bool[,] OceanMap = new bool[Width, Width];
+    private byte[,] biomeMap = new byte[Width, Width];
+	private byte BiomeNum;
+	private bool IsOcean;
+    private int[,] heightMap = new int[Width, Width];
 
     public Queue<VoxelMod> modifications = new Queue<VoxelMod>();
 
@@ -37,6 +39,13 @@ public class Chunk
 
         if (generateOnLoad)
 			Init();
+    }
+
+	public Chunk(ChunkCoord coord)
+    {
+        this.coord = coord;
+        position = new Vector3(coord.x * Width, 0f, coord.z * Width);
+        PopulateVoxelMap();
     }
 
 	public void Init()
@@ -61,14 +70,15 @@ public class Chunk
 
 	private void PopulateVoxelMap()
     {
+		(BiomeNum, IsOcean) = World.I.generateMap.GetBiomeType(coord);
         for (int x = 0; x < Width; x++)
             for (int z = 0; z < Width; z++)
             {
-				(biomeMap[x, z], OceanMap[x, z]) = World.I.generateMap.GetBiomeType(coord, new Vector2(x, z));
+				(biomeMap[x, z], OceanMap[x, z]) = (BiomeNum, IsOcean);
                 if (OceanMap[x, z])
-                    heightMap[x, z] = World.I.generateMap.GetSolidOceanGroundHight(coord, biomeMap[x, z]);
+                    heightMap[x, z] = World.I.generateMap.GetSolidOceanGroundHight(new Vector2(position.x + x, position.z + z), biomeMap[x, z]);
                 else
-                    heightMap[x, z] = World.I.generateMap.GetSolidGroundHight(coord, biomeMap[x, z]);
+                    heightMap[x, z] = World.I.generateMap.GetSolidGroundHight(new Vector2(position.x + x, position.z + z), biomeMap[x, z]);
             }
 
         for (int y = 0; y < Hight; y++)
@@ -234,6 +244,21 @@ public class Chunk
         zCheck -= Mathf.FloorToInt(position.z);
 
         return new Vector2(xCheck, zCheck);
+    }
+
+	public byte GetBiomeType(Vector3 pos)
+	{
+		return biomeMap[(int)GetVoxelPos(pos).x, (int)GetVoxelPos(pos).z];
+    }
+    public bool GetOceanMap(Vector3 pos)
+    {
+        return OceanMap[(int)GetVoxelPos(pos).x, (int)GetVoxelPos(pos).z];
+    }
+
+	public int GetSolidGroundHeight(Vector3 pos)
+	{
+		return heightMap[(int)GetVoxelPos(pos).x, (int)GetVoxelPos(pos).z];
+
     }
 
     private void UpdateMeshData(Vector3 pos)

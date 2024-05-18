@@ -16,6 +16,7 @@ public class World : Singleton<World>
     public Material transparentMaterial;
 
     private Chunk[,] chunks = new Chunk[WorldSizeInChunks, WorldSizeInChunks];
+    private Dictionary<ChunkCoord, Chunk> notInitChunk = new Dictionary<ChunkCoord, Chunk>();
 
     private List<ChunkCoord> activeChunk = new List<ChunkCoord>();
     private ChunkCoord playerChunkCoord;
@@ -76,13 +77,13 @@ public class World : Singleton<World>
         int spawmXZ = WorldSizeInVoxels / 2;
         ChunkCoord chunk = new ChunkCoord(new Vector3(spawmXZ, 0, spawmXZ));
         Vector2 voxelPos = chunks[chunk.x, chunk.z].GetVoxelPos(new Vector2(spawmXZ, spawmXZ));
-        int biomeType = generateMap.GetBiomeType(chunk, voxelPos).Item1;
-        bool ocean = generateMap.GetBiomeType(chunk, voxelPos).Item2;
+        byte biomeType = generateMap.GetBiomeType(chunk).Item1;
+        bool ocean = generateMap.GetBiomeType(chunk).Item2;
         float spawnY;
         if (ocean)
-            spawnY = generateMap.GetSolidOceanGroundHight(chunk, biomeType);
+            spawnY = generateMap.GetSolidOceanGroundHight(new Vector2(spawmXZ, spawmXZ), biomeType);
         else
-            spawnY = generateMap.GetSolidGroundHight(chunk, biomeType);
+            spawnY = generateMap.GetSolidGroundHight(new Vector2(spawmXZ, spawmXZ), biomeType);
         return new Vector3(spawmXZ, spawnY, spawmXZ);
     }
 
@@ -174,7 +175,6 @@ public class World : Singleton<World>
     IEnumerator ApplyModifications()
     {
         applyingModifications = true;
-        int count = 0;
 
         while (modifications.Count > 0)
         {
@@ -191,6 +191,8 @@ public class World : Singleton<World>
             if (chunks[c.x, c.z] == null)
             {
                 chunks[c.x, c.z] = new Chunk(c, true);
+                if(notInitChunk.ContainsKey(c))
+                    notInitChunk.Remove(c);
                 activeChunk.Add(c);
             }
 
@@ -201,12 +203,7 @@ public class World : Singleton<World>
                 chunksToUpdate.Add(chunks[c.x, c.z]);
             }
 
-            count++;
-            if (count > 20)
-            {
-                count = 0;
-                yield return null;
-            }
+            yield return 1;
         }
 
         applyingModifications = false;
@@ -309,7 +306,14 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].isSolid;
 
-        return false;
+        (byte, bool) biome = generateMap.GetBiomeType(thisChunk);
+        int height;
+        if (biome.Item2)
+            height = generateMap.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+        else
+            height = generateMap.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+
+        return BlockManager.I.blocktype[GetVoxel(pos, biome.Item1, biome.Item2, height)].isSolid;
     }
 
     public bool CheckIfVoxelTransparent(Vector3 pos)
@@ -322,7 +326,14 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].isTransparent;
 
-        return false;
+        (byte, bool) biome = generateMap.GetBiomeType(thisChunk);
+        int height;
+        if (biome.Item2)
+            height = generateMap.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+        else
+            height = generateMap.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+
+        return BlockManager.I.blocktype[GetVoxel(pos, biome.Item1, biome.Item2, height)].isTransparent;
     }
 
     public int CheckIfVoxel(Vector3 pos)
@@ -335,7 +346,14 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos);
 
-        return 0;
+        (byte, bool) biome = generateMap.GetBiomeType(thisChunk);
+        int height;
+        if (biome.Item2)
+            height = generateMap.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+        else
+            height = generateMap.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+
+        return GetVoxel(pos, biome.Item1, biome.Item2, height);
     }
 
     public string CheckForBlockType(Vector3 pos)
@@ -348,7 +366,14 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].name;
 
-        return "null";
+        (byte, bool) biome = generateMap.GetBiomeType(thisChunk);
+        int height;
+        if (biome.Item2)
+            height = generateMap.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+        else
+            height = generateMap.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+
+        return BlockManager.I.blocktype[GetVoxel(pos, biome.Item1, biome.Item2, height)].name;
     }
 
     public float BlockNeedDestructionTime(Vector3 pos)
@@ -361,7 +386,14 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].destructionTime;
 
-        return 0;
+        (byte, bool) biome = generateMap.GetBiomeType(thisChunk);
+        int height;
+        if (biome.Item2)
+            height = generateMap.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+        else
+            height = generateMap.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+
+        return BlockManager.I.blocktype[GetVoxel(pos, biome.Item1, biome.Item2, height)].destructionTime;
     }
 
     public int BlockNeedRarity(Vector3 pos)
@@ -374,7 +406,14 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].needRarity;
 
-        return -1;
+        (byte, bool) biome = generateMap.GetBiomeType(thisChunk);
+        int height;
+        if (biome.Item2)
+            height = generateMap.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+        else
+            height = generateMap.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+
+        return BlockManager.I.blocktype[GetVoxel(pos, biome.Item1, biome.Item2, height)].needRarity;
     }
     public EnumGameData.ItemType BlockEfficientTool(Vector3 pos)
     {
@@ -386,11 +425,18 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].efficientTool;
 
-        return EnumGameData.ItemType.Null;
+        (byte, bool) biome = generateMap.GetBiomeType(thisChunk);
+        int height;
+        if (biome.Item2)
+            height = generateMap.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+        else
+            height = generateMap.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
+
+        return BlockManager.I.blocktype[GetVoxel(pos, biome.Item1, biome.Item2, height)].efficientTool;
     }
 
     //É`ÉÉÉìÉNÇÃèâä˙ê∂ê¨óp
-    public int GetVoxel(Vector3 voxelPos, int biomeType, bool ocean, int terrainHeight)
+    public int GetVoxel(Vector3 voxelPos, byte biomeType, bool ocean, int terrainHeight)
     {
         voxelPos.y = Mathf.FloorToInt(voxelPos.y);
 
@@ -429,8 +475,10 @@ public class World : Singleton<World>
                 voxelValue = (int)oceanBiome[biomeType].topBlocks;
             else if (pos.y < terrainHight && pos.y > terrainHight - 4)
                 voxelValue = (int)oceanBiome[biomeType].middleLayer;
-            else if (pos.y > terrainHight)
-                return (int)EnumGameData.BlockID.air;
+            else if (pos.y > terrainHight && pos.y <= 64)
+                voxelValue = (int)EnumGameData.BlockID.glass;
+            else if (pos.y > 64)
+                voxelValue = (int)EnumGameData.BlockID.air;
             else
                 voxelValue = (int)oceanBiome[biomeType].basicsBlocks;
         }
@@ -438,12 +486,12 @@ public class World : Singleton<World>
         {
             if (pos.y == terrainHight)
                 voxelValue = (int)biome[biomeType].topBlocks;
-            else if (pos.y < terrainHight && pos.y > terrainHight - 4)
+            else if (pos.y < terrainHight && pos.y > terrainHight - biome[biomeType].middleLayerWidth)
                 voxelValue = (int)biome[biomeType].middleLayer;
             else if (pos.y > terrainHight)
                 return (int)EnumGameData.BlockID.air;
             else
-                voxelValue = (int)biome[biomeType].basicsBlocks;
+                voxelValue = (int)EnumGameData.BlockID.stone;
         }
 
         return voxelValue;

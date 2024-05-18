@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: db9fc2babea467b40881dde08b90e8ad, type: 3}
-  m_Name: Plain
+  m_Name: BambooJungle
   m_EditorClassIdentifier: 
-  temperatureLv: 4
-  precipitationLv: 0
-  vegetationLv: 0
+  temperatureLv: 3
+  precipitationLv: 2
+  vegetationLv: 1
   solidGroundHight: 64
-  terrainHeight: 10
-  terrainScale: 0.4
+  terrainHeight: 25
+  terrainScale: 0.32
   topBlocks: 3
-  middleLayer: 5
-  basicsBlocks: 2
+  middleLayer: 2
+  middleLayerWidth: 4
