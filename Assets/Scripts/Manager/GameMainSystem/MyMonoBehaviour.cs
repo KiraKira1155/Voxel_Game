@@ -36,7 +36,7 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
 
             generateMap.DoAwake();
 
-            world.DoAwake();
+            StartCoroutine(DoAwake());
         }
     }
 
@@ -76,9 +76,15 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
         }
     }
 
+    IEnumerator DoAwake()
+    {
+        yield return new WaitUntil(() => generateMap.successGenerateMap);
+        world.DoAwake();
+    }
+
     IEnumerator DoStart()
     {
-        yield return new WaitUntil(() => ConfigManager.successGenerateWorld);
+        yield return new WaitUntil(() => world.successGenerateWorld);
         successStart = true;
 
         world.DoStart();
@@ -86,15 +92,12 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
     }
     IEnumerator DoUpdate()
     {
-        yield return new WaitUntil(() => ConfigManager.successGenerateWorld);
         yield return new WaitUntil(() => successStart);
         successUpdate = true;
     }
 
     IEnumerator DoFixedUpdate()
     {
-        yield return new WaitUntil(() => ConfigManager.successGenerateWorld);
-        yield return new WaitUntil(() => successStart);
         yield return new WaitUntil(() => successUpdate);
         successFixedUpdate = true;
     }

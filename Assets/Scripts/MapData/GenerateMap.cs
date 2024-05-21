@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class GenerateMap : Singleton<GenerateMap>
@@ -14,10 +15,10 @@ public class GenerateMap : Singleton<GenerateMap>
     private const short precipitationMapSize = 1024;
     private const short vegetationMapSize = 2048;
     private const short continentalnessMapSize = 1024;
-    private byte[,] temperatureMap;
-    private byte[,] precipitationMap;
-    private byte[,] vegetationMap;
-    private byte[,] continentalnessMap;
+    private byte[,] temperatureMap = new byte[temperatureMapSize, temperatureMapSize];
+    private byte[,] precipitationMap = new byte[precipitationMapSize, precipitationMapSize];
+    private byte[,] vegetationMap = new byte[vegetationMapSize, vegetationMapSize];
+    private byte[,] continentalnessMap = new byte[continentalnessMapSize, continentalnessMapSize];
 
     private (byte, bool)[,] biomeMap = new (byte, bool)[ConfigManager.WorldSizeInChunks, ConfigManager.WorldSizeInChunks];
 
@@ -34,6 +35,8 @@ public class GenerateMap : Singleton<GenerateMap>
     [SerializeField] int DebugOceanFalse;
     [SerializeField] int[] DebugBiome;
 
+    public bool successGenerateMap = false;
+
     private void Awake()
     {
         Init();
@@ -48,37 +51,28 @@ public class GenerateMap : Singleton<GenerateMap>
         seed = ConfigManager.seed;
 
         DebugBiome = new int[biomeNum];
-        StartCoroutine(GenerateMapData());
+
+        var task = Task.Run(() =>
+        {
+            GenarateTemperatureMap();
+            GenaratePrecipitationMap();
+            GenarateVegetationMap();
+            GenerateContinentalnessMap();
+        });
+        task.Wait();
+        var task1 = Task.Run(() =>
+        {
+            for (int x = (ConfigManager.WorldSizeInChunks / 2) - 100; x < (ConfigManager.WorldSizeInChunks / 2) + 100; x++)
+            {
+                for (int z = (ConfigManager.WorldSizeInChunks / 2) - 100; z < (ConfigManager.WorldSizeInChunks / 2) + 100; z++)
+                    biomeMap[x, z] = GenerateBiomeMap(new ChunkCoord(x, z));
+            }
+        });
+        task1.Wait();
+
+        successGenerateMap = true;
         //InitTerrestrialLvForBiome(); 
         //InitVoxelPerlinNoise();
-    }
-
-    IEnumerator GenerateMapData()
-    {
-        temperatureMap = new byte[temperatureMapSize, temperatureMapSize];
-        precipitationMap = new byte[precipitationMapSize, precipitationMapSize];
-        vegetationMap = new byte[vegetationMapSize, vegetationMapSize];
-        continentalnessMap = new byte[continentalnessMapSize, continentalnessMapSize];
-
-        GenarateTemperatureMap();
-        GenaratePrecipitationMap();
-        GenarateVegetationMap();
-        GenerateContinentalnessMap();
-
-        for (int x = (ConfigManager.WorldSizeInChunks / 2) - 100; x < (ConfigManager.WorldSizeInChunks / 2) + 100; x++)
-        {
-            UnityEngine.Debug.Log(x);
-            yield return null;
-            for (int z = (ConfigManager.WorldSizeInChunks / 2) - 100; z < (ConfigManager.WorldSizeInChunks / 2) + 100; z++)
-                biomeMap[x, z] = GenerateBiomeMap(new ChunkCoord(x, z));
-        }
-        
-        temperatureMap = null;
-        precipitationMap = null;
-        vegetationMap = null;
-        continentalnessMap = null;
-
-        ConfigManager.successGenerateMap = true;
     }
 
     private void Debug()

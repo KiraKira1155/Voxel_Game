@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using static VoxelData;
 
@@ -11,7 +12,7 @@ public class Chunk
 	private MeshRenderer meshRenderer;
 	private MeshFilter meshFilter;
 
-	private int vertexIndex = 0;
+    private int vertexIndex = 0;
 	private List<Vector3> vertices = new List<Vector3>();
 	private List<int> triangles = new List<int>();
 	private List<Vector2> uvs = new List<Vector2>();
@@ -37,13 +38,6 @@ public class Chunk
 
         if (generateOnLoad)
 			Init();
-    }
-
-	public Chunk(ChunkCoord coord)
-    {
-        this.coord = coord;
-        position = new Vector3(coord.x * Width, 0f, coord.z * Width);
-        PopulateVoxelMap();
     }
 
 	public void Init()
@@ -91,16 +85,20 @@ public class Chunk
 
     public void UpdateChunk()
     {
-        ClearMeshData();
+		var task = Task.Run(() =>
+        {
+            ClearMeshData();
 
-        for (int y = 0; y < Hight; y++)
-			for (int x = 0; x < Width; x++)
-				for (int z = 0; z < Width; z++)
-                {
-                    if (BlockManager.I.blocktype[voxelMap[x, y, z]].isSolid)
-						UpdateMeshData(new Vector3(x, y, z));
-				}
-
+            for (int y = 0; y < Hight; y++)
+                for (int x = 0; x < Width; x++)
+                    for (int z = 0; z < Width; z++)
+                    {
+                        if (BlockManager.I.blocktype[voxelMap[x, y, z]].isSolid)
+                            UpdateMeshData(new Vector3(x, y, z));
+                    }
+        });
+		
+		task.Wait();
 		CreateMesh();
 	}
 
@@ -294,7 +292,7 @@ public class Chunk
 		}
 	}
 
-	public void CreateMesh()
+	private void CreateMesh()
 	{
 		Mesh mesh = new Mesh();
 		mesh.vertices = vertices.ToArray();

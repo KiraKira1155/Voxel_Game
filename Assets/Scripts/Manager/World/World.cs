@@ -28,6 +28,8 @@ public class World : Singleton<World>
     private bool checkView = false;
     private bool checkCreate = false;
 
+    public bool successGenerateWorld = false;
+
     public static int WorldSizeInVoxels
     {
         get { return WorldSizeInChunks * VoxelData.Width; }
@@ -74,7 +76,6 @@ public class World : Singleton<World>
     {
         int spawmXZ = WorldSizeInVoxels / 2 + 8;
         ChunkCoord chunk = new ChunkCoord(new Vector3(spawmXZ, 0, spawmXZ));
-        Vector2 voxelPos = chunks[chunk.x, chunk.z].GetVoxelPos(new Vector2(spawmXZ, spawmXZ));
         byte biomeType = GenerateMap.I.GetBiomeType(chunk).Item1;
         bool ocean = GenerateMap.I.GetBiomeType(chunk).Item2;
         float spawnY;
@@ -85,7 +86,7 @@ public class World : Singleton<World>
         return new Vector3(spawmXZ, spawnY, spawmXZ);
     }
 
-    public async void DoUpdate()
+    public void DoUpdate()
     {
         playerChunkCoord = GetChunkCoordFromVector3(PlayerManager.I.transform.position);
 
@@ -97,15 +98,13 @@ public class World : Singleton<World>
             CheckView();
 
         if (chunksToCreate.Count > 0 && !checkView && !checkCreate)
-            await CreateChunk();
+            StartCoroutine(CreateChunk());
 
         if (chunksToUpdate.Count > 0)
             UpdateChunks();
     }
     IEnumerator GenerateWorld()
     {
-        yield return new WaitUntil(() => ConfigManager.successGenerateMap);
-
         for (int x = (WorldSizeInChunks / 2) - ViewDistanceInChunk; x < (WorldSizeInChunks / 2) + ViewDistanceInChunk; x++)
         {
             for (int z = (WorldSizeInChunks / 2) - ViewDistanceInChunk; z < (WorldSizeInChunks / 2) + ViewDistanceInChunk; z++)
@@ -117,10 +116,11 @@ public class World : Singleton<World>
             }
         }
 
+        Debug.Log("成功");
         successGenerateWorld = true;
     }
 
-    private async Task CreateChunk()
+    IEnumerator CreateChunk()
     {
         checkCreate = true;
 
@@ -130,7 +130,7 @@ public class World : Singleton<World>
             chunksToCreate.RemoveAt(0); 
             chunks[c.x, c.z].Init();
             activeChunk.Add(c);
-            await Task.Run(() => { Thread.Sleep(50); });
+            yield return new WaitForSeconds(0.032f);
         }
 
         checkCreate = false;
@@ -233,17 +233,14 @@ public class World : Singleton<World>
             yield return null;
         }
 
-        checkView = false;
-
-        Task.Run(() =>
+        //以前のリストに残っているチャンクは視界内にないから、ループをthroughして無効に
+        foreach (ChunkCoord c in previouslyActiveChunks)
         {
-            //以前のリストに残っているチャンクは視界内にないから、ループをthroughして無効に
-            foreach (ChunkCoord c in previouslyActiveChunks)
-            {
-                Thread.Sleep(30);
-                chunks[c.x, c.z].isActive = false;
-            }
-        });
+            chunks[c.x, c.z].isActive = false;
+            yield return null;
+        }
+
+        checkView = false;
     }
 
     //プレイヤーの当たり判定用
