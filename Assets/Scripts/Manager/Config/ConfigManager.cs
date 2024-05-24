@@ -7,7 +7,6 @@ using UnityEngine;
 public class ConfigManager
 {
     [SerializeField] public int setSeed;
-    [ReadOnly] private float _seed;
     [SerializeField] private bool creative;
     public static int thisWorldSeed { get; private set; }
     public static float seed { get; private set; }
@@ -58,6 +57,5 @@ public class ConfigManager
         thisWorldSeed = setSeed;
         float s = rnd.Next(10000, 1000000);
         seed = s / 100000;
-        _seed = seed;
     }
 }

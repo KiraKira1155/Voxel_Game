@@ -1,7 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 using static ConfigManager;
 
@@ -23,10 +21,10 @@ public class World : Singleton<World>
     private ChunkCoord playerLastChunkCoord;
 
     private List<ChunkCoord> chunksToCreate = new List<ChunkCoord>();
-    private List<Chunk> chunksToUpdate = new List<Chunk>();
+    private List<ChunkCoord> chunksToHidden = new List<ChunkCoord>();
 
-    private bool checkView = false;
     private bool checkCreate = false;
+    private bool checkHidden = false;
 
     public bool successGenerateWorld = false;
 
@@ -91,67 +89,80 @@ public class World : Singleton<World>
         playerChunkCoord = GetChunkCoordFromVector3(PlayerManager.I.transform.position);
 
         //プレイヤーがチャンクを移動した場合のみ更新
-        if (!playerChunkCoord.Equals(playerLastChunkCoord) && !checkView)
-            StartCoroutine(CheckViewDistance());
-        
-        if (!checkView)
-            CheckView();
+        if (!playerChunkCoord.Equals(playerLastChunkCoord))
+            CheckViewDistance();
 
-        if (chunksToCreate.Count > 0 && !checkView && !checkCreate)
+        if (chunksToCreate.Count > 0 && !checkCreate)
             StartCoroutine(CreateChunk());
 
-        if (chunksToUpdate.Count > 0)
-            UpdateChunks();
+        if (chunksToHidden.Count > 0 && !checkHidden)
+            StartCoroutine(HiddenChunk());
     }
+
+    public void DoFixedUpdate()
+    {
+    }
+
     IEnumerator GenerateWorld()
     {
         for (int x = (WorldSizeInChunks / 2) - ViewDistanceInChunk; x < (WorldSizeInChunks / 2) + ViewDistanceInChunk; x++)
         {
             for (int z = (WorldSizeInChunks / 2) - ViewDistanceInChunk; z < (WorldSizeInChunks / 2) + ViewDistanceInChunk; z++)
             {
-                chunks[x, z] = new Chunk(new ChunkCoord(x, z), true);
+                if (chunks[x, z] == null)
+                    chunks[x, z] = new Chunk(new ChunkCoord(x, z));
+                if (!chunks[x, z].isInit)
+                    chunks[x, z].Init();
                 activeChunk.Add(new ChunkCoord(x, z));
-                Debug.Log("ワールド生成" + x);
                 yield return null;
             }
         }
 
-        Debug.Log("成功");
         successGenerateWorld = true;
+
+        yield break;
     }
 
     IEnumerator CreateChunk()
     {
         checkCreate = true;
 
-        while(chunksToCreate.Count > 0)
+        var wait = new WaitForSeconds(0.048f);
+
+        while (chunksToCreate.Count > 0)
         {
             ChunkCoord c = chunksToCreate[0];
-            chunksToCreate.RemoveAt(0); 
-            chunks[c.x, c.z].Init();
+            chunksToCreate.RemoveAt(0);
             activeChunk.Add(c);
-            yield return new WaitForSeconds(0.032f);
+            if (!chunks[c.x, c.z].isInit)
+            {
+                chunks[c.x, c.z].Init();
+                yield return wait;
+            }
         }
 
         checkCreate = false;
+
+        yield break;
     }
 
-    private void UpdateChunks()
+    IEnumerator HiddenChunk()
     {
-        bool update = false;
-        int index = 0;
+        checkHidden = true;
 
-        while (!update && index < chunksToUpdate.Count -1)
+        var wait = new WaitForSeconds(0.016f);
+
+        while (chunksToHidden.Count > 0)
         {
-            if (chunksToUpdate[index].isVoxelMapPopulated)
-            {
-                chunksToUpdate[index].UpdateChunk();
-                chunksToUpdate.RemoveAt(index);
-                update = true;
-            }
-            else
-                index++;
+            ChunkCoord c = chunksToHidden[0];
+            chunksToHidden.RemoveAt(0);
+            chunks[c.x, c.z].isActive = false;
+            yield return wait;
         }
+
+        checkHidden = false;
+
+        yield break;
     }
 
     public ChunkCoord GetChunkCoordFromVector3(Vector3 pos)
@@ -169,7 +180,7 @@ public class World : Singleton<World>
     }
 
     //描画されているかのチェック
-    private void CheckView()
+    IEnumerator CheckView()
     {
         ChunkCoord coord = GetChunkCoordFromVector3(PlayerManager.I.transform.position);
 
@@ -179,14 +190,14 @@ public class World : Singleton<World>
             {
                 if (IsChunkInWorld(new ChunkCoord(x, z)))
                 {
+                    if (!chunks[x, z].isActive)
+                        chunks[x, z].isActive = true;
                     if (chunks[x, z] == null)
                     {
-                        chunks[x, z] = new Chunk(new ChunkCoord(x, z), false);
+                        chunks[x, z] = new Chunk(new ChunkCoord(x, z));
                         chunksToCreate.Add(new ChunkCoord(x, z));
-                    }
-                    if (!chunks[x, z].isActive)
-                    {
                         chunks[x, z].isActive = true;
+                        yield return null;
                     }
                 }
             }
@@ -194,14 +205,13 @@ public class World : Singleton<World>
     }
 
     //プレイヤーの確認できるチャンクの描画
-    IEnumerator CheckViewDistance()
+    private void CheckViewDistance()
     {
-        checkView = true;
-
         ChunkCoord coord = GetChunkCoordFromVector3(PlayerManager.I.transform.position);
         playerLastChunkCoord = playerChunkCoord;
 
         List<ChunkCoord> previouslyActiveChunks = new List<ChunkCoord>(activeChunk);
+        activeChunk.Clear();
 
         //プレイヤーの視界内にあるチャンクをループ
         for (int x = coord.x - ViewDistanceInChunk; x < coord.x + ViewDistanceInChunk; x++)
@@ -213,34 +223,27 @@ public class World : Singleton<World>
                 {
                     //アクティブの確認と、アクティブでない場合はアクティブに
                     if (chunks[x, z] == null)
-                    {
-                        chunks[x, z] = new Chunk(new ChunkCoord(x, z), false);
+                        chunks[x, z] = new Chunk(new ChunkCoord(x, z));
+                    
+                    if (!chunks[x, z].isInit)
                         chunksToCreate.Add(new ChunkCoord(x, z));
-                    }
-                    if (!chunks[x, z].isActive)
-                    {
+
+                    if (!chunks[x, z].isActive && chunks[x, z].isInit)
                         chunks[x, z].isActive = true;
-                        activeChunk.Add(new ChunkCoord(x, z));
-                    }
                 }
 
-                // 以前にアクティブだったチャンクを調べて、このチャンクが存在するかどうかを確認します。存在する場合は、リストから削除します。
+                // 以前にアクティブだったチャンクを調べて、このチャンクが存在するかどうかを確認。存在する場合は、リストから削除。
                 for (int i = 0; i < previouslyActiveChunks.Count; i++)
                     if (previouslyActiveChunks[i].Equals(new ChunkCoord(x, z)))
                         previouslyActiveChunks.RemoveAt(i);
-            }
 
-            yield return null;
+                activeChunk.Add(new ChunkCoord(x, z));
+            }
         }
 
         //以前のリストに残っているチャンクは視界内にないから、ループをthroughして無効に
         foreach (ChunkCoord c in previouslyActiveChunks)
-        {
-            chunks[c.x, c.z].isActive = false;
-            yield return null;
-        }
-
-        checkView = false;
+            chunksToHidden.Add(c);
     }
 
     //プレイヤーの当たり判定用
@@ -254,14 +257,8 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].isSolid;
 
-        (byte, bool) biome = GenerateMap.I.GetBiomeType(thisChunk);
-        int height;
-        if (biome.Item2)
-            height = GenerateMap.I.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-        else
-            height = GenerateMap.I.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-
-        return BlockManager.I.blocktype[GetVoxel(pos, biome.Item1, biome.Item2, height)].isSolid;
+        chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
+        return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].isSolid;
     }
 
     public bool CheckIfVoxelTransparent(Vector3 pos)
@@ -274,14 +271,12 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].isTransparent;
 
-        (byte, bool) biome = GenerateMap.I.GetBiomeType(thisChunk);
-        int height;
-        if (biome.Item2)
-            height = GenerateMap.I.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-        else
-            height = GenerateMap.I.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-
-        return BlockManager.I.blocktype[GetVoxel(pos, biome.Item1, biome.Item2, height)].isTransparent;
+        if (chunks[thisChunk.x, thisChunk.z] == null)
+        {
+            chunks[thisChunk.x, thisChunk.z] = new Chunk(thisChunk);
+        }
+        chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
+        return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].isTransparent;
     }
 
     public int CheckIfVoxel(Vector3 pos)
@@ -294,14 +289,8 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos);
 
-        (byte, bool) biome = GenerateMap.I.GetBiomeType(thisChunk);
-        int height;
-        if (biome.Item2)
-            height = GenerateMap.I.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-        else
-            height = GenerateMap.I.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-
-        return GetVoxel(pos, biome.Item1, biome.Item2, height);
+        chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
+        return chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos);
     }
 
     public string CheckForBlockType(Vector3 pos)
@@ -314,14 +303,8 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].name;
 
-        (byte, bool) biome = GenerateMap.I.GetBiomeType(thisChunk);
-        int height;
-        if (biome.Item2)
-            height = GenerateMap.I.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-        else
-            height = GenerateMap.I.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-
-        return BlockManager.I.blocktype[GetVoxel(pos, biome.Item1, biome.Item2, height)].name;
+        chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
+        return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].name;
     }
 
     public float BlockNeedDestructionTime(Vector3 pos)
@@ -334,14 +317,8 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].destructionTime;
 
-        (byte, bool) biome = GenerateMap.I.GetBiomeType(thisChunk);
-        int height;
-        if (biome.Item2)
-            height = GenerateMap.I.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-        else
-            height = GenerateMap.I.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-
-        return BlockManager.I.blocktype[GetVoxel(pos, biome.Item1, biome.Item2, height)].destructionTime;
+        chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
+        return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].destructionTime;
     }
 
     public int BlockNeedRarity(Vector3 pos)
@@ -354,14 +331,8 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].needRarity;
 
-        (byte, bool) biome = GenerateMap.I.GetBiomeType(thisChunk);
-        int height;
-        if (biome.Item2)
-            height = GenerateMap.I.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-        else
-            height = GenerateMap.I.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-
-        return BlockManager.I.blocktype[GetVoxel(pos, biome.Item1, biome.Item2, height)].needRarity;
+        chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
+        return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].needRarity;
     }
     public EnumGameData.ItemType BlockEfficientTool(Vector3 pos)
     {
@@ -373,14 +344,8 @@ public class World : Singleton<World>
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
             return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].efficientTool;
 
-        (byte, bool) biome = GenerateMap.I.GetBiomeType(thisChunk);
-        int height;
-        if (biome.Item2)
-            height = GenerateMap.I.GetSolidOceanGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-        else
-            height = GenerateMap.I.GetSolidGroundHight(new Vector2(pos.x, pos.z), biome.Item1);
-
-        return BlockManager.I.blocktype[GetVoxel(pos, biome.Item1, biome.Item2, height)].efficientTool;
+        chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
+        return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].efficientTool;
     }
 
     //チャンクの初期生成用
@@ -425,10 +390,10 @@ public class World : Singleton<World>
                 voxelValue = (int)oceanBiome[biomeType].middleLayer;
             else if (pos.y > terrainHight && pos.y <= 64)
                 voxelValue = (int)EnumGameData.BlockID.glass;
-            else if (pos.y > 64)
-                voxelValue = (int)EnumGameData.BlockID.air;
+            else if(pos.y > 64)
+                return (int)EnumGameData.BlockID.air;
             else
-                voxelValue = (int)oceanBiome[biomeType].basicsBlocks;
+                voxelValue = (int)EnumGameData.BlockID.stone;
         }
         else
         {

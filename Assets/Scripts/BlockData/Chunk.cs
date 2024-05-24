@@ -28,22 +28,33 @@ public class Chunk
 	private bool IsOcean;
     private int[,] heightMap = new int[Width, Width];
 
+	public bool isInit {  get; private set; } = false;
+	private bool generateBiomeMap = false;
     private bool _isActive;
     public bool isVoxelMapPopulated { get; private set; } = false;
 
-    public Chunk(ChunkCoord coord, bool generateOnLoad)
+    public Chunk(ChunkCoord coord)
 	{
 		this.coord = coord;
         isActive = true;
-
-        if (generateOnLoad)
-			Init();
+        position = new Vector3(coord.x * Width, 0f, coord.z * Width);
     }
 
 	public void Init()
-	{
+    {
+        var task = Task.Run(() =>
+        {
+            if (!generateBiomeMap)
+            {
+                GenerateMap.I.AddGenerateBiomeMap(coord);
+				generateBiomeMap = true;
+            }
+            PopulateVoxelMap();
+        });
 		thisObj = new GameObject();
-		meshRenderer = thisObj.AddComponent<MeshRenderer>();
+        thisObj.transform.position = new Vector3(coord.x * Width, 0f, coord.z * Width);
+
+        meshRenderer = thisObj.AddComponent<MeshRenderer>();
 		meshFilter = thisObj.AddComponent<MeshFilter>();
 
 		materials[0] = World.I.material;
@@ -51,16 +62,35 @@ public class Chunk
 		meshRenderer.materials = materials;
 
 		thisObj.transform.SetParent(World.I.transform);
-		thisObj.transform.position = new Vector3(coord.x * Width, 0f, coord.z * Width);
 		thisObj.name = "Chunk" + coord.x + ", " + coord.z;
 
-		position = thisObj.transform.position;
+        task.Wait();
+        UpdateChunk();
 
-        PopulateVoxelMap();
-		UpdateChunk();
+        isInit = true;
 	}
 
-	private void PopulateVoxelMap()
+	public void InitVoxelMap(Vector3 pos)
+    {
+        if (!generateBiomeMap)
+        {
+            GenerateMap.I.AddGenerateBiomeMap(coord);
+            generateBiomeMap = true;
+        }
+
+        Vector3 voxelPos = GetVoxelPos(pos);
+        (BiomeNum, IsOcean) = GenerateMap.I.GetBiomeType(coord);
+        (biomeMap[(int)voxelPos.x, (int)voxelPos.z], OceanMap[(int)voxelPos.x, (int)voxelPos.z]) = (BiomeNum, IsOcean);
+        if (OceanMap[(int)voxelPos.x, (int)voxelPos.z])
+            heightMap[(int)voxelPos.x, (int)voxelPos.z] = GenerateMap.I.GetSolidOceanGroundHight(new Vector2(position.x + (int)voxelPos.x, position.z + (int)voxelPos.z), biomeMap[(int)voxelPos.x, (int)voxelPos.z]);
+        else
+            heightMap[(int)voxelPos.x, (int)voxelPos.z] = GenerateMap.I.GetSolidGroundHight(new Vector2(position.x + (int)voxelPos.x, position.z + (int)voxelPos.z), biomeMap[(int)voxelPos.x, (int)voxelPos.z]);
+
+
+        voxelMap[(int)voxelPos.x, (int)voxelPos.y, (int)voxelPos.z] = World.I.GetVoxel(new Vector3((int)voxelPos.x, (int)voxelPos.y, (int)voxelPos.z) + position, biomeMap[(int)voxelPos.x, (int)voxelPos.z], OceanMap[(int)voxelPos.x, (int)voxelPos.z], heightMap[(int)voxelPos.x, (int)voxelPos.z]);
+    }
+
+    private void PopulateVoxelMap()
     {
 		(BiomeNum, IsOcean) = GenerateMap.I.GetBiomeType(coord);
         for (int x = 0; x < Width; x++)
@@ -78,10 +108,10 @@ public class Chunk
 				for (int z = 0; z < Width; z++)
 				{
                     voxelMap[x, y, z] = World.I.GetVoxel(new Vector3(x, y, z) + position, biomeMap[x, z], OceanMap[x, z], heightMap[x, z]);
-				}
+                }
 
-		isVoxelMapPopulated = true;
-	}
+        isVoxelMapPopulated = true;
+    }
 
     public void UpdateChunk()
     {
@@ -97,9 +127,9 @@ public class Chunk
                             UpdateMeshData(new Vector3(x, y, z));
                     }
         });
-		
+
 		task.Wait();
-		CreateMesh();
+        CreateMesh();
 	}
 
 	private void ClearMeshData()
@@ -118,8 +148,8 @@ public class Chunk
 		{
 			_isActive = value;
 			if(thisObj != null)
-				thisObj.SetActive(value);
-		}
+                meshRenderer.enabled = value;
+        }
     }
 
 	private bool IsVoxelInChunk(int x, int y,int z)
@@ -257,10 +287,9 @@ public class Chunk
 
 		for (int p = 0; p < 6; p++)
 		{
-			if (CheckVoxelTransParent(pos + VoxelData.faceChecks[p]) && !CheckVoxelTransParent(pos) 
+			if ((CheckVoxelTransParent(pos + VoxelData.faceChecks[p]) && !CheckVoxelTransParent(pos))
 				|| CheckVoxel(pos + VoxelData.faceChecks[p]) == (int)EnumGameData.BlockID.air)
 			{
-
 				vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 0]]);
 				vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 1]]);
 				vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 2]]);
@@ -287,7 +316,6 @@ public class Chunk
                     transparentTriangles.Add(vertexIndex + 3);
                 }
 				vertexIndex += 4;
-
 			}
 		}
 	}

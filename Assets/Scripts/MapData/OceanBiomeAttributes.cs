@@ -26,5 +26,4 @@ public class OceanBiomeAttributes : ScriptableObject
 
     [SearchableEnum] public EnumGameData.BlockID topBlocks;
     [SearchableEnum] public EnumGameData.BlockID middleLayer;
-    [SearchableEnum] public EnumGameData.BlockID basicsBlocks;
 }

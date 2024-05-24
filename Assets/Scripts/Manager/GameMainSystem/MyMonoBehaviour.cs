@@ -6,6 +6,8 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
 {
     public ConfigManager configManager;
 
+    [SerializeField] private TitleManager titleManager;
+
     [SerializeField] private PlayerManager player;
     [SerializeField] private World world;
     [SerializeField] private DebugScreen debugScreen;
@@ -16,10 +18,29 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
 
     KeyConfig keyConfig = new KeyConfig();
 
-    private bool init = false;
-    private bool successStart = false;
-    private bool successUpdate = false;
-    private bool successFixedUpdate = false;
+    public bool init { get; private set; } = false;
+    public bool successStart { get; private set; } = false;
+    public bool successUpdate { get; private set; } = false;
+    public bool successFixedUpdate { get; private set; } = false;
+
+    [SerializeField] [ReadOnly] private GameScene gameScene;
+
+    public GameScene GetGameScene()
+    {
+        return gameScene;
+    }
+
+    public void SetGameScene(GameScene gameScene)
+    {
+        this.gameScene = gameScene;
+    }
+
+    public enum GameScene
+    {
+        Title,
+        Option,
+        MainGame
+    }
 
     private void Awake()
     {
@@ -27,59 +48,95 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
         if (!init)
         {
             init = true;
+            gameScene = GameScene.Title;
             configManager.DoAwake();
             keyConfig.DoAwake();
-
-            player.DoAwake();
-            debugScreen.DoAwake();
-            debugScreen.gameObject.SetActive(false);
-
-            generateMap.DoAwake();
-
-            StartCoroutine(DoAwake());
+            StartCoroutine(DoInit());
         }
     }
 
     private void Start()
     {
+        titleManager.DoStart();
         StartCoroutine(DoStart());
     }
 
     private void Update()
     {
-        if (successUpdate)
+        switch (gameScene)
         {
-            world.DoUpdate();
-            player.DoUpdate();
+            case GameScene.Title:
+                titleManager.DoUpdate();
+                break;
+
+            case GameScene.Option:
+                break;
+
+            case GameScene.MainGame:
+                if (successUpdate)
+                {
+                    world.DoUpdate();
+                    player.DoUpdate();
 
 
-            if (KeyConfig.GetKeyUp(KeyConfig.KeyName.DebugScreen))
-                debugScreen.gameObject.SetActive(!debugScreen.gameObject.activeSelf);
-            if (debugScreen.gameObject.activeSelf)
-                debugScreen.DoUpdate();
-        }
-        else
-        {
-            StartCoroutine(DoUpdate());
+                    if (KeyConfig.GetKeyDown(KeyConfig.KeyName.DebugScreen))
+                        debugScreen.gameObject.SetActive(!debugScreen.gameObject.activeSelf);
+                    if (debugScreen.gameObject.activeSelf)
+                        debugScreen.DoUpdate();
+                }
+                else
+                {
+                    StartCoroutine(DoUpdate());
+                }
+                break;
         }
     }
 
     private void FixedUpdate()
     {
-        if (successFixedUpdate)
+        switch (gameScene)
         {
-            player.DoFixedUpDate();
+            case GameScene.Title:
+                break;
+
+            case GameScene.Option:
+
+                break;
+
+            case GameScene.MainGame:
+                if (successFixedUpdate)
+                {
+                    world.DoFixedUpdate();
+                    player.DoFixedUpDate();
+                }
+                else
+                {
+                    StartCoroutine(DoFixedUpdate());
+                }
+                break;
         }
-        else
-        {
-            StartCoroutine(DoFixedUpdate());
-        }
+    }
+
+    IEnumerator DoInit()
+    {
+        yield return new WaitUntil(() => gameScene == GameScene.MainGame);
+        player.DoAwake();
+        debugScreen.DoAwake();
+        debugScreen.gameObject.SetActive(false);
+
+        generateMap.DoAwake();
+
+        StartCoroutine(DoAwake());
+
+        yield break;
     }
 
     IEnumerator DoAwake()
     {
         yield return new WaitUntil(() => generateMap.successGenerateMap);
         world.DoAwake();
+
+        yield break;
     }
 
     IEnumerator DoStart()
@@ -89,16 +146,22 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
 
         world.DoStart();
         player.DoStart();
+
+        yield break;
     }
     IEnumerator DoUpdate()
     {
         yield return new WaitUntil(() => successStart);
         successUpdate = true;
+
+        yield break;
     }
 
     IEnumerator DoFixedUpdate()
     {
         yield return new WaitUntil(() => successUpdate);
         successFixedUpdate = true;
+
+        yield break;
     }
 }

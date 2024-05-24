@@ -60,15 +60,6 @@ public class GenerateMap : Singleton<GenerateMap>
             GenerateContinentalnessMap();
         });
         task.Wait();
-        var task1 = Task.Run(() =>
-        {
-            for (int x = (ConfigManager.WorldSizeInChunks / 2) - 100; x < (ConfigManager.WorldSizeInChunks / 2) + 100; x++)
-            {
-                for (int z = (ConfigManager.WorldSizeInChunks / 2) - 100; z < (ConfigManager.WorldSizeInChunks / 2) + 100; z++)
-                    biomeMap[x, z] = GenerateBiomeMap(new ChunkCoord(x, z));
-            }
-        });
-        task1.Wait();
 
         successGenerateMap = true;
         //InitTerrestrialLvForBiome(); 
@@ -145,6 +136,11 @@ public class GenerateMap : Singleton<GenerateMap>
     public (byte, bool) GetBiomeType(ChunkCoord chunkCoord)
     {
         return biomeMap[chunkCoord.x, chunkCoord.z];
+    }
+
+    public void AddGenerateBiomeMap(ChunkCoord chunkCoord)
+    {
+        biomeMap[chunkCoord.x, chunkCoord.z] = GenerateBiomeMap(chunkCoord);
     }
 
     private (byte, bool) GenerateBiomeMap(ChunkCoord chunkCoord)
