@@ -6,8 +6,9 @@ using UnityEngine;
 [System.Serializable]
 public class ConfigManager
 {
-    [SerializeField] public int setSeed;
     [SerializeField] private bool creative;
+    [SerializeField] private int _thisWorldSeed;
+    [SerializeField] private float _seed;
     public static int thisWorldSeed { get; private set; }
     public static float seed { get; private set; }
     public static short WorldSizeInChunks { get; private set; } = 8192;
@@ -26,8 +27,8 @@ public class ConfigManager
     public static KeyCode Squat { get; private set; } = KeyCode.LeftShift;
     public static KeyCode Run { get; private set; } = KeyCode.LeftControl;
     public static KeyCode DebugScreen { get; private set; } = KeyCode.F3;
-    public static KeyCode RightClick { get; private set; } = KeyCode.Mouse0;
-    public static KeyCode LeftClick { get; private set; } = KeyCode.Mouse1;
+    public static KeyCode RightClick { get; private set; } = KeyCode.Mouse1;
+    public static KeyCode LeftClick { get; private set; } = KeyCode.Mouse0;
     public static KeyCode Inventory { get; private set; } = KeyCode.E;
 
     public void DoAwake()
@@ -41,21 +42,27 @@ public class ConfigManager
             PlayerStatus.SurvivalMode();
     }
 
+    public void SetSeed(int seed)
+    {
+        thisWorldSeed = seed;
+        _thisWorldSeed = seed;
+    }
+
     private void Random()
     {
         System.Random rnd;
-        if (setSeed == 0)
+        if (thisWorldSeed == 0)
         {
             int timeSeed = DateTime.Now.Millisecond + DateTime.Now.Second * 1000 + DateTime.Now.Minute * 100000;
             rnd = new System.Random(timeSeed);
-            setSeed = rnd.Next(1, 2147483647);
+            thisWorldSeed = rnd.Next(1, 2147483647);
         }
         else
         {
-            rnd = new System.Random(setSeed);
+            rnd = new System.Random(thisWorldSeed);
         }
-        thisWorldSeed = setSeed;
         float s = rnd.Next(10000, 1000000);
         seed = s / 100000;
+        _seed = seed;
     }
 }

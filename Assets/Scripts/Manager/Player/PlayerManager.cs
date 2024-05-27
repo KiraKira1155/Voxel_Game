@@ -31,7 +31,8 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField] private GameObject cursorSlot;
     private void Awake()
     {
-        Init();
+        if (!init)
+            Init();
     }
 
     public void DoAwake()

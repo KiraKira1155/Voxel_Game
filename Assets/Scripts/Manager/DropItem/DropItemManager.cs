@@ -9,7 +9,8 @@ public class DropItemManager : Singleton<DropItemManager>
 
     private void Awake()
     {
-        Init();
+        if (!init)
+            Init();
     }
 
     public void DoFixedUpDate()

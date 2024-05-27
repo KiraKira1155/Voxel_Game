@@ -36,12 +36,12 @@ public class DragAndDropHandlar : MonoBehaviour
         Vector3 screenPos = new Vector3(cursorPos.x, cursorPos.y - 20f, 1f);
         cursorSlot.transform.position = UICamera.ScreenToWorldPoint(screenPos);
 
-        if (KeyConfig.GetKeyDown(KeyConfig.KeyName.RightClick))
+        if (KeyConfig.GetKeyDown(KeyConfig.KeyName.LeftClick))
         {
             if (CheckForSlot() != null)
                 SlotRightClick(CheckForSlot());
         }
-        else if(KeyConfig.GetKeyDown(KeyConfig.KeyName.LeftClick))
+        else if(KeyConfig.GetKeyDown(KeyConfig.KeyName.RightClick))
         {
             if(CheckForSlot() != null)
                 SlotLeftClick(CheckForSlot());

@@ -35,7 +35,8 @@ public class World : Singleton<World>
 
     private void Awake()
     {
-        Init();
+        if (!init)
+            Init();
     }
 
     public void DoAwake()

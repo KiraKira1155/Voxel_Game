@@ -17,5 +17,4 @@ MonoBehaviour:
   terrainHeight: 15
   terrainScale: 0.3
   topBlocks: 9
-  middleLayer: 0
-  basicsBlocks: 2
+  middleLayer: 7

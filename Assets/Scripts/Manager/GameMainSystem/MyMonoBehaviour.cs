@@ -6,8 +6,6 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
 {
     public ConfigManager configManager;
 
-    [SerializeField] private TitleManager titleManager;
-
     [SerializeField] private PlayerManager player;
     [SerializeField] private World world;
     [SerializeField] private DebugScreen debugScreen;
@@ -15,10 +13,11 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
     [SerializeField] private BlockManager block;
     [SerializeField] private DropItemManager dropItem;
     [SerializeField] private GenerateMap generateMap;
+    [SerializeField] private TitleManager titleManager;
+    [SerializeField] private Inventory inventory;
 
     KeyConfig keyConfig = new KeyConfig();
-
-    public bool init { get; private set; } = false;
+    
     public bool successStart { get; private set; } = false;
     public bool successUpdate { get; private set; } = false;
     public bool successFixedUpdate { get; private set; } = false;
@@ -44,12 +43,10 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
 
     private void Awake()
     {
-        Init();
         if (!init)
         {
-            init = true;
             gameScene = GameScene.Title;
-            configManager.DoAwake();
+            Init();
             keyConfig.DoAwake();
             StartCoroutine(DoInit());
         }
@@ -86,6 +83,7 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
                 }
                 else
                 {
+                    titleManager.LoadCnt();
                     StartCoroutine(DoUpdate());
                 }
                 break;
@@ -120,6 +118,7 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
     IEnumerator DoInit()
     {
         yield return new WaitUntil(() => gameScene == GameScene.MainGame);
+        configManager.DoAwake();
         player.DoAwake();
         debugScreen.DoAwake();
         debugScreen.gameObject.SetActive(false);

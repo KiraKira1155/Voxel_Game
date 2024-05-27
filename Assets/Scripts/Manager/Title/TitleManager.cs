@@ -1,16 +1,50 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class TitleManager : Singleton<TitleManager>
 {
     [SerializeField] private Image titleBackGround;
     [SerializeField] private byte r, g, b;
+    private PointerEventData pointerEventData;
+    [SerializeField] private GraphicRaycaster raycaster = null;
+    [SerializeField] private EventSystem eventSystem = null;
+
+    [SerializeField] [ReadOnly] private Menu menu;
+
+    [SerializeField] private GameObject titleMenuObj;
+    [SerializeField] private GameObject worldSelectMenuObj;
+    [SerializeField] private GameObject optionMenuObj;
+    [SerializeField] private GameObject endMenuObj;
+
+    [SerializeField] private TitleMenu titleMenu = new TitleMenu();
+    [SerializeField] private WorldSelectMenu worldSelectMenu = new WorldSelectMenu();
+    [SerializeField] private OptionMenu optionMenu = new OptionMenu();
+    [SerializeField] private EndMenu endMenu = new EndMenu();
+
+    [SerializeField] private TextMeshProUGUI loadTime;
+    float loadTimeCnt;
+
+    public enum Menu
+    {
+        title,
+        worldSelect,
+        option,
+        end
+    }
+
+    public void SetMenu(Menu menu)
+    {
+        this.menu = menu;
+    }
 
     private void Awake()
     {
-        Init();
+        if (!init)
+            Init();
     }
 
     private void OnEnable()
@@ -19,6 +53,9 @@ public class TitleManager : Singleton<TitleManager>
         g = 0;
         b = 0;
         titleBackGround.color = new Color32(r, g, b, 255);
+
+        menu = Menu.title;
+        SelectMenu();
     }
 
     public void DoStart()
@@ -28,11 +65,80 @@ public class TitleManager : Singleton<TitleManager>
 
     public void DoUpdate()
     {
-        if (KeyConfig.GetKeyDown(KeyConfig.KeyName.RightClick))
+        if (KeyConfig.GetKeyDown(KeyConfig.KeyName.LeftClick))
+            ClickEvent();
+    }
+
+    public void CheckInputSeed()
+    {
+        worldSelectMenu.OrganizeInputSeed();
+    }
+
+    private void ClickEvent()
+    {
+        switch (menu)
         {
-            MyMonoBehaviour.I.SetGameScene(MyMonoBehaviour.GameScene.MainGame);
-            StartCoroutine(SetActiveFalse());
+            case Menu.title:
+                titleMenu.ClickButton();
+                break;
+
+            case Menu.worldSelect:
+                worldSelectMenu.ClickButton();
+                break;
+
+            case Menu.option:
+                optionMenu.ClickButton();
+                break;
+
+            case Menu.end:
+                endMenu.ClickButton();
+                break;
         }
+        SelectMenu();
+    }
+
+    private void SelectMenu()
+    {
+        ActiveFalseMenu();
+        switch (menu)
+        {
+            case Menu.title:
+                titleMenuObj.SetActive(true);
+                break;
+
+            case Menu.worldSelect:
+                worldSelectMenuObj.SetActive(true);
+                break;
+
+            case Menu.option:
+                optionMenuObj.SetActive(true);
+                break;
+
+            case Menu.end:
+                endMenuObj.SetActive(true);
+                break;
+        }
+    }
+
+    private void ActiveFalseMenu()
+    {
+        titleMenuObj.SetActive(false);
+        worldSelectMenuObj.SetActive(false);
+        optionMenuObj.SetActive(false);
+        endMenuObj.SetActive(false);
+    }
+
+    public void StartGame()
+    {
+        MyMonoBehaviour.I.SetGameScene(MyMonoBehaviour.GameScene.MainGame);
+        loadTime.text = "0.0s";
+        StartCoroutine(SetActiveFalse());
+    }
+
+    public void LoadCnt()
+    {
+        loadTimeCnt += Time.deltaTime;
+        loadTime.text = loadTimeCnt.ToString() + "s";
     }
 
     IEnumerator SetActiveFalse()
@@ -67,5 +173,39 @@ public class TitleManager : Singleton<TitleManager>
         }
 
         yield break;
+    }
+
+    public bool CheckForButton(string tagName)
+    {
+        pointerEventData = new PointerEventData(eventSystem);
+        pointerEventData.position = Input.mousePosition;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        raycaster.Raycast(pointerEventData, results);
+
+        foreach (RaycastResult result in results)
+        {
+            if (result.gameObject.tag == tagName)
+                return true;
+        }
+
+        return false;
+    }
+
+    public bool CheckForObject(GameObject obj)
+    {
+        pointerEventData = new PointerEventData(eventSystem);
+        pointerEventData.position = Input.mousePosition;
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        raycaster.Raycast(pointerEventData, results);
+
+        foreach (RaycastResult result in results)
+        {
+            if (result.gameObject == obj)
+                return true;
+        }
+
+        return false;
     }
 }

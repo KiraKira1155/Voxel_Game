@@ -38,13 +38,13 @@ public class PlayerAgainstBlcks
         if (highlightBlock.gameObject.activeSelf)
         {
             //ブロックの破壊
-            if (KeyConfig.GetKeyDown(KeyConfig.KeyName.RightClick))
+            if (KeyConfig.GetKeyDown(KeyConfig.KeyName.LeftClick))
             {
                 highlightPos = highlightBlock.transform.position;
                 destructionTime = DestructionTime(World.I.BlockNeedDestructionTime(highlightPos));
                 coolTimeCnt = coolTime;
             }
-            if (KeyConfig.GetKey(KeyConfig.KeyName.RightClick) && World.I.BlockNeedRarity(highlightPos) != -1)
+            if (KeyConfig.GetKey(KeyConfig.KeyName.LeftClick) && World.I.BlockNeedRarity(highlightPos) != -1)
             {
                 if (highlightPos == highlightBlock.transform.position)
                 {
@@ -74,14 +74,14 @@ public class PlayerAgainstBlcks
                     }
                 }
             }
-            if (KeyConfig.GetKeyUp(KeyConfig.KeyName.RightClick) || highlightPos != highlightBlock.transform.position)
+            if (KeyConfig.GetKeyUp(KeyConfig.KeyName.LeftClick) || highlightPos != highlightBlock.transform.position)
             {
                 startBlockDestroy = false;
                 time = 0;
             }
 
             //ブロックの設置
-            if (KeyConfig.GetKeyDown(KeyConfig.KeyName.LeftClick))
+            if (KeyConfig.GetKeyDown(KeyConfig.KeyName.RightClick))
             {
                 if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack != null)
                 {
