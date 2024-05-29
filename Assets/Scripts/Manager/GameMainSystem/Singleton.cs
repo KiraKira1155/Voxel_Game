@@ -7,8 +7,6 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T>
     protected virtual bool DestroyTargetGameObj => false;
     public static T I { get; private set; } = null;
 
-    public static bool init = false;
-
     public static bool IsValid() => I != null;
 
     protected void Init()

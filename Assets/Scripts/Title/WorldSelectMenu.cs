@@ -12,13 +12,13 @@ public class WorldSelectMenu
 
     public void ClickButton()
     {
-        if (TitleManager.I.CheckForButton("TitleButton") && TitleManager.I.CheckForObject(generateWorldButton))
+        if (TitleManager.I.CheckForButton("TitleButton", generateWorldButton))
         {
             MyMonoBehaviour.I.configManager.SetSeed(seedInput.GetInputSeed());
             TitleManager.I.StartGame();
         }
 
-        if (TitleManager.I.CheckForButton("TitleButton") && TitleManager.I.CheckForObject(returnButton))
+        if (TitleManager.I.CheckForButton("TitleButton", returnButton))
             TitleManager.I.SetMenu(TitleManager.Menu.title);
     }
 

@@ -43,13 +43,10 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
 
     private void Awake()
     {
-        if (!init)
-        {
-            gameScene = GameScene.Title;
-            Init();
-            keyConfig.DoAwake();
-            StartCoroutine(DoInit());
-        }
+        Init();
+        gameScene = GameScene.Title;
+        keyConfig.DoAwake();
+        StartCoroutine(DoInit());
     }
 
     private void Start()
@@ -126,7 +123,6 @@ public class MyMonoBehaviour : Singleton<MyMonoBehaviour>
         generateMap.DoAwake();
 
         StartCoroutine(DoAwake());
-
         yield break;
     }
 

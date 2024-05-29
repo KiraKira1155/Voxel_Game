@@ -636,6 +636,9 @@ MonoBehaviour:
   dragAndDropHandlar: {fileID: 1758345373}
   inventoryWindow: {fileID: 351934202}
   cursorSlot: {fileID: 1669533520}
+  playerDirection: 0
+  cursorFaceDirection: 0
+  viewingAngle: 0
 --- !u!1001 &305809442
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2532,7 +2535,6 @@ GameObject:
   - component: {fileID: 736301065}
   - component: {fileID: 736301068}
   - component: {fileID: 736301067}
-  - component: {fileID: 736301066}
   m_Layer: 0
   m_Name: Block
   m_TagString: Untagged
@@ -2550,32 +2552,11 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5, y: 0.5, z: 0.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.01, y: 1.01, z: 1.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1204673690}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &736301066
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 736301064}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &736301067
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -5153,6 +5134,7 @@ Transform:
   - {fileID: 1803107396}
   - {fileID: 1942029393}
   - {fileID: 870690528}
+  - {fileID: 1563855762}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1558599537
@@ -5297,7 +5279,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1519464037}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1605428294
 GameObject:
@@ -5351,6 +5333,7 @@ MonoBehaviour:
   raycaster: {fileID: 1142227410}
   eventSystem: {fileID: 1563855761}
   menu: 0
+  titleCamera: {fileID: 1155590652}
   titleMenuObj: {fileID: 954275480}
   worldSelectMenuObj: {fileID: 2058748075}
   optionMenuObj: {fileID: 1841846987}
@@ -7553,4 +7536,3 @@ SceneRoots:
   m_Roots:
   - {fileID: 1519464037}
   - {fileID: 1478984700}
-  - {fileID: 1563855762}

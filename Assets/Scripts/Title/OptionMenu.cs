@@ -9,7 +9,7 @@ public class OptionMenu
 
     public void ClickButton()
     {
-        if (TitleManager.I.CheckForButton("TitleButton") && TitleManager.I.CheckForObject(returnButton))
+        if (TitleManager.I.CheckForButton("TitleButton", returnButton))
             TitleManager.I.SetMenu(TitleManager.Menu.title);
     }
 }

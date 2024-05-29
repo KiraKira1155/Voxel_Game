@@ -13,8 +13,7 @@ public class Inventory : Singleton<Inventory>
 
     private void Awake()
     {
-        if (!init)
-            Init();
+        Init();
     }
 
     public void DoAwake(Slot slot)

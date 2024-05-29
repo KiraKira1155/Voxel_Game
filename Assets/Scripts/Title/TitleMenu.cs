@@ -12,13 +12,13 @@ public class TitleMenu
 
     public void ClickButton()
     {
-        if (TitleManager.I.CheckForButton("TitleButton") && TitleManager.I.CheckForObject(worldSelectButton))
+        if (TitleManager.I.CheckForButton("TitleButton", worldSelectButton))
             TitleManager.I.SetMenu(TitleManager.Menu.worldSelect);
 
-        if (TitleManager.I.CheckForButton("TitleButton") && TitleManager.I.CheckForObject(optionButton))
+        if (TitleManager.I.CheckForButton("TitleButton", optionButton))
             TitleManager.I.SetMenu(TitleManager.Menu.option);
 
-        if (TitleManager.I.CheckForButton("TitleButton") && TitleManager.I.CheckForObject(endButton))
+        if (TitleManager.I.CheckForButton("TitleButton", endButton))
             TitleManager.I.SetMenu(TitleManager.Menu.end);
     }
 }

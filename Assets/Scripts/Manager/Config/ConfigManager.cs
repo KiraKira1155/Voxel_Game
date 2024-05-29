@@ -12,7 +12,7 @@ public class ConfigManager
     public static int thisWorldSeed { get; private set; }
     public static float seed { get; private set; }
     public static short WorldSizeInChunks { get; private set; } = 8192;
-    public static byte ViewDistanceInChunk { get; private set; } = 15;
+    public static byte ViewDistanceInChunk { get; private set; } = 10;
 
     public static int HorizontalSpeed { get; private set; }
     public static int VerticalSpeed { get; private set; }
@@ -45,7 +45,6 @@ public class ConfigManager
     public void SetSeed(int seed)
     {
         thisWorldSeed = seed;
-        _thisWorldSeed = seed;
     }
 
     private void Random()
@@ -56,6 +55,7 @@ public class ConfigManager
             int timeSeed = DateTime.Now.Millisecond + DateTime.Now.Second * 1000 + DateTime.Now.Minute * 100000;
             rnd = new System.Random(timeSeed);
             thisWorldSeed = rnd.Next(1, 2147483647);
+            _thisWorldSeed = thisWorldSeed;
         }
         else
         {

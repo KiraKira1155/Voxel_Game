@@ -39,8 +39,7 @@ public class GenerateMap : Singleton<GenerateMap>
 
     private void Awake()
     {
-        if (!init)
-            Init();
+        Init();
     }
 
     public void DoAwake()

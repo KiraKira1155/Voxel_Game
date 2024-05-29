@@ -8,8 +8,7 @@ public class BlockManager : Singleton<BlockManager>
 
     private void Awake()
     {
-        if (!init)
-            Init();
+        Init();
     }
 
     public int MaxAmount(EnumGameData.BlockID blockID)

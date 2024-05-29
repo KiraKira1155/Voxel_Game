@@ -14,15 +14,18 @@ public class PlayerAgainstBlcks
     private float time;
     private bool startBlockDestroy;
 
-    private GameObject highlightBlock;
-    private GameObject placeBlock;
-    private GameObject cam;
+    public enum CursorFaceDirection
+    {
+        top,
+        bottom,
+        north,
+        east,
+        west,
+        south
+    }
 
     public void DoStart()
     {
-        highlightBlock = PlayerManager.I.highlightBlock;
-        placeBlock = PlayerManager.I.placeBlock;
-        cam = PlayerManager.I.cam;
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -35,25 +38,25 @@ public class PlayerAgainstBlcks
     Vector3 highlightPos;
     private void PlayerInputKey()
     {
-        if (highlightBlock.gameObject.activeSelf)
+        if (PlayerManager.I.highlightBlock.gameObject.activeSelf)
         {
             //ÉuÉçÉbÉNÇÃîjâÛ
             if (KeyConfig.GetKeyDown(KeyConfig.KeyName.LeftClick))
             {
-                highlightPos = highlightBlock.transform.position;
+                highlightPos = PlayerManager.I.highlightBlock.transform.position;
                 destructionTime = DestructionTime(World.I.BlockNeedDestructionTime(highlightPos));
                 coolTimeCnt = coolTime;
             }
             if (KeyConfig.GetKey(KeyConfig.KeyName.LeftClick) && World.I.BlockNeedRarity(highlightPos) != -1)
             {
-                if (highlightPos == highlightBlock.transform.position)
+                if (highlightPos == PlayerManager.I.highlightBlock.transform.position)
                 {
                     startBlockDestroy = true;
                 }
                 else
                 {
                     time = 0;
-                    highlightPos = highlightBlock.transform.position;
+                    highlightPos = PlayerManager.I.highlightBlock.transform.position;
                     destructionTime = DestructionTime(World.I.BlockNeedDestructionTime(highlightPos));
                     startBlockDestroy = false;
                 }
@@ -74,7 +77,7 @@ public class PlayerAgainstBlcks
                     }
                 }
             }
-            if (KeyConfig.GetKeyUp(KeyConfig.KeyName.LeftClick) || highlightPos != highlightBlock.transform.position)
+            if (KeyConfig.GetKeyUp(KeyConfig.KeyName.LeftClick) || highlightPos != PlayerManager.I.highlightBlock.transform.position)
             {
                 startBlockDestroy = false;
                 time = 0;
@@ -89,7 +92,7 @@ public class PlayerAgainstBlcks
                         return;
                 }
 
-                if (placeBlock.transform.position.y < VoxelData.Hight - 4 && (PlayerManager.I.playerBodyUpper.transform.localPosition != PlayerManager.I.placeBlock.transform.localPosition && PlayerManager.I.playerBodyLower.transform.localPosition != PlayerManager.I.placeBlock.transform.localPosition))
+                if (PlayerManager.I.placeBlock.transform.position.y < VoxelData.Hight - 4 && (PlayerManager.I.playerBodyUpper.transform.localPosition != PlayerManager.I.placeBlock.transform.localPosition && PlayerManager.I.playerBodyLower.transform.localPosition != PlayerManager.I.placeBlock.transform.localPosition))
                 {
                     if (!World.I.CheckForVoxel(PlayerManager.I.playerBodyLower.transform.position) && !World.I.CheckForVoxel(PlayerManager.I.playerBodyUpper.transform.position))
                     {
@@ -137,18 +140,18 @@ public class PlayerAgainstBlcks
         if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack != null)
         {
             if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.kinds == EnumGameData.ItemKinds.item
-                && PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemType == World.I.BlockEfficientTool(highlightBlock.transform.position))
+                && PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemType == World.I.BlockEfficientTool(PlayerManager.I.highlightBlock.transform.position))
             {
-                int rarity = World.I.BlockNeedRarity(highlightBlock.transform.position) - ItemManager.I.GetRarity(PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemType, PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemID);
+                int rarity = World.I.BlockNeedRarity(PlayerManager.I.highlightBlock.transform.position) - ItemManager.I.GetRarity(PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemType, PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemID);
 
-                if (World.I.BlockNeedRarity(highlightBlock.transform.position) == 0)
+                if (World.I.BlockNeedRarity(PlayerManager.I.highlightBlock.transform.position) == 0)
                 {
                     rarity++;
                 }
 
                 if (rarity > 0)
                 {
-                    if (World.I.BlockEfficientTool(highlightBlock.transform.position) == EnumGameData.ItemType.pickaxe)
+                    if (World.I.BlockEfficientTool(PlayerManager.I.highlightBlock.transform.position) == EnumGameData.ItemType.pickaxe)
                         rarity += 4;
                     return intervalTime *= (rarity + 1);
                 }
@@ -174,16 +177,16 @@ public class PlayerAgainstBlcks
             }
             else
             {
-                int rarity = World.I.BlockNeedRarity(highlightBlock.transform.position);
-                if (World.I.BlockEfficientTool(highlightBlock.transform.position) == EnumGameData.ItemType.pickaxe)
+                int rarity = World.I.BlockNeedRarity(PlayerManager.I.highlightBlock.transform.position);
+                if (World.I.BlockEfficientTool(PlayerManager.I.highlightBlock.transform.position) == EnumGameData.ItemType.pickaxe)
                     rarity += 5;
                 return intervalTime *= (rarity + 1.5f);
             }
         }
         else
         {
-            int rarity = World.I.BlockNeedRarity(highlightBlock.transform.position);
-            if (World.I.BlockEfficientTool(highlightBlock.transform.position) == EnumGameData.ItemType.pickaxe)
+            int rarity = World.I.BlockNeedRarity(PlayerManager.I.highlightBlock.transform.position);
+            if (World.I.BlockEfficientTool(PlayerManager.I.highlightBlock.transform.position) == EnumGameData.ItemType.pickaxe)
                 rarity += 5;
             return intervalTime  *= (rarity + 1.5f);
         }
@@ -228,26 +231,107 @@ public class PlayerAgainstBlcks
     private void PlaceCursorBlocks()
     {
         float step = checkIncrement;
-        Vector3 pos = cam.transform.position + (cam.transform.forward * step);
+        Vector3 pos = PlayerManager.I.cam.transform.position + (PlayerManager.I.cam.transform.forward * step);
         Vector3 lastPos = new Vector3(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z));
         while (step < PlayerStatus.Reach)
         {
-            pos = cam.transform.position + (cam.transform.forward * step);
+            pos = PlayerManager.I.cam.transform.position + (PlayerManager.I.cam.transform.forward * step);
             if (World.I.CheckForVoxel(pos))
             {
-                highlightBlock.transform.position = new Vector3(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z));
-                PlayerManager.I.placeBlock.transform.position = lastPos;
 
-                highlightBlock.gameObject.SetActive(true);
+                PlayerManager.I.highlightBlock.gameObject.SetActive(true);
                 PlayerManager.I.placeBlock.gameObject.SetActive(true);
 
+                PlayerManager.I.highlightBlock.transform.position = new Vector3(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z));
+                CheckCursorBlockFaceDirection(lastPos);
+                if (World.I.CheckForVoxel(PlayerManager.I.highlightBlock.transform.position))
+                {
+                    Vector3 HighlightPos = new Vector3(PlayerManager.I.placeBlock.transform.position.x, PlayerManager.I.highlightBlock.transform.position.y, PlayerManager.I.placeBlock.transform.position.z);
+                    if(World.I.CheckForVoxel(HighlightPos))
+                        PlayerManager.I.highlightBlock.transform.position = HighlightPos;
+                }
                 return;
             }
-            lastPos = new Vector3(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y), Mathf.FloorToInt(pos.z));
+            lastPos = pos;
             step += checkIncrement;
         }
 
-        highlightBlock.gameObject.SetActive(false);
+        PlayerManager.I.highlightBlock.gameObject.SetActive(false);
         PlayerManager.I.placeBlock.gameObject.SetActive(false);
+    }
+
+    private void CheckCursorBlockFaceDirection(Vector3 placePos)
+    {
+        Vector3 targetPos = PlayerManager.I.highlightBlock.transform.position;
+        Vector3 targetVoxelPos = World.I.CheckVoxelPos(targetPos);
+        float check= checkIncrement + 0.01f;
+
+        PlayerManager.I.placeBlock.transform.position = new Vector3(Mathf.FloorToInt(placePos.x), Mathf.FloorToInt(placePos.y), Mathf.FloorToInt(placePos.z));
+
+        if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(0, -check, 0)))
+        {
+            PlayerManager.I.cursorFaceDirection = CursorFaceDirection.top;
+            return;
+        }
+        else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(0, check, 0)))
+        {
+            PlayerManager.I.cursorFaceDirection = CursorFaceDirection.bottom;
+            return;
+        }
+        else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(check, 0, 0)))
+        {
+            PlayerManager.I.cursorFaceDirection = CursorFaceDirection.east;
+            return;
+        }
+        else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(0, 0, check)))
+        {
+            PlayerManager.I.cursorFaceDirection = CursorFaceDirection.south;
+            return;
+        }
+        else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(-check, 0, 0)))
+        {
+            PlayerManager.I.cursorFaceDirection = CursorFaceDirection.west;
+            return;
+        }
+        else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(0, 0, -check)))
+        {
+            PlayerManager.I.cursorFaceDirection = CursorFaceDirection.north;
+            return;
+        }
+
+        if(targetVoxelPos.y < World.I.CheckVoxelPos(placePos).y || targetVoxelPos.y > World.I.CheckVoxelPos(placePos).y)
+        {
+            PlayerManager.I.placeBlock.transform.position = new Vector3(Mathf.FloorToInt(targetPos.x), Mathf.FloorToInt(placePos.y), Mathf.FloorToInt(targetPos.z));
+            if (World.I.CheckForVoxel(PlayerManager.I.placeBlock.transform.position))
+            {
+                Vector3 currentPlacePos = PlayerManager.I.placeBlock.transform.position;
+
+                if (World.I.CheckVoxelPos(currentPlacePos) == World.I.CheckVoxelPos(placePos + new Vector3(check, 0, 0)))
+                {
+                    PlayerManager.I.cursorFaceDirection = CursorFaceDirection.east;
+                    PlayerManager.I.placeBlock.transform.position += new Vector3(-1, 0, 0);
+                    return;
+                }
+                else if (World.I.CheckVoxelPos(currentPlacePos) == World.I.CheckVoxelPos(placePos + new Vector3(0, 0, check)))
+                {
+                    PlayerManager.I.cursorFaceDirection = CursorFaceDirection.south;
+                    PlayerManager.I.placeBlock.transform.position += new Vector3(0, 0, -1);
+                    return;
+                }
+                else if (World.I.CheckVoxelPos(currentPlacePos) == World.I.CheckVoxelPos(placePos + new Vector3(-check, 0, 0)))
+                {
+                    PlayerManager.I.cursorFaceDirection = CursorFaceDirection.west;
+                    PlayerManager.I.placeBlock.transform.position += new Vector3(1, 0, 0);
+                    return;
+                }
+                else if (World.I.CheckVoxelPos(currentPlacePos) == World.I.CheckVoxelPos(placePos + new Vector3(0, 0, -check)))
+                {
+                    PlayerManager.I.cursorFaceDirection = CursorFaceDirection.north;
+                    PlayerManager.I.placeBlock.transform.position += new Vector3(0, 0, 1);
+                    return;
+                }
+            }
+            return;
+        }
     }
 }

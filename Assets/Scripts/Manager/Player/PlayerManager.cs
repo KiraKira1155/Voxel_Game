@@ -29,10 +29,21 @@ public class PlayerManager : Singleton<PlayerManager>
 
     [SerializeField] private GameObject inventoryWindow;
     [SerializeField] private GameObject cursorSlot;
+
+    public PlayerDirection playerDirection;
+    public PlayerAgainstBlcks.CursorFaceDirection cursorFaceDirection;
+    [SerializeField] private float viewingAngle;
+    public enum PlayerDirection
+    {
+        north,
+        east,
+        west,
+        south
+    }
+
     private void Awake()
     {
-        if (!init)
-            Init();
+        Init();
     }
 
     public void DoAwake()
@@ -77,6 +88,7 @@ public class PlayerManager : Singleton<PlayerManager>
         else
         {
             playerVision.DoUpdate();
+            ViewingAngle();
             playerMove.DoUpdate();
             playerAgainstBlcks.DoUpdate();
 
@@ -119,5 +131,28 @@ public class PlayerManager : Singleton<PlayerManager>
     {
         playerBodyUpper.transform.position = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y) + 1.5f, Mathf.FloorToInt(transform.position.z) + 0.5f);
         playerBodyLower.transform.position = new Vector3(Mathf.FloorToInt(transform.position.x) + 0.5f, Mathf.FloorToInt(transform.position.y) + 0.5f, Mathf.FloorToInt(transform.position.z) + 0.5f);
+    }
+
+    private void ViewingDirection()
+    {
+        if (viewingAngle >= 0 && viewingAngle < 45 ||
+            viewingAngle >= 315 &&  viewingAngle < 360)
+            playerDirection = PlayerDirection.north;
+
+        if(viewingAngle >= 45 &&  viewingAngle < 135)
+            playerDirection = PlayerDirection.west;
+
+        if(viewingAngle >= 135 && viewingAngle < 225)
+            playerDirection = PlayerDirection.south;
+
+        if(viewingAngle >= 225 &&  viewingAngle < 315)
+            playerDirection = PlayerDirection.east;
+    }
+
+    private void ViewingAngle()
+    {
+        viewingAngle = transform.rotation.eulerAngles.y;
+
+        ViewingDirection();
     }
 }

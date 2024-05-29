@@ -18,8 +18,7 @@ public class DebugScreen : Singleton<DebugScreen>
 
     private void Awake()
     {
-        if (!init)
-            Init();
+        Init();
     }
 
 

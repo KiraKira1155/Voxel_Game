@@ -15,6 +15,8 @@ public class TitleManager : Singleton<TitleManager>
 
     [SerializeField] [ReadOnly] private Menu menu;
 
+    [SerializeField] private GameObject titleCamera;
+
     [SerializeField] private GameObject titleMenuObj;
     [SerializeField] private GameObject worldSelectMenuObj;
     [SerializeField] private GameObject optionMenuObj;
@@ -43,23 +45,15 @@ public class TitleManager : Singleton<TitleManager>
 
     private void Awake()
     {
-        if (!init)
-            Init();
-    }
+        pointerEventData = new PointerEventData(eventSystem);
 
-    private void OnEnable()
-    {
-        r = 0;
-        g = 0;
-        b = 0;
-        titleBackGround.color = new Color32(r, g, b, 255);
-
-        menu = Menu.title;
-        SelectMenu();
+        Init();
     }
 
     public void DoStart()
     {
+        menu = Menu.title;
+        SelectMenu();
         StartCoroutine(ChengeColor());
     }
 
@@ -144,13 +138,17 @@ public class TitleManager : Singleton<TitleManager>
     IEnumerator SetActiveFalse()
     {
         yield return new WaitUntil(() => MyMonoBehaviour.I.successStart);
-        gameObject.SetActive(false);
+        titleCamera.SetActive(false);
 
         yield break;
     }
 
     IEnumerator ChengeColor()
     {
+        r = 0;
+        g = 0;
+        b = 0;
+        titleBackGround.color = new Color32(r, g, b, 255);
         var wait = new WaitForSeconds(0.016f);
         while (!MyMonoBehaviour.I.successStart)
         {
@@ -175,34 +173,16 @@ public class TitleManager : Singleton<TitleManager>
         yield break;
     }
 
-    public bool CheckForButton(string tagName)
+    public bool CheckForButton(string tagName, GameObject obj)
     {
-        pointerEventData = new PointerEventData(eventSystem);
+        List<RaycastResult> results = new List<RaycastResult>();
         pointerEventData.position = Input.mousePosition;
 
-        List<RaycastResult> results = new List<RaycastResult>();
         raycaster.Raycast(pointerEventData, results);
 
         foreach (RaycastResult result in results)
         {
-            if (result.gameObject.tag == tagName)
-                return true;
-        }
-
-        return false;
-    }
-
-    public bool CheckForObject(GameObject obj)
-    {
-        pointerEventData = new PointerEventData(eventSystem);
-        pointerEventData.position = Input.mousePosition;
-
-        List<RaycastResult> results = new List<RaycastResult>();
-        raycaster.Raycast(pointerEventData, results);
-
-        foreach (RaycastResult result in results)
-        {
-            if (result.gameObject == obj)
+            if (result.gameObject.tag == tagName && result.gameObject == obj)
                 return true;
         }
 

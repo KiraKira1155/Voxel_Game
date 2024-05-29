@@ -35,8 +35,7 @@ public class World : Singleton<World>
 
     private void Awake()
     {
-        if (!init)
-            Init();
+        Init();
     }
 
     public void DoAwake()
@@ -245,6 +244,13 @@ public class World : Singleton<World>
         //以前のリストに残っているチャンクは視界内にないから、ループをthroughして無効に
         foreach (ChunkCoord c in previouslyActiveChunks)
             chunksToHidden.Add(c);
+    }
+
+    public Vector3 CheckVoxelPos(Vector3 pos)
+    {
+        ChunkCoord thisChunk = new ChunkCoord(pos);
+
+        return chunks[thisChunk.x, thisChunk.z].GetVoxelPos(pos);
     }
 
     //プレイヤーの当たり判定用

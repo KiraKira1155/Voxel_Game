@@ -25,8 +25,7 @@ public class ItemManager : Singleton<ItemManager>
 
     private void Awake()
     {
-        if (!init)
-            Init();
+        Init();
     }
 
     public int GetEachTypeCount(EnumGameData.ItemType itemType)
