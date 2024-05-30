@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Unity.VisualScripting;
 using UnityEngine;
 using static ConfigManager;
 
@@ -27,6 +29,9 @@ public class World : Singleton<World>
     private bool checkHidden = false;
 
     public bool successGenerateWorld = false;
+
+    WaitForSeconds createChunkWait = new WaitForSeconds(0.048f);
+    WaitForSeconds hiddenChunkWait = new WaitForSeconds(0.016f);
 
     public static int WorldSizeInVoxels
     {
@@ -67,7 +72,8 @@ public class World : Singleton<World>
 
         PlayerManager.I.transform.position = player;
 
-        playerLastChunkCoord = GetChunkCoordFromVector3(PlayerManager.I.transform.position);
+        playerChunkCoord = GetChunkCoordFromVector3(PlayerManager.I.transform.position);
+        playerLastChunkCoord = playerChunkCoord;
     }
 
     private Vector3 SpawnPositionGenerate()
@@ -127,8 +133,6 @@ public class World : Singleton<World>
     {
         checkCreate = true;
 
-        var wait = new WaitForSeconds(0.048f);
-
         while (chunksToCreate.Count > 0)
         {
             ChunkCoord c = chunksToCreate[0];
@@ -137,7 +141,7 @@ public class World : Singleton<World>
             if (!chunks[c.x, c.z].isInit)
             {
                 chunks[c.x, c.z].Init();
-                yield return wait;
+                yield return createChunkWait;
             }
         }
 
@@ -150,14 +154,13 @@ public class World : Singleton<World>
     {
         checkHidden = true;
 
-        var wait = new WaitForSeconds(0.016f);
 
         while (chunksToHidden.Count > 0)
         {
             ChunkCoord c = chunksToHidden[0];
             chunksToHidden.RemoveAt(0);
             chunks[c.x, c.z].isActive = false;
-            yield return wait;
+            yield return hiddenChunkWait;
         }
 
         checkHidden = false;
@@ -182,6 +185,8 @@ public class World : Singleton<World>
     //描画されているかのチェック
     IEnumerator CheckView()
     {
+        yield return new WaitUntil(() => checkCreate);
+        yield return new WaitUntil(() => !checkCreate);
         ChunkCoord coord = GetChunkCoordFromVector3(PlayerManager.I.transform.position);
 
         for (int x = coord.x - ViewDistanceInChunk; x < coord.x + ViewDistanceInChunk; x++)
@@ -190,18 +195,12 @@ public class World : Singleton<World>
             {
                 if (IsChunkInWorld(new ChunkCoord(x, z)))
                 {
-                    if (!chunks[x, z].isActive)
+                    if (!chunks[x, z].isActive && chunks[x, z].isInit)
                         chunks[x, z].isActive = true;
-                    if (chunks[x, z] == null)
-                    {
-                        chunks[x, z] = new Chunk(new ChunkCoord(x, z));
-                        chunksToCreate.Add(new ChunkCoord(x, z));
-                        chunks[x, z].isActive = true;
-                        yield return null;
-                    }
                 }
             }
         }
+
     }
 
     //プレイヤーの確認できるチャンクの描画
@@ -218,6 +217,14 @@ public class World : Singleton<World>
         {
             for (int z = coord.z - ViewDistanceInChunk; z < coord.z + ViewDistanceInChunk; z++)
             {
+                var task = Task.Run(() =>
+                {
+                    // 以前にアクティブだったチャンクを調べて、このチャンクが存在するかどうかを確認。存在する場合は、リストから削除。
+                    for (int i = 0; i < previouslyActiveChunks.Count; i++)
+                        if (previouslyActiveChunks[i].Equals(new ChunkCoord(x, z)))
+                            previouslyActiveChunks.RemoveAt(i);
+                });
+
                 //現在のチャンクがワールド内にある場合
                 if (IsChunkInWorld(new ChunkCoord(x, z)))
                 {
@@ -232,11 +239,7 @@ public class World : Singleton<World>
                         chunks[x, z].isActive = true;
                 }
 
-                // 以前にアクティブだったチャンクを調べて、このチャンクが存在するかどうかを確認。存在する場合は、リストから削除。
-                for (int i = 0; i < previouslyActiveChunks.Count; i++)
-                    if (previouslyActiveChunks[i].Equals(new ChunkCoord(x, z)))
-                        previouslyActiveChunks.RemoveAt(i);
-
+                task.Wait();
                 activeChunk.Add(new ChunkCoord(x, z));
             }
         }
@@ -244,6 +247,9 @@ public class World : Singleton<World>
         //以前のリストに残っているチャンクは視界内にないから、ループをthroughして無効に
         foreach (ChunkCoord c in previouslyActiveChunks)
             chunksToHidden.Add(c);
+
+
+        StartCoroutine(CheckView());
     }
 
     public Vector3 CheckVoxelPos(Vector3 pos)

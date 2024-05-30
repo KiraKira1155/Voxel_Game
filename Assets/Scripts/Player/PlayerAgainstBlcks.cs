@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class PlayerAgainstBlcks
@@ -247,8 +248,11 @@ public class PlayerAgainstBlcks
                 if (World.I.CheckForVoxel(PlayerManager.I.highlightBlock.transform.position))
                 {
                     Vector3 HighlightPos = new Vector3(PlayerManager.I.placeBlock.transform.position.x, PlayerManager.I.highlightBlock.transform.position.y, PlayerManager.I.placeBlock.transform.position.z);
-                    if(World.I.CheckForVoxel(HighlightPos))
+                    if (World.I.CheckForVoxel(HighlightPos))
+                    {
                         PlayerManager.I.highlightBlock.transform.position = HighlightPos;
+                        PlayerManager.I.placeBlock.transform.position = new Vector3(PlayerManager.I.highlightBlock.transform.position.x, PlayerManager.I.placeBlock.transform.position.y, PlayerManager.I.highlightBlock.transform.position.z);
+                    }
                 }
                 return;
             }
@@ -268,36 +272,39 @@ public class PlayerAgainstBlcks
 
         PlayerManager.I.placeBlock.transform.position = new Vector3(Mathf.FloorToInt(placePos.x), Mathf.FloorToInt(placePos.y), Mathf.FloorToInt(placePos.z));
 
-        if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(0, -check, 0)))
+        var task = Task.Run(() =>
         {
-            PlayerManager.I.cursorFaceDirection = CursorFaceDirection.top;
-            return;
-        }
-        else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(0, check, 0)))
-        {
-            PlayerManager.I.cursorFaceDirection = CursorFaceDirection.bottom;
-            return;
-        }
-        else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(check, 0, 0)))
-        {
-            PlayerManager.I.cursorFaceDirection = CursorFaceDirection.east;
-            return;
-        }
-        else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(0, 0, check)))
-        {
-            PlayerManager.I.cursorFaceDirection = CursorFaceDirection.south;
-            return;
-        }
-        else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(-check, 0, 0)))
-        {
-            PlayerManager.I.cursorFaceDirection = CursorFaceDirection.west;
-            return;
-        }
-        else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(0, 0, -check)))
-        {
-            PlayerManager.I.cursorFaceDirection = CursorFaceDirection.north;
-            return;
-        }
+            if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(0, -check, 0)))
+            {
+                PlayerManager.I.cursorFaceDirection = CursorFaceDirection.top;
+                return;
+            }
+            else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(0, check, 0)))
+            {
+                PlayerManager.I.cursorFaceDirection = CursorFaceDirection.bottom;
+                return;
+            }
+            else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(check, 0, 0)))
+            {
+                PlayerManager.I.cursorFaceDirection = CursorFaceDirection.east;
+                return;
+            }
+            else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(0, 0, check)))
+            {
+                PlayerManager.I.cursorFaceDirection = CursorFaceDirection.south;
+                return;
+            }
+            else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(-check, 0, 0)))
+            {
+                PlayerManager.I.cursorFaceDirection = CursorFaceDirection.west;
+                return;
+            }
+            else if (targetVoxelPos == World.I.CheckVoxelPos(placePos + new Vector3(0, 0, -check)))
+            {
+                PlayerManager.I.cursorFaceDirection = CursorFaceDirection.north;
+                return;
+            }
+        });
 
         if(targetVoxelPos.y < World.I.CheckVoxelPos(placePos).y || targetVoxelPos.y > World.I.CheckVoxelPos(placePos).y)
         {

@@ -11,13 +11,14 @@ public class Chunk
 	private GameObject thisObj;
 	private MeshRenderer meshRenderer;
 	private MeshFilter meshFilter;
+	private Mesh mesh;
 
     private int vertexIndex = 0;
 	private List<Vector3> vertices = new List<Vector3>();
-	private List<int> triangles = new List<int>();
-	private List<Vector2> uvs = new List<Vector2>();
-	Material[] materials = new Material[2];
-	List<int> transparentTriangles = new List<int>();
+    private List<Vector2> uvs = new List<Vector2>();
+    private List<int> triangles = new List<int>();
+    List<int> transparentTriangles = new List<int>();
+    Material[] materials = new Material[2];
 
 	public Vector3 position {  get; private set; }
 
@@ -53,6 +54,7 @@ public class Chunk
         });
 		thisObj = new GameObject();
         thisObj.transform.position = new Vector3(coord.x * Width, 0f, coord.z * Width);
+		mesh = new Mesh();
 
         meshRenderer = thisObj.AddComponent<MeshRenderer>();
 		meshFilter = thisObj.AddComponent<MeshFilter>();
@@ -115,7 +117,8 @@ public class Chunk
 
     public void UpdateChunk()
     {
-		var task = Task.Run(() =>
+		mesh.Clear();
+        var task = Task.Run(() =>
         {
             ClearMeshData();
 
@@ -289,15 +292,15 @@ public class Chunk
 		{
 			if ((CheckVoxelTransParent(pos + VoxelData.faceChecks[p]) && !CheckVoxelTransParent(pos))
 				|| CheckVoxel(pos + VoxelData.faceChecks[p]) == (int)EnumGameData.BlockID.air)
-			{
-				vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 0]]);
-				vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 1]]);
-				vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 2]]);
-				vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 3]]);
+            {
+                vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 0]]);
+                vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 1]]);
+                vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 2]]);
+                vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 3]]);
 
-				AddTexture(BlockManager.I.blocktype[blockID].GetTextureFace((BlockType.faceIndex)p));
+                AddTexture(BlockManager.I.blocktype[blockID].GetTextureFace((BlockType.faceIndex)p));
 
-				if (!isTransparent)
+                if (!isTransparent)
                 {
                     triangles.Add(vertexIndex);
                     triangles.Add(vertexIndex + 1);
@@ -322,11 +325,11 @@ public class Chunk
 
 	private void CreateMesh()
 	{
-		Mesh mesh = new Mesh();
 		mesh.vertices = vertices.ToArray();
 
-		mesh.subMeshCount = 2;
-		mesh.SetTriangles(triangles.ToArray(), 0);
+        mesh.subMeshCount = 2;
+
+        mesh.SetTriangles(triangles.ToArray(), 0);
         mesh.SetTriangles(transparentTriangles.ToArray(), 1);
         mesh.uv = uvs.ToArray();
 

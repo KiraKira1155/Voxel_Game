@@ -318,22 +318,22 @@ public class GenerateMap : Singleton<GenerateMap>
     /// 0`2‚ªŠCi”š‚ª’á‚¢‚Ù‚Ç[‚­j‘¼‚Í—¤’n
     /// </para>
     /// <para>
-    /// 0‚©‚ç‡‚É ŠC(50%) 16.5% % 21% 12.5% —¤’n(50%) 18.5% 17.5% 9.5% 4.5%
+    /// 0‚©‚ç‡‚É ŠC(30%) 7% 13% 10% —¤’n(70%) 25.5% 23% 14% 7.5%
     /// </para>
     /// </returns>
     private byte ContinentalnessLv(float noise)
     {
-        if (noise > 0.955f)
+        if (noise > 0.925f)
             return 6;
-        else if (noise > 0.86f)
+        else if (noise > 0.785f)
             return 5;
-        else if (noise > 0.685f)
+        else if (noise > 0.555f)
             return 4;
-        else if (noise > 0.5f)
+        else if (noise > 0.3f)
             return 3;
-        else if (noise > 0.375f)
+        else if (noise > 0.2f)
             return 2;
-        else if (noise > 0.165f)
+        else if (noise > 0.07f)
             return 1;
         else
             return 0;
