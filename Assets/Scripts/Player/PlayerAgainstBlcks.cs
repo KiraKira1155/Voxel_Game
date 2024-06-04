@@ -41,78 +41,8 @@ public class PlayerAgainstBlcks
     {
         if (PlayerManager.I.highlightBlock.gameObject.activeSelf)
         {
-            //ブロックの破壊
-            if (KeyConfig.GetKeyDown(KeyConfig.KeyName.LeftClick))
-            {
-                highlightPos = PlayerManager.I.highlightBlock.transform.position;
-                destructionTime = DestructionTime(World.I.BlockNeedDestructionTime(highlightPos));
-                coolTimeCnt = coolTime;
-            }
-            if (KeyConfig.GetKey(KeyConfig.KeyName.LeftClick) && World.I.BlockNeedRarity(highlightPos) != -1)
-            {
-                if (highlightPos == PlayerManager.I.highlightBlock.transform.position)
-                {
-                    startBlockDestroy = true;
-                }
-                else
-                {
-                    time = 0;
-                    highlightPos = PlayerManager.I.highlightBlock.transform.position;
-                    destructionTime = DestructionTime(World.I.BlockNeedDestructionTime(highlightPos));
-                    startBlockDestroy = false;
-                }
-
-                if (startBlockDestroy && BlockDestroyCoolTime())
-                {
-                    if (BlockDestroyInterval(destructionTime))
-                    {
-                        //ここで破壊が確定
-                        DropItemManager.I.DropWhenDestroyBlock((EnumGameData.BlockID)World.I.CheckIfVoxel(highlightPos), highlightPos);
-                        coolTimeCnt = 0;
-                        World.I.GetChunkFromVector3(highlightPos).EditVoxel(highlightPos, EnumGameData.BlockID.air);
-                        if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack != null)
-                            if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.durability > -1)
-                            {
-                                PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.UseTool(1);
-                            }
-                    }
-                }
-            }
-            if (KeyConfig.GetKeyUp(KeyConfig.KeyName.LeftClick) || highlightPos != PlayerManager.I.highlightBlock.transform.position)
-            {
-                startBlockDestroy = false;
-                time = 0;
-            }
-
-            //ブロックの設置
-            if (KeyConfig.GetKeyDown(KeyConfig.KeyName.RightClick))
-            {
-                if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack != null)
-                {
-                    if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.kinds == EnumGameData.ItemKinds.item)
-                        return;
-                }
-
-                if (PlayerManager.I.placeBlock.transform.position.y < VoxelData.Hight - 4 && (PlayerManager.I.playerBodyUpper.transform.localPosition != PlayerManager.I.placeBlock.transform.localPosition && PlayerManager.I.playerBodyLower.transform.localPosition != PlayerManager.I.placeBlock.transform.localPosition))
-                {
-                    if (!World.I.CheckForVoxel(PlayerManager.I.playerBodyLower.transform.position) && !World.I.CheckForVoxel(PlayerManager.I.playerBodyUpper.transform.position))
-                    {
-                        if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].HasItem)
-                        {
-                            if (!PlayerStatus.isGrounded && ((PlayerManager.I.playerBodyUpper.transform.localPosition.y + 1.0f) != PlayerManager.I.placeBlock.transform.localPosition.y))
-                            {
-                                World.I.GetChunkFromVector3(PlayerManager.I.placeBlock.transform.position).EditVoxel(PlayerManager.I.placeBlock.transform.position, PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.blockID);
-                                PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.Take(1);
-                            }
-                            if (PlayerStatus.isGrounded)
-                            {
-                                World.I.GetChunkFromVector3(PlayerManager.I.placeBlock.transform.position).EditVoxel(PlayerManager.I.placeBlock.transform.position, PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.blockID);
-                                PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.Take(1);
-                            }
-                        }
-                    }
-                }
-            }
+            DestructionBlock();
+            InstallationBlock();
         }
     }
 
@@ -131,6 +61,83 @@ public class PlayerAgainstBlcks
             {
                 Inventory.I.toolBarSlots[i].GetItem(1);
                 return;
+            }
+        }
+    }
+
+    private void DestructionBlock()
+    {
+        if (KeyConfig.GetKeyDown(KeyConfig.KeyName.LeftClick))
+        {
+            highlightPos = PlayerManager.I.highlightBlock.transform.position;
+            destructionTime = DestructionTime(World.I.BlockNeedDestructionTime(highlightPos));
+            coolTimeCnt = coolTime;
+        }
+        if (KeyConfig.GetKey(KeyConfig.KeyName.LeftClick) && World.I.BlockNeedRarity(highlightPos) != -1)
+        {
+            if (highlightPos == PlayerManager.I.highlightBlock.transform.position)
+            {
+                startBlockDestroy = true;
+            }
+            else
+            {
+                time = 0;
+                highlightPos = PlayerManager.I.highlightBlock.transform.position;
+                destructionTime = DestructionTime(World.I.BlockNeedDestructionTime(highlightPos));
+                startBlockDestroy = false;
+            }
+
+            if (startBlockDestroy && BlockDestroyCoolTime())
+            {
+                if (BlockDestroyInterval(destructionTime))
+                {
+                    //ここで破壊が確定
+                    DropItemManager.I.DropWhenDestroyBlock((EnumGameData.BlockID)World.I.CheckIfVoxel(highlightPos), highlightPos);
+                    coolTimeCnt = 0;
+                    World.I.GetChunkFromVector3(highlightPos).EditVoxel(highlightPos, EnumGameData.BlockID.air);
+                    if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack != null)
+                        if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.durability > -1)
+                        {
+                            PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.UseTool(1);
+                        }
+                }
+            }
+        }
+        if (KeyConfig.GetKeyUp(KeyConfig.KeyName.LeftClick) || highlightPos != PlayerManager.I.highlightBlock.transform.position)
+        {
+            startBlockDestroy = false;
+            time = 0;
+        }
+    }
+
+    private void InstallationBlock()
+    {
+        if (KeyConfig.GetKeyDown(KeyConfig.KeyName.RightClick))
+        {
+            if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack != null)
+            {
+                if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.kinds == EnumGameData.ItemKinds.item)
+                    return;
+            }
+
+            if (PlayerManager.I.placeBlock.transform.position.y < VoxelData.Hight - 4 && (PlayerManager.I.playerBodyUpper.transform.localPosition != PlayerManager.I.placeBlock.transform.localPosition && PlayerManager.I.playerBodyLower.transform.localPosition != PlayerManager.I.placeBlock.transform.localPosition))
+            {
+                if (!World.I.CheckForVoxel(PlayerManager.I.playerBodyLower.transform.position) && !World.I.CheckForVoxel(PlayerManager.I.playerBodyUpper.transform.position))
+                {
+                    if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].HasItem)
+                    {
+                        if (!PlayerStatus.isGrounded && ((PlayerManager.I.playerBodyUpper.transform.localPosition.y + 1.0f) != PlayerManager.I.placeBlock.transform.localPosition.y))
+                        {
+                            World.I.GetChunkFromVector3(PlayerManager.I.placeBlock.transform.position).EditVoxel(PlayerManager.I.placeBlock.transform.position, PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.blockID);
+                            PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.Take(1);
+                        }
+                        if (PlayerStatus.isGrounded)
+                        {
+                            World.I.GetChunkFromVector3(PlayerManager.I.placeBlock.transform.position).EditVoxel(PlayerManager.I.placeBlock.transform.position, PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.blockID);
+                            PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.Take(1);
+                        }
+                    }
+                }
             }
         }
     }

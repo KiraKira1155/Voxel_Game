@@ -30,7 +30,7 @@ MonoBehaviour:
   - _name: iron_pickaxe
     _texture: {fileID: 2800000, guid: 3bf6560cd50b1c14db4d3c39fab2df4f, type: 3}
     _attribute: 0
-    _rarity: 10
+    _rarity: 3
     _damage: 3
     _durability: 576
     _reuseTime: 1

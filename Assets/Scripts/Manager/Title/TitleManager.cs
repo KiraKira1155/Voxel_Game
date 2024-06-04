@@ -32,6 +32,7 @@ public class TitleManager : Singleton<TitleManager>
 
     public enum Menu
     {
+        none,
         title,
         worldSelect,
         option,

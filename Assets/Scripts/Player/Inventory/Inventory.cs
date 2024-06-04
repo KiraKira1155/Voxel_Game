@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Inventory : Singleton<Inventory>
 {
-    public GameObject slotPrefab;
+    [SerializeField] private GameObject slotPrefab;
     [SerializeField] private bool creative;
 
     private Slot slot;

@@ -15,6 +15,7 @@ public class WorldSelectMenu
         if (TitleManager.I.CheckForButton("TitleButton", generateWorldButton))
         {
             MyMonoBehaviour.I.configManager.SetSeed(seedInput.GetInputSeed());
+            TitleManager.I.SetMenu(TitleManager.Menu.none);
             TitleManager.I.StartGame();
         }
 

@@ -147,6 +147,8 @@ public class World : Singleton<World>
 
         checkCreate = false;
 
+        StartCoroutine(CheckView());
+
         yield break;
     }
 
@@ -185,8 +187,6 @@ public class World : Singleton<World>
     //描画されているかのチェック
     IEnumerator CheckView()
     {
-        yield return new WaitUntil(() => checkCreate);
-        yield return new WaitUntil(() => !checkCreate);
         ChunkCoord coord = GetChunkCoordFromVector3(PlayerManager.I.transform.position);
 
         for (int x = coord.x - ViewDistanceInChunk; x < coord.x + ViewDistanceInChunk; x++)
@@ -201,6 +201,7 @@ public class World : Singleton<World>
             }
         }
 
+        yield return null;
     }
 
     //プレイヤーの確認できるチャンクの描画
@@ -247,9 +248,6 @@ public class World : Singleton<World>
         //以前のリストに残っているチャンクは視界内にないから、ループをthroughして無効に
         foreach (ChunkCoord c in previouslyActiveChunks)
             chunksToHidden.Add(c);
-
-
-        StartCoroutine(CheckView());
     }
 
     public Vector3 CheckVoxelPos(Vector3 pos)
