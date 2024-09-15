@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ffc4e16af61384f98efc37f0411c4a, type: 3}
+  m_Name: Projectile
+  m_EditorClassIdentifier: 
+  projectileDatas:
+  - _name: snowball
+    _texture: {fileID: 2800000, guid: cc43d5c9c6cbbf74fbbb45b32f3b4c14, type: 3}
+    _attribute: 0
+    _stackMaxSize: 16
+    _damage: 1
+    _reuseTime: 0.5

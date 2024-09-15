@@ -13,31 +13,38 @@ MonoBehaviour:
   m_Name: Pickaxe
   m_EditorClassIdentifier: 
   toolDatas:
-  - _name: wodden_pickaxe
-    _texture: {fileID: 2800000, guid: e76803cc18d38084e9486e3d80260743, type: 3}
+  - _name: wood_pickaxe
+    _texture: {fileID: 2800000, guid: 4e116206ae39db84d9b1c936cadbd2c3, type: 3}
     _attribute: 0
     _rarity: 1
-    _damage: 1.5
-    _durability: 160
-    _reuseTime: 1
+    _damage: 2
+    _durability: 59
+    _attackPerSecond: 1.2
   - _name: stone_pickaxe
     _texture: {fileID: 2800000, guid: 878ceba1527e12c49b7fdc76d08f82ed, type: 3}
     _attribute: 0
     _rarity: 2
-    _damage: 2
-    _durability: 288
-    _reuseTime: 1
+    _damage: 3
+    _durability: 131
+    _attackPerSecond: 1.2
   - _name: iron_pickaxe
     _texture: {fileID: 2800000, guid: 3bf6560cd50b1c14db4d3c39fab2df4f, type: 3}
     _attribute: 0
     _rarity: 3
-    _damage: 3
-    _durability: 576
-    _reuseTime: 1
-  - _name: golden_pickaxe
-    _texture: {fileID: 2800000, guid: 0b25c08e70ccf634bba7427f16895cd1, type: 3}
+    _damage: 4
+    _durability: 250
+    _attackPerSecond: 1.2
+  - _name: diamond_pickaxe
+    _texture: {fileID: 2800000, guid: dfd7a28098fa5e64fa8ac59a648fea92, type: 3}
+    _attribute: 0
+    _rarity: 4
+    _damage: 5
+    _durability: 1561
+    _attackPerSecond: 1.2
+  - _name: gold_pickaxe
+    _texture: {fileID: 2800000, guid: c73f908e17fca5443b071eb8a667fd21, type: 3}
     _attribute: 0
     _rarity: 2
-    _damage: 2.5
-    _durability: 96
-    _reuseTime: 1
+    _damage: 2
+    _durability: 32
+    _attackPerSecond: 1.2

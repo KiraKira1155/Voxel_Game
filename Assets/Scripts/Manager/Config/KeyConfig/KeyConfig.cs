@@ -22,7 +22,9 @@ public class KeyConfig
 
         DebugScreen,
 
-        Inventory
+        Inventory,
+
+        GameEnd
     }
 
     public void DoAwake()
@@ -41,6 +43,8 @@ public class KeyConfig
         Config[KeyName.DebugScreen] = ConfigManager.DebugScreen;
 
         Config[KeyName.Inventory] = ConfigManager.Inventory;
+
+        Config[KeyName.GameEnd] = ConfigManager.GameEnd;
     }
 
     public void DoUpdate()

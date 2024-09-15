@@ -1,0 +1,30 @@
+{
+  "dropItem": [
+    {
+      "roll": {
+        "min": 1,
+        "max": 2
+      },
+      "entries": [
+        {
+          "needToo": false,
+          "perfectMiner": true,
+          "dropItemID": 602,
+          "probability": 1,
+          "dropMinNum": 1,
+          "dropMaxNum": 1
+        },
+        {
+          "needToo": false,
+          "perfectMiner": false,
+          "dropItemID": 601,
+          "probability": 1,
+          "dropMinNum": 1,
+          "dropMaxNum": 1
+        }
+      ],
+      "matchToolEntry": [
+      ]
+    }
+  ]
+}

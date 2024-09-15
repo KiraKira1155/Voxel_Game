@@ -37,3 +37,6 @@ MonoBehaviour:
   - _name: gold_ingot
     _texture: {fileID: 2800000, guid: f5de07a4ebbba8b4a89e857083522e76, type: 3}
     _stackMaxSize: 64
+  - _name: diamond
+    _texture: {fileID: 2800000, guid: e4a28375d5e296c4493d0df7a1efbc24, type: 3}
+    _stackMaxSize: 64

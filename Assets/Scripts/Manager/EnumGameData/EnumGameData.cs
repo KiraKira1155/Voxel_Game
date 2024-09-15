@@ -21,7 +21,10 @@ public class EnumGameData
         hoe,
         projectile,
 
-        ore
+        material,
+        ore,
+
+        block
     }
     public enum WeaponAttribute
     {
@@ -79,51 +82,98 @@ public class EnumGameData
         log,
         leaf,
         glass
-
     }
     public enum ItemID
     {
         None = 0,
 
         //meleeWeapon
-        wooden_sword = 1,
+        wood_sword = 1,
         stone_sword,
         iron_sword,
-        golden_sword,
+        gold_sword,
+        diamond_sword,
 
         //pickaxe
-        wooden_pickaxe = 1000,
+        wood_pickaxe = 25,
         stone_pickaxe,
         iron_pickaxe,
-        golden_pickaxe,
+        gold_pickaxe,
+        diamond_pickaxe,
 
         //axe
-        wooden_axe = 2000,
+        wood_axe = 50,
         stone_axe,
         iron_axe,
-        golden_axe,
+        gold_axe,
+        diamond_axe,
 
         //shovel
-        wooden_shovel = 3000,
+        wood_shovel = 75,
         stone_shovel,
         iron_shovel,
-        golden_shovel,
+        gold_shovel,
+        diamond_shovel,
 
         //hoe
-        wooden_hoe = 4000,
+        wood_hoe = 100,
         stone_hoe,
         iron_hoe,
-        golden_hoe,
+        gold_hoe,
+        diamond_hoe,
+
+        //projectile
+        snowball = 150,
+
+        //material
+        flint = 200,
 
         //ore
-        charcoal = 5000,
+        charcoal = 500,
         coal,
         raw_iron,
         iron_ingot,
         raw_copper,
         copper_ingot,
         raw_gold,
-        gold_ingot
+        gold_ingot,
+        diamond,
 
+        //block
+        bedrock = 600,
+        dirt,
+        grass,
+        coarseDirt,
+        snow,
+        snowDirt,
+        sand,
+        redSand,
+        gravel,
+        stone,
+        cobble,
+        deepslate,
+        cobbleDeepslate,
+        andesite,
+        granite,
+        diorite,
+        coalOre,
+        ironOre,
+        goldOre,
+        diamondOre,
+        redstoneOre,
+        copperOre,
+        emeraldOre,
+        ancientDebris,
+        coalBlock,
+        ironBlock,
+        goldBlock,
+        diamondBlock,
+        redstoneBlock,
+        copperBlock,
+        emeraldBlock,
+        netheriteBlock,
+        log,
+        leaf,
+        glass
     }
 }

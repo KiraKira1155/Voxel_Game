@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BiomeAttributes", menuName = "Voxel_Game / Tool Attribute")]
+[CreateAssetMenu(fileName = "ToolAttributes", menuName = "Voxel_Game / Tool Attribute")]
 public class ToolAttributes : ScriptableObject
 {
     public ToolData[] toolDatas;
@@ -14,7 +15,7 @@ public interface IToolData : IItemData
     EnumGameData.WeaponAttribute attribute();
     int rarity();
     float damage();
-    float reuseTime();
+    float attackPerSecond();
     int durability();
 }
 
@@ -28,7 +29,7 @@ public class ToolData : IToolData
     [Range(1, 100)][SerializeField] private float _damage;
     [Tooltip("-1ÇÕÅAëœãvÇ™ñ≥å¿")]
     [Range(-1, 10000)][SerializeField] private int _durability;
-    [Range(0, 10)][SerializeField] private float _reuseTime;
+    [Range(0, 10)][SerializeField] private float _attackPerSecond;
 
     public EnumGameData.WeaponAttribute attribute()
     {
@@ -55,9 +56,9 @@ public class ToolData : IToolData
         return _rarity;
     }
 
-    public float reuseTime()
+    public float attackPerSecond()
     {
-        return _reuseTime;
+        return _attackPerSecond;
     }
 
     public int stackMaxSize()

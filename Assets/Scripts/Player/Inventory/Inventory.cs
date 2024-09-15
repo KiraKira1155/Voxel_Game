@@ -76,6 +76,16 @@ public class Inventory : Singleton<Inventory>
             SlotTypeItemInit(EnumGameData.ItemType.hoe, i);
         }
 
+        for (int i = 0; i < ItemManager.I.GetEachTypeCount(EnumGameData.ItemType.projectile); i++)
+        {
+            SlotTypeItemInit(EnumGameData.ItemType.projectile, i);
+        }
+
+        for (int i = 0; i < ItemManager.I.GetEachTypeCount(EnumGameData.ItemType.material); i++)
+        {
+            SlotTypeItemInit(EnumGameData.ItemType.material, i);
+        }
+
         for (int i = 0; i < ItemManager.I.GetEachTypeCount(EnumGameData.ItemType.ore); i++)
         {
             SlotTypeItemInit(EnumGameData.ItemType.ore, i);

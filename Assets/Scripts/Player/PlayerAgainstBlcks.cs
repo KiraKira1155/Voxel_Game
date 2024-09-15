@@ -10,10 +10,13 @@ public class PlayerAgainstBlcks
 
     private const float maxDestructionTime = 0.05f;
     private const float coolTime = 0.25f;
-    private float destructionTime;
+    public float destructionTime { get; private set; }
     private float coolTimeCnt;
-    private float time;
+    public float miningTime {  get; private set; }
     private bool startBlockDestroy;
+
+    private int blockID;
+
 
     public enum CursorFaceDirection
     {
@@ -46,34 +49,16 @@ public class PlayerAgainstBlcks
         }
     }
 
-    private void GetDestructionBlockItem(Vector3 destroyPos)
-    {
-        for (int i = 0; i < Inventory.I.toolBarSlots.Count; i++)
-        {
-            if (Inventory.I.toolBarSlots[i].stack == null)
-            {
-                ItemStack getItem = new ItemStack(EnumGameData.ItemKinds.blockItem, (EnumGameData.BlockID)World.I.CheckIfVoxel(destroyPos), 1);
-                Inventory.I.toolBarSlots[i].InsertStack(getItem);
-                return;
-            }
-            if (Inventory.I.toolBarSlots[i].stack.blockID == (EnumGameData.BlockID)World.I.CheckIfVoxel(destroyPos)
-                && Inventory.I.toolBarSlots[i].stack.amount < BlockManager.I.MaxAmount((EnumGameData.BlockID)World.I.CheckIfVoxel(destroyPos)))
-            {
-                Inventory.I.toolBarSlots[i].GetItem(1);
-                return;
-            }
-        }
-    }
-
     private void DestructionBlock()
     {
         if (KeyConfig.GetKeyDown(KeyConfig.KeyName.LeftClick))
         {
             highlightPos = PlayerManager.I.highlightBlock.transform.position;
-            destructionTime = DestructionTime(World.I.BlockNeedDestructionTime(highlightPos));
+            blockID = World.I.CheckForBlockID(highlightPos);
+            destructionTime = DestructionTime(BlockManager.I.blocktype[blockID].destructionTime);
             coolTimeCnt = coolTime;
         }
-        if (KeyConfig.GetKey(KeyConfig.KeyName.LeftClick) && World.I.BlockNeedRarity(highlightPos) != -1)
+        if (KeyConfig.GetKey(KeyConfig.KeyName.LeftClick) && BlockManager.I.blocktype[blockID].needRarity != -1)
         {
             if (highlightPos == PlayerManager.I.highlightBlock.transform.position)
             {
@@ -81,9 +66,10 @@ public class PlayerAgainstBlcks
             }
             else
             {
-                time = 0;
+                miningTime = 0;
                 highlightPos = PlayerManager.I.highlightBlock.transform.position;
-                destructionTime = DestructionTime(World.I.BlockNeedDestructionTime(highlightPos));
+                blockID = World.I.CheckForBlockID(highlightPos);
+                destructionTime = DestructionTime(BlockManager.I.blocktype[blockID].destructionTime);
                 startBlockDestroy = false;
             }
 
@@ -91,8 +77,9 @@ public class PlayerAgainstBlcks
             {
                 if (BlockDestroyInterval(destructionTime))
                 {
+
                     //ここで破壊が確定
-                    DropItemManager.I.DropWhenDestroyBlock((EnumGameData.BlockID)World.I.CheckIfVoxel(highlightPos), highlightPos);
+                    DropItemManager.I.DropWhenDestroyBlock((EnumGameData.BlockID)blockID, highlightPos);
                     coolTimeCnt = 0;
                     World.I.GetChunkFromVector3(highlightPos).EditVoxel(highlightPos, EnumGameData.BlockID.air);
                     if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack != null)
@@ -106,7 +93,7 @@ public class PlayerAgainstBlcks
         if (KeyConfig.GetKeyUp(KeyConfig.KeyName.LeftClick) || highlightPos != PlayerManager.I.highlightBlock.transform.position)
         {
             startBlockDestroy = false;
-            time = 0;
+            miningTime = 0;
         }
     }
 
@@ -142,24 +129,29 @@ public class PlayerAgainstBlcks
         }
     }
     
+    /// <summary>
+    /// 採掘にかかる時間
+    /// </summary>
+    /// <param name="intervalTime"></param>
+    /// <returns></returns>
     public float DestructionTime(float intervalTime)
     {
         //所持アイテムによって採掘必要時間を変更
         if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack != null)
         {
             if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.kinds == EnumGameData.ItemKinds.item
-                && PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemType == World.I.BlockEfficientTool(PlayerManager.I.highlightBlock.transform.position))
+                && PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemType == BlockManager.I.blocktype[blockID].efficientTool)
             {
-                int rarity = World.I.BlockNeedRarity(PlayerManager.I.highlightBlock.transform.position) - ItemManager.I.GetRarity(PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemType, PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemID);
+                int rarity = BlockManager.I.blocktype[blockID].needRarity - ItemManager.I.GetRarity(PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemType, PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemID);
 
-                if (World.I.BlockNeedRarity(PlayerManager.I.highlightBlock.transform.position) == 0)
+                if (BlockManager.I.blocktype[blockID].needRarity == 0)
                 {
-                    rarity++;
+                    return intervalTime;
                 }
 
                 if (rarity > 0)
                 {
-                    if (World.I.BlockEfficientTool(PlayerManager.I.highlightBlock.transform.position) == EnumGameData.ItemType.pickaxe)
+                    if (BlockManager.I.blocktype[blockID].efficientTool == EnumGameData.ItemType.pickaxe)
                         rarity += 4;
                     return intervalTime *= (rarity + 1);
                 }
@@ -185,16 +177,16 @@ public class PlayerAgainstBlcks
             }
             else
             {
-                int rarity = World.I.BlockNeedRarity(PlayerManager.I.highlightBlock.transform.position);
-                if (World.I.BlockEfficientTool(PlayerManager.I.highlightBlock.transform.position) == EnumGameData.ItemType.pickaxe)
+                int rarity = BlockManager.I.blocktype[blockID].needRarity;
+                if (BlockManager.I.blocktype[blockID].efficientTool == EnumGameData.ItemType.pickaxe)
                     rarity += 5;
                 return intervalTime *= (rarity + 1.5f);
             }
         }
         else
         {
-            int rarity = World.I.BlockNeedRarity(PlayerManager.I.highlightBlock.transform.position);
-            if (World.I.BlockEfficientTool(PlayerManager.I.highlightBlock.transform.position) == EnumGameData.ItemType.pickaxe)
+            int rarity = BlockManager.I.blocktype[blockID].needRarity;
+            if (BlockManager.I.blocktype[blockID].efficientTool == EnumGameData.ItemType.pickaxe)
                 rarity += 5;
             return intervalTime  *= (rarity + 1.5f);
         }
@@ -202,21 +194,21 @@ public class PlayerAgainstBlcks
  
     private bool BlockDestroyInterval(float intervalTime)
     {
-        time += Time.deltaTime;
+        miningTime += Time.deltaTime;
 
         if (PlayerStatus.Creative)
         {
-            if (time >= maxDestructionTime)
+            if (miningTime >= maxDestructionTime)
             {
-                time = 0;
+                miningTime = 0;
                 return true;
             }
         }
         else
         {
-            if (time >= maxDestructionTime && time >= intervalTime)
+            if (miningTime >= maxDestructionTime && miningTime >= intervalTime)
             {
-                time = 0;
+                miningTime = 0;
                 return true;
             }
         }
@@ -261,6 +253,8 @@ public class PlayerAgainstBlcks
                         PlayerManager.I.placeBlock.transform.position = new Vector3(PlayerManager.I.highlightBlock.transform.position.x, PlayerManager.I.placeBlock.transform.position.y, PlayerManager.I.highlightBlock.transform.position.z);
                     }
                 }
+                blockID = World.I.CheckForBlockID(PlayerManager.I.highlightBlock.transform.position);
+                destructionTime = DestructionTime(BlockManager.I.blocktype[blockID].destructionTime);
                 return;
             }
             lastPos = pos;

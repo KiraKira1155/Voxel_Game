@@ -13,31 +13,38 @@ MonoBehaviour:
   m_Name: Shovel
   m_EditorClassIdentifier: 
   toolDatas:
-  - _name: wodden_shovel
-    _texture: {fileID: 2800000, guid: 7cf75a02aacc6ab4396b304a1b71c147, type: 3}
+  - _name: wood_shovel
+    _texture: {fileID: 2800000, guid: 4bf2c4177df664548a99d03be5371300, type: 3}
     _attribute: 0
     _rarity: 1
-    _damage: 1.5
-    _durability: 128
-    _reuseTime: 1
+    _damage: 2.5
+    _durability: 59
+    _attackPerSecond: 1
   - _name: stone_shovel
     _texture: {fileID: 2800000, guid: 77738992951428e43b62e725ca2f9ef9, type: 3}
     _attribute: 0
     _rarity: 2
-    _damage: 2
-    _durability: 256
-    _reuseTime: 1
+    _damage: 3.5
+    _durability: 131
+    _attackPerSecond: 1
   - _name: iron_shovel
     _texture: {fileID: 2800000, guid: 87c1704603ea1a345bcb2bed3f355144, type: 3}
     _attribute: 0
     _rarity: 3
-    _damage: 3
-    _durability: 512
-    _reuseTime: 1
-  - _name: golden_shovel
-    _texture: {fileID: 2800000, guid: e0aca8327ca510d47a789a143abe5144, type: 3}
+    _damage: 4.5
+    _durability: 250
+    _attackPerSecond: 1
+  - _name: diamond_shovel
+    _texture: {fileID: 2800000, guid: 43ad2e985069b0149acf5986144a6006, type: 3}
+    _attribute: 0
+    _rarity: 4
+    _damage: 5.5
+    _durability: 1561
+    _attackPerSecond: 1
+  - _name: gold_shovel
+    _texture: {fileID: 2800000, guid: 8ca8ad013ec30b34ba858310e33d2cea, type: 3}
     _attribute: 0
     _rarity: 2
     _damage: 2.5
-    _durability: 64
-    _reuseTime: 1
+    _durability: 32
+    _attackPerSecond: 1

@@ -26,7 +26,7 @@ public class Slot : MonoBehaviour
         foreach (UIItemSlot s in toolbarSlots)
         {
             ItemStack stack = null;
-            ItemSlot slot = new ItemSlot(s, stack);
+            s.itemSlot = new ItemSlot(s, stack);
         }
     }
 }

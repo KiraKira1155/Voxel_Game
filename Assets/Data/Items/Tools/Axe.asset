@@ -13,31 +13,38 @@ MonoBehaviour:
   m_Name: Axe
   m_EditorClassIdentifier: 
   toolDatas:
-  - _name: wooden_axe
-    _texture: {fileID: 2800000, guid: 467b8cc9169017140b2e2cd5de2b4af0, type: 3}
+  - _name: wood_axe
+    _texture: {fileID: 2800000, guid: 1b597489c7f446d47bca8cd42e34c14b, type: 3}
     _attribute: 0
     _rarity: 1
-    _damage: 3.5
-    _durability: 64
-    _reuseTime: 2.5
+    _damage: 7
+    _durability: 59
+    _attackPerSecond: 0.8
   - _name: stone_axe
     _texture: {fileID: 2800000, guid: a1a0323193106a04dbdca59b41e2ea53, type: 3}
     _attribute: 0
     _rarity: 2
-    _damage: 4
-    _durability: 128
-    _reuseTime: 2.5
+    _damage: 9
+    _durability: 131
+    _attackPerSecond: 0.8
   - _name: iron_axe
     _texture: {fileID: 2800000, guid: a3d3d75c0eb53014c99c04ff178883f6, type: 3}
     _attribute: 0
     _rarity: 3
-    _damage: 5.5
-    _durability: 384
-    _reuseTime: 2.5
-  - _name: golden_axe
-    _texture: {fileID: 2800000, guid: c0ef9ab69747f8d4baaa067bd7f2477e, type: 3}
+    _damage: 9
+    _durability: 250
+    _attackPerSecond: 0.9
+  - _name: diamond_axe
+    _texture: {fileID: 2800000, guid: 8130e3de34041124289fb0928a17fe71, type: 3}
+    _attribute: 0
+    _rarity: 4
+    _damage: 9
+    _durability: 1561
+    _attackPerSecond: 1
+  - _name: gold_axe
+    _texture: {fileID: 2800000, guid: 16b9303fe2397e84895de93cd7b21ee8, type: 3}
     _attribute: 0
     _rarity: 2
-    _damage: 4.5
+    _damage: 7
     _durability: 32
-    _reuseTime: 2.5
+    _attackPerSecond: 1

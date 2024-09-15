@@ -12,7 +12,7 @@ public class ConfigManager
     public static int thisWorldSeed { get; private set; }
     public static float seed { get; private set; }
     public static short WorldSizeInChunks { get; private set; } = 8192;
-    public static byte ViewDistanceInChunk { get; private set; } = 10;
+    public static byte ViewDistanceInChunk { get; private set; } = 7;
 
     public static int HorizontalSpeed { get; private set; }
     public static int VerticalSpeed { get; private set; }
@@ -30,6 +30,8 @@ public class ConfigManager
     public static KeyCode RightClick { get; private set; } = KeyCode.Mouse1;
     public static KeyCode LeftClick { get; private set; } = KeyCode.Mouse0;
     public static KeyCode Inventory { get; private set; } = KeyCode.E;
+    public static KeyCode GameEnd { get; private set; } = KeyCode.F4;
+
 
     public void DoAwake()
     {

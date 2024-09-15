@@ -1,3 +1,4 @@
+using SaveData;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,16 +6,81 @@ using UnityEngine;
 public class BlockManager : Singleton<BlockManager>
 {
     public BlockType[] blocktype;
+    public BlockDropItemData dropItemData = new BlockDropItemData();
 
+    public IBaseBlock[] blockTypes;
+
+    public BlockAir air;
     private void Awake()
     {
         Init();
+        InitBlockSetting();
     }
 
     public int MaxAmount(EnumGameData.BlockID blockID)
     {
         return blocktype[(int)blockID].stackMaxSize;
     }
+
+    private void InitBlockSetting()
+    {
+        blockTypes = new IBaseBlock[]
+        {
+            air,
+
+        };
+
+        foreach (var block in blockTypes) 
+        {
+            block.Init();
+        }
+    }
+
+    public IBaseBlock GetBlockData(EnumGameData.BlockID blockID)
+    {
+        foreach (var block in blockTypes)
+        {
+            if(block.ID() == blockID)
+                return block;
+        }
+
+
+        return null;
+    }
+
+    public enum faceIndex
+    {
+        back,
+        front,
+        top,
+        bottom,
+        left,
+        right
+    }
+    public enum BlockDirection
+    {
+        Down,
+        Up,
+        East,
+        West,
+        South,
+        North
+    }
+
+    //private void SampleDropItem()
+    //{
+
+    //    dropItemData.dropItem = new BlockDropItem.DropItem[2];
+    //    dropItemData.dropItem[0].entries = new BlockDropItem.ItemEntry[2];
+    //    dropItemData.dropItem[0].matchToolEntry = new BlockDropItem.MatchToolItemEntry[1];
+    //    dropItemData.dropItem[0].roll.min = 1;
+    //    dropItemData.dropItem[0].roll.max = 1;
+    //    dropItemData.dropItem[0].entries[0].dropItemID = EnumGameData.ItemID.dirt;
+    //    dropItemData.dropItem[0].entries[0].dropMinNum = 1;
+    //    dropItemData.dropItem[0].entries[0].dropMaxNum = 1;
+
+    //    BlockDropItem.LoadData.Save(dropItemData, EnumGameData.BlockID.dirt);
+    //}
 }
 
 [System.Serializable]
@@ -32,12 +98,8 @@ public class BlockType
     [Range(0.05f, 100)][SerializeField] private float _destructionTime;
     [Tooltip("-1は、破壊不可")]
     [Range(-1, 10)][SerializeField] private int _needRarity;
-    [Tooltip("採取に対応したツールが必要か")]
-    [SerializeField] private bool _needTool;
-    [Tooltip("これがないと採取できない、もしくは別アイテムが落ちる")]
-    [SerializeField] private bool _perfectMiner;
+    [Tooltip("適正ツール")]
     [SearchableEnum][SerializeField] EnumGameData.ItemType _efficientTool;
-    public DropItemAttribute[] dropItem;
 
     public string name { get { return _name; } }
     public bool isSolid { get { return _isSolid; } }
@@ -45,8 +107,6 @@ public class BlockType
     public int stackMaxSize { get { return _stackMaxSize; } }
     public float destructionTime { get { return _destructionTime; } }
     public int needRarity {  get { return _needRarity; } }
-    public bool needTool { get { return _needTool; } }
-    public bool perfectMiner { get { return _perfectMiner; } }
     public EnumGameData.ItemType efficientTool { get { return _efficientTool; } }
     public EnumGameData.ItemKinds kinds { get; private set; } = EnumGameData.ItemKinds.blockItem;
 
@@ -69,6 +129,7 @@ public class BlockType
         left,
         right
     }
+
     public EnumGameData.BlockID GetTextureFace(faceIndex faceIndex)
     {
         switch (faceIndex)
@@ -90,13 +151,4 @@ public class BlockType
                 return 0;
         }
     }
-}
-
-[System.Serializable]
-public class DropItemAttribute
-{
-    [SearchableEnum][SerializeField] private EnumGameData.ItemID _itemID;
-    [Range(0.01f, 1.0f)][SerializeField] private float _probability;
-    [SerializeField] private int dropMinNum;
-    [SerializeField] private int dropMaxNum;
 }

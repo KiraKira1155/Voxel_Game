@@ -1,7 +1,9 @@
+using SaveData;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 using static ConfigManager;
 
@@ -32,6 +34,9 @@ public class World : Singleton<World>
 
     WaitForSeconds createChunkWait = new WaitForSeconds(0.048f);
     WaitForSeconds hiddenChunkWait = new WaitForSeconds(0.016f);
+
+    Queue<VoxelMod> modifications = new Queue<VoxelMod>();
+    bool applyingModifications = false;
 
     public static int WorldSizeInVoxels
     {
@@ -103,10 +108,49 @@ public class World : Singleton<World>
 
         if (chunksToHidden.Count > 0 && !checkHidden)
             StartCoroutine(HiddenChunk());
+
+        if (modifications.Count > 0 && !applyingModifications)
+            StartCoroutine(ApplyModifications());
     }
 
     public void DoFixedUpdate()
     {
+    }
+
+    IEnumerator ApplyModifications()
+    {
+        applyingModifications = true;
+        int cnt = 0;
+        Queue<VoxelMod> queue = new Queue<VoxelMod>();
+
+        while (modifications.Count > 0)
+        {
+            VoxelMod v = modifications.Dequeue();
+            ChunkCoord c = GetChunkCoordFromVector3(v.position);
+
+            if (chunks[c.x, c.z] == null)
+            {
+                queue.Enqueue(v);
+            }
+            else
+            {
+                chunks[c.x, c.z].modifications.Enqueue(v);
+            }
+
+            cnt++;
+            if (cnt > 200)
+            {
+                cnt = 0;
+                yield return null;
+            }
+        }
+
+        while(queue.Count > 0)
+        {
+            modifications.Enqueue(queue.Dequeue());
+        }
+
+        applyingModifications = false;
     }
 
     IEnumerator GenerateWorld()
@@ -124,6 +168,44 @@ public class World : Singleton<World>
             }
         }
 
+        Queue<VoxelMod> queue = new Queue<VoxelMod>();
+        int cnt = 0;
+
+        while (modifications.Count > 0)
+        {
+            VoxelMod v = modifications.Dequeue();
+            ChunkCoord c = GetChunkCoordFromVector3(v.position);
+
+            if (chunks[c.x, c.z] == null)
+            {
+                queue.Enqueue(v);
+            }
+            else
+            {
+                chunks[c.x, c.z].modifications.Enqueue(v);
+            }
+
+            cnt++;
+            if(cnt >= 500)
+            {
+                cnt = 0;
+                yield return null;
+            }
+        }
+
+        while (queue.Count > 0)
+        {
+            modifications.Enqueue(queue.Dequeue());
+        }
+
+        for (int x = (WorldSizeInChunks / 2) - ViewDistanceInChunk; x < (WorldSizeInChunks / 2) + ViewDistanceInChunk; x++)
+        {
+            for (int z = (WorldSizeInChunks / 2) - ViewDistanceInChunk; z < (WorldSizeInChunks / 2) + ViewDistanceInChunk; z++)
+            {
+                chunks[x, z].CheckModifications();
+            }
+            yield return null;
+        }
         successGenerateWorld = true;
 
         yield break;
@@ -141,6 +223,7 @@ public class World : Singleton<World>
             if (!chunks[c.x, c.z].isInit)
             {
                 chunks[c.x, c.z].Init();
+
                 yield return createChunkWait;
             }
         }
@@ -197,11 +280,12 @@ public class World : Singleton<World>
                 {
                     if (!chunks[x, z].isActive && chunks[x, z].isInit)
                         chunks[x, z].isActive = true;
+                    chunks[x, z].CheckModifications();
                 }
             }
-        }
 
-        yield return null;
+            yield return null;
+        }
     }
 
     //プレイヤーの確認できるチャンクの描画
@@ -257,7 +341,11 @@ public class World : Singleton<World>
         return chunks[thisChunk.x, thisChunk.z].GetVoxelPos(pos);
     }
 
-    //プレイヤーの当たり判定用
+    /// <summary>
+    /// プレイヤーの当たり判定用
+    /// </summary>
+    /// <param name="pos"></param>
+    /// <returns></returns>
     public bool CheckForVoxel(Vector3 pos)
     {
         ChunkCoord thisChunk = new ChunkCoord(pos);
@@ -290,7 +378,7 @@ public class World : Singleton<World>
         return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].isTransparent;
     }
 
-    public int CheckIfVoxel(Vector3 pos)
+    public int CheckForBlockID(Vector3 pos)
     {
         ChunkCoord thisChunk = new ChunkCoord(pos);
 
@@ -304,62 +392,14 @@ public class World : Singleton<World>
         return chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos);
     }
 
-    public string CheckForBlockType(Vector3 pos)
-    {
-        ChunkCoord thisChunk = new ChunkCoord(pos);
-
-        if (!IsChunkInWorld(thisChunk) || pos.y < 0 || pos.y > VoxelData.Hight)
-            return "null";
-
-        if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
-            return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].name;
-
-        chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
-        return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].name;
-    }
-
-    public float BlockNeedDestructionTime(Vector3 pos)
-    {
-        ChunkCoord thisChunk = new ChunkCoord(pos);
-
-        if (!IsChunkInWorld(thisChunk) || pos.y < 0 || pos.y > VoxelData.Hight)
-            return 0;
-
-        if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
-            return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].destructionTime;
-
-        chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
-        return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].destructionTime;
-    }
-
-    public int BlockNeedRarity(Vector3 pos)
-    {
-        ChunkCoord thisChunk = new ChunkCoord(pos);
-
-        if (!IsChunkInWorld(thisChunk) || pos.y < 0 || pos.y > VoxelData.Hight)
-            return -1;
-
-        if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
-            return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].needRarity;
-
-        chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
-        return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].needRarity;
-    }
-    public EnumGameData.ItemType BlockEfficientTool(Vector3 pos)
-    {
-        ChunkCoord thisChunk = new ChunkCoord(pos);
-
-        if (!IsChunkInWorld(thisChunk) || pos.y < 0 || pos.y > VoxelData.Hight)
-            return EnumGameData.ItemType.Null;
-
-        if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
-            return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].efficientTool;
-
-        chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
-        return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].efficientTool;
-    }
-
-    //チャンクの初期生成用
+    /// <summary>
+    /// チャンクの初期生成用
+    /// </summary>
+    /// <param name="voxelPos"></param>
+    /// <param name="biomeType"></param>
+    /// <param name="ocean"></param>
+    /// <param name="terrainHeight"></param>
+    /// <returns></returns>
     public int GetVoxel(Vector3 voxelPos, byte biomeType, bool ocean, int terrainHeight)
     {
         voxelPos.y = Mathf.FloorToInt(voxelPos.y);
@@ -418,6 +458,9 @@ public class World : Singleton<World>
                 voxelValue = (int)EnumGameData.BlockID.stone;
         }
 
+        if (voxelValue == (int)EnumGameData.BlockID.grass)
+            PopulatedTree(pos);
+
         return voxelValue;
     }
 
@@ -432,22 +475,25 @@ public class World : Singleton<World>
         return voxelValue;
     }
 
-    //public int PopulatedTree(Vector3 pos, int voxelValue, int biomeType)
-    //{
+    public void PopulatedTree(Vector3 pos)
+    {
+        /* TREE PASS */
+        if (Noise.Get2DPerlin(new Vector2(pos.x, pos.z), seed, 1.3f) > 0.6f)
+        {
+            if (Noise.Get2DPerlin(new Vector2(pos.x, pos.z), seed, 15f) > 0.8f)
+            {
+                Structure.MakeTree(modifications, seed, pos, 5, 12);
+            }
+        }
 
-    //    /* TREE PASS */
-    //    if (Noise.Get2DPerlinNoise(new Vector2(pos.x, pos.z), seed, biome.trees.treeZoneScale) > biome.trees.treeZoneThreshold)
-    //    {
-    //        voxelValue = (int)EnumGameData.BlockID.bricks;
-    //        if (Noise.Get2DPerlinNoise(new Vector2(pos.x, pos.z), seed, biome.trees.treePlacementScale) > biome.trees.treePlacementThreshold)
-    //        {
-    //            voxelValue = (int)biome.trees.lootBlock;
-    //            Structure.MakeTree(pos, modifications, biome.trees.minTreeHeight, biome.trees.maxTreeHeight);
-    //        }
-    //    }
-
-    //    return voxelValue;
-    //}
+        if (Noise.Get2DPerlin(new Vector2(pos.x, pos.z), seed, 0.5f) > 0.7f)
+        {
+            if (Noise.Get2DPerlin(new Vector2(pos.x, pos.z), seed, 5f) > 0.9f)
+            {
+                Structure.MakeAncientTree(modifications, seed, pos, 30, 40);
+            }
+        }
+    }
 
     private bool IsChunkInWorld(ChunkCoord coord)
     {

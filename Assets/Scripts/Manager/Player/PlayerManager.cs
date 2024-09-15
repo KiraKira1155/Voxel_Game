@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PlayerManager : Singleton<PlayerManager>
 {
+    [SerializeField] BlockInfoManager blockInfoManager;
     private PlayerVision playerVision = new PlayerVision();
     private PlayerMove playerMove = new PlayerMove();
     public PlayerAgainstBlcks playerAgainstBlcks { get; private set; } = new PlayerAgainstBlcks();
     public ToolBar toolBar { get; private set; } = new ToolBar();
-    private DebugBlocks debugBlocks = new DebugBlocks();
 
     [SerializeField] private GameObject _cam;
     public GameObject cam { get { return _cam; } private set { _cam = value; } }
@@ -53,6 +53,8 @@ public class PlayerManager : Singleton<PlayerManager>
         toolBar.DoAwake(slot);
         dragAndDropHandlar.DoAwake();
         inventory.DoAwake(slot);
+
+        blockInfoManager.DoAwake();
     }
 
     public void DoStart()
@@ -84,6 +86,7 @@ public class PlayerManager : Singleton<PlayerManager>
         {
             dragAndDropHandlar.DoUpdate();
             crosshair.SetActive(false);
+            BlockInfoManager.I.HideBlockInfo();
         }
         else
         {
@@ -91,11 +94,7 @@ public class PlayerManager : Singleton<PlayerManager>
             ViewingAngle();
             playerMove.DoUpdate();
             playerAgainstBlcks.DoUpdate();
-
-            if (Input.GetKeyDown(KeyCode.F4))
-            {
-                debugBlocks.DoUpdate();
-            }
+            BlockInfoManager.I.DoUpdate();
             crosshair.SetActive(true);
         }
         toolBar.DoUpdate();

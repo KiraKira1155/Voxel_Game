@@ -11,6 +11,7 @@ public class ItemStack
     public int amount;
     public int durability;
 
+
     public ItemStack(EnumGameData.ItemKinds kinds, EnumGameData.BlockID blockID, int amount)
     {
         this.kinds = kinds;

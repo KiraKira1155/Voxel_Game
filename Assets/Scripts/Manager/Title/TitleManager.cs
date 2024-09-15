@@ -125,7 +125,7 @@ public class TitleManager : Singleton<TitleManager>
 
     public void StartGame()
     {
-        MyMonoBehaviour.I.SetGameScene(MyMonoBehaviour.GameScene.MainGame);
+        GameManager.I.SetGameScene(GameManager.GameScene.MainGame);
         loadTime.text = "0.0s";
         StartCoroutine(SetActiveFalse());
     }
@@ -138,7 +138,7 @@ public class TitleManager : Singleton<TitleManager>
 
     IEnumerator SetActiveFalse()
     {
-        yield return new WaitUntil(() => MyMonoBehaviour.I.successStart);
+        yield return new WaitUntil(() => GameManager.I.successStart);
         titleCamera.SetActive(false);
 
         yield break;
@@ -151,7 +151,7 @@ public class TitleManager : Singleton<TitleManager>
         b = 0;
         titleBackGround.color = new Color32(r, g, b, 255);
         var wait = new WaitForSeconds(0.016f);
-        while (!MyMonoBehaviour.I.successStart)
+        while (!GameManager.I.successStart)
         {
             if (r < 255 && b == 0)
                 r++;

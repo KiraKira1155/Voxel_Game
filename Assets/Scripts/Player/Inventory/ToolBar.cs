@@ -24,7 +24,7 @@ public class ToolBar
 
     public void DoStart()
     {
-        highlight = slot.highlight;;
+        highlight = slot.highlight;
     }
 
     public void DoUpdate()
@@ -33,7 +33,7 @@ public class ToolBar
 
         if (scroll != 0)
         {
-            if (scroll > 0)
+            if (scroll < 0)
                 slotIndex++;
             else
                 slotIndex--;

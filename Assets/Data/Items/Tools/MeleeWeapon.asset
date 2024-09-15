@@ -13,31 +13,38 @@ MonoBehaviour:
   m_Name: MeleeWeapon
   m_EditorClassIdentifier: 
   toolDatas:
-  - _name: wooden_sword
-    _texture: {fileID: 2800000, guid: a826f85f114a9b54299879c39a9e3d53, type: 3}
+  - _name: wood_sword
+    _texture: {fileID: 2800000, guid: a6c540654c990a141823a98ed964b288, type: 3}
     _attribute: 0
     _rarity: 1
-    _damage: 2.5
-    _durability: 80
-    _reuseTime: 1.4
+    _damage: 4
+    _durability: 59
+    _attackPerSecond: 1.6
   - _name: stone_sword
     _texture: {fileID: 2800000, guid: a5efdff9fae5fd847a6a799dee8adde1, type: 3}
     _attribute: 0
     _rarity: 2
-    _damage: 3
-    _durability: 160
-    _reuseTime: 1.4
+    _damage: 5
+    _durability: 131
+    _attackPerSecond: 1.6
   - _name: iron_sword
     _texture: {fileID: 2800000, guid: 5920cc96c1925b845b16b25160bff4cc, type: 3}
     _attribute: 0
     _rarity: 3
-    _damage: 4.5
-    _durability: 300
-    _reuseTime: 1.4
-  - _name: golden_sword
-    _texture: {fileID: 2800000, guid: 4dbb52af29e718b45a46d31554362199, type: 3}
+    _damage: 6
+    _durability: 250
+    _attackPerSecond: 1.6
+  - _name: diamond_sword
+    _texture: {fileID: 2800000, guid: 567d054e91b8df6478df994748e15d8c, type: 3}
+    _attribute: 0
+    _rarity: 4
+    _damage: 7
+    _durability: 1561
+    _attackPerSecond: 1.6
+  - _name: gold_sword
+    _texture: {fileID: 2800000, guid: ee14668fa9bd1424cbb6bc275e18e713, type: 3}
     _attribute: 0
     _rarity: 2
-    _damage: 3.5
-    _durability: 50
-    _reuseTime: 1.4
+    _damage: 4
+    _durability: 32
+    _attackPerSecond: 1.6
