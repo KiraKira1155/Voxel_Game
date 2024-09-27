@@ -20,7 +20,7 @@ public interface IBlockData
     /// <summary>
     /// NeedRarityが同じ対応ツール使用時の破壊時間。
     /// <para>
-    /// NeedRarityが０の場合はツールに関係なく同じ時間必要に
+    /// NeedRarityが０の場合はレアリティが1の対応ツール使用時
     /// </para>
     /// </summary>
     /// <returns></returns>

@@ -10,7 +10,7 @@ public class BlockManager : Singleton<BlockManager>
 
     public IBaseBlock[] blockTypes;
 
-    public BlockAir air;
+    public BlockAir air = new BlockAir();
     private void Awake()
     {
         Init();

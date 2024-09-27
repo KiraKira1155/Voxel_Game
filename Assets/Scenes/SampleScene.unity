@@ -8194,7 +8194,7 @@ MonoBehaviour:
     _isSolid: 1
     _isTransparent: 0
     _stackMaxSize: 64
-    _destructionTime: 2.75
+    _destructionTime: 2
     _needRarity: 1
     _efficientTool: 4
     backFaceTexture: 29

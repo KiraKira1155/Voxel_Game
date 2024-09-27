@@ -146,7 +146,7 @@ public class PlayerAgainstBlcks
 
                 if (BlockManager.I.blocktype[blockID].needRarity == 0)
                 {
-                    return intervalTime;
+                    rarity++;
                 }
 
                 if (rarity > 0)
