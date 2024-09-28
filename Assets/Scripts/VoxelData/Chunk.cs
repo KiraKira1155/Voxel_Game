@@ -143,7 +143,7 @@ public class Chunk
                 for (int x = 0; x < Width; x++)
                     for (int z = 0; z < Width; z++)
                     {
-						if (BlockManager.I.blocktype[voxelMap[x, y, z]].isSolid)
+						if (BlockManager.I.GetBlockData(voxelMap[x, y, z]).IsDisplay())
 							UpdateMeshData(new Vector3(x, y, z));
                     }
         });
@@ -235,10 +235,22 @@ public class Chunk
 		if(!IsVoxelInChunk(x, y, z))
 			return World.I.CheckIfVoxelTransparent(pos + position);
 
-		return BlockManager.I.blocktype[voxelMap[x, y, z]].isTransparent;
+		return BlockManager.I.GetBlockData(voxelMap[x, y, z]).IsTransparent();
+	}
+	private bool CheckVoxelDisplay(Vector3 pos)
+	{
+
+		int x = Mathf.FloorToInt(pos.x);
+		int y = Mathf.FloorToInt(pos.y);
+		int z = Mathf.FloorToInt(pos.z);
+
+		if (!IsVoxelInChunk(x, y, z))
+			return World.I.CheckIfVoxelDisplay(pos + position);
+
+		return BlockManager.I.GetBlockData(voxelMap[x, y, z]).IsDisplay();
 	}
 
-    private int CheckVoxel(Vector3 pos)
+	private int CheckVoxel(Vector3 pos)
     {
         int x = Mathf.FloorToInt(pos.x);
         int y = Mathf.FloorToInt(pos.y);
@@ -317,19 +329,19 @@ public class Chunk
     private void UpdateMeshData(Vector3 pos)
 	{
 		int blockID = voxelMap[(int)pos.x, (int)pos.y, (int)pos.z];
-		bool isTransparent = BlockManager.I.blocktype[blockID].isTransparent;
+		bool isTransparent = BlockManager.I.GetBlockData(blockID).IsTransparent();
 
 		for (int p = 0; p < 6; p++)
 		{
 			if ((CheckVoxelTransParent(pos + VoxelData.faceChecks[p]) && !CheckVoxelTransParent(pos))
-				|| CheckVoxel(pos + VoxelData.faceChecks[p]) == (int)EnumGameData.BlockID.air)
+				|| !CheckVoxelDisplay(pos + VoxelData.faceChecks[p]))
             {
                 vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 0]]);
                 vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 1]]);
                 vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 2]]);
                 vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 3]]);
 
-                AddTexture(BlockManager.I.blocktype[blockID].GetTextureFace((BlockType.faceIndex)p));
+                AddTexture(BlockManager.I.GetBlockData(blockID).GetTextureFace((BlockManager.faceIndex)p));
 
                 if (!isTransparent)
                 {

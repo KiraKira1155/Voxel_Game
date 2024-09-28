@@ -57,10 +57,10 @@ public class DebugScreenManager : Singleton<DebugScreenManager>
         string blockName = "null";
         if (highlightBlock.gameObject.activeSelf)
         {
-            blockName = BlockManager.I.blocktype[World.I.CheckForBlockID(highlightBlock.transform.position)].name;
+            blockName = BlockManager.I.GetBlockData(World.I.CheckForBlockID(highlightBlock.transform.position)).ID().ToString();
         }
         return
-        string.Format("BlockName: {0}", blockName.ToString());
+        string.Format("BlockName: {0}", blockName);
     }
 
     private string DebugFPS()

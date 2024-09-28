@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Structure
 {
+    private static EnumGameData.BlockID leaf = EnumGameData.BlockID.oakLeaf;
+    private static EnumGameData.BlockID log = EnumGameData.BlockID.oakLog;
     public static void MakeTree(Queue<VoxelMod> queue, float seed, Vector3 position, int minHeight, int maxHeight)
     {
         int height = (int)(maxHeight * Noise.Get2DPerlin(new Vector2(position.x, position.z), seed, 3f));
@@ -18,8 +20,8 @@ public class Structure
                 //chunk.EditVoxel(new Vector3(position.x + x, position.y + height - 2, position.z + z), EnumGameData.BlockID.leaf);
                 //chunk.EditVoxel(new Vector3(position.x + x, position.y + height - 3, position.z + z), EnumGameData.BlockID.leaf);
                 if(x == 0 && z == 0) continue;
-                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height - 2, position.z + z), EnumGameData.BlockID.leaf));
-                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height - 3, position.z + z), EnumGameData.BlockID.leaf));
+                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height - 2, position.z + z), leaf));
+                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height - 3, position.z + z), leaf));
             }
         }
 
@@ -28,7 +30,7 @@ public class Structure
             for (int z = -1; z < 2; z++)
             {
                 //chunk.EditVoxel(new Vector3(position.x + x, position.y + height - 1, position.z + z), EnumGameData.BlockID.leaf);
-                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height - 1, position.z + z), EnumGameData.BlockID.leaf));
+                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height - 1, position.z + z), leaf));
             }
         }
         for (int x = -1; x < 2; x++)
@@ -37,19 +39,19 @@ public class Structure
                 for (int z = -1; z < 2; z++)
                 {
                     //chunk.EditVoxel(new Vector3(position.x + x, position.y + height, position.z + z), EnumGameData.BlockID.leaf);
-                    queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height, position.z + z), EnumGameData.BlockID.leaf));
+                    queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height, position.z + z), leaf));
                 }
             else
             {
                 //chunk.EditVoxel(new Vector3(position.x + x, position.y + height, position.z), EnumGameData.BlockID.leaf);
-                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height, position.z), EnumGameData.BlockID.leaf));
+                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height, position.z), leaf));
             }
         }
 
         for (int i = 1; i < height -1; i++)
         {
             //chunk.EditVoxel(new Vector3(position.x, position.y + i, position.z), EnumGameData.BlockID.log);
-            queue.Enqueue(new VoxelMod(new Vector3(position.x, position.y + i, position.z), EnumGameData.BlockID.log));
+            queue.Enqueue(new VoxelMod(new Vector3(position.x, position.y + i, position.z), log));
         }
     }
 
@@ -69,8 +71,8 @@ public class Structure
                 //chunk.EditVoxel(new Vector3(position.x + x, position.y + height - 2, position.z + z), EnumGameData.BlockID.leaf);
                 //chunk.EditVoxel(new Vector3(position.x + x, position.y + height - 3, position.z + z), EnumGameData.BlockID.leaf);
                 if(x == 0 && z == 0 || x == -1 && z == -1 || x == 0 && z == -1 || x == -1 && z == 0) continue;
-                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height - 2, position.z + z), EnumGameData.BlockID.diamondBlock));
-                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height - 3, position.z + z), EnumGameData.BlockID.diamondBlock));
+                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height - 2, position.z + z), leaf));
+                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height - 3, position.z + z), leaf));
             }
         }
 
@@ -79,31 +81,31 @@ public class Structure
             for (int z = -2; z < 2; z++)
             {
                 //chunk.EditVoxel(new Vector3(position.x + x, position.y + height - 1, position.z + z), EnumGameData.BlockID.leaf);
-                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height - 1, position.z + z), EnumGameData.BlockID.diamondBlock));
-                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height, position.z + z), EnumGameData.BlockID.diamondBlock));
-                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height + 1, position.z + z), EnumGameData.BlockID.diamondBlock));
+                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height - 1, position.z + z), leaf));
+                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height, position.z + z), leaf));
+                queue.Enqueue(new VoxelMod(new Vector3(position.x + x, position.y + height + 1, position.z + z), leaf));
             }
         }
 
         for (int i = 1; i < height - 1; i++)
         {
             //chunk.EditVoxel(new Vector3(position.x, position.y + i, position.z), EnumGameData.BlockID.log);
-            queue.Enqueue(new VoxelMod(new Vector3(position.x - 1, position.y + i, position.z), EnumGameData.BlockID.log));
+            queue.Enqueue(new VoxelMod(new Vector3(position.x - 1, position.y + i, position.z), log));
         }
         for (int i = 1; i < height - 1; i++)
         {
             //chunk.EditVoxel(new Vector3(position.x, position.y + i, position.z), EnumGameData.BlockID.log);
-            queue.Enqueue(new VoxelMod(new Vector3(position.x, position.y + i, position.z - 1), EnumGameData.BlockID.log));
+            queue.Enqueue(new VoxelMod(new Vector3(position.x, position.y + i, position.z - 1), log));
         }
         for (int i = 1; i < height - 1; i++)
         {
             //chunk.EditVoxel(new Vector3(position.x, position.y + i, position.z), EnumGameData.BlockID.log);
-            queue.Enqueue(new VoxelMod(new Vector3(position.x - 1, position.y + i, position.z - 1), EnumGameData.BlockID.log));
+            queue.Enqueue(new VoxelMod(new Vector3(position.x - 1, position.y + i, position.z - 1), log));
         }
         for (int i = 1; i < height - 1; i++)
         {
             //chunk.EditVoxel(new Vector3(position.x, position.y + i, position.z), EnumGameData.BlockID.log);
-            queue.Enqueue(new VoxelMod(new Vector3(position.x, position.y + i, position.z), EnumGameData.BlockID.log));
+            queue.Enqueue(new VoxelMod(new Vector3(position.x, position.y + i, position.z), log));
         }
     }
 }

@@ -29,7 +29,7 @@ public abstract class BaseBlockSand : BaseBlock
 
     public override float DestructionTime()
     {
-        return 0.35f;
+        return 0.5f;
     }
     public override bool Gravity()
     {

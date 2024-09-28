@@ -2,12 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockEmeraldOre : BaseBlockOre
+public class BlockOakLog : BaseBlockLog
 {
     protected override EnumGameData.BlockID id { get; set; }
-        = EnumGameData.BlockID.emeraldOre;
+        = EnumGameData.BlockID.oakLog;
     protected override (int back, int front, int top, int bottom, int left, int right) texture { get; set; }
-    = (26, 26, 26, 26, 26, 26);
-    protected override byte needRarity { get; set; }
-        = 3;
+    = (65, 65, 66, 66, 65, 65);
 }

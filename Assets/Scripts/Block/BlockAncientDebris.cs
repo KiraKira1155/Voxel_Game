@@ -27,6 +27,6 @@ public class BlockAncientDebris : BaseBlock
 
     public override float DestructionTime()
     {
-        return 4.0f;
+        return 30.0f;
     }
 }

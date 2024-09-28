@@ -5,13 +5,13 @@ public class EnumGameData
 {
     public enum ItemKinds
     {
-        Null,
+        Hand,
         blockItem,
         item,
     }
     public enum ItemType
     {
-        Null,
+        Hand,
         meleeWeapon,
         projectileWeapon,
         rod,
@@ -79,8 +79,8 @@ public class EnumGameData
         copperBlock,
         emeraldBlock,
         netheriteBlock,
-        log,
-        leaf,
+        oakLog,
+        oakLeaf,
         glass
     }
     public enum ItemID

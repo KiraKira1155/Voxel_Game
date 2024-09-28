@@ -10,7 +10,7 @@ public class CalculationDrawingBlock
         List<Vector2> uvs = new List<Vector2>();
         int[] triangles = new int[] { };
         int[] transparentTriangles = new int[] { };
-        bool isTransparent = BlockManager.I.blocktype[(int)blockID].isTransparent;
+        bool isTransparent = BlockManager.I.GetBlockData(blockID).IsTransparent();
         Mesh mesh = new Mesh();
 
         // í∏ì_ÇÃç¿ïW
@@ -61,9 +61,9 @@ public class CalculationDrawingBlock
         mesh.vertices = vertices;
         mesh.triangles = triangles;
 
-        AddTexture(BlockManager.I.blocktype[(int)blockID].GetTextureFace(BlockType.faceIndex.front), uvs);
-        AddTexture(BlockManager.I.blocktype[(int)blockID].GetTextureFace(BlockType.faceIndex.left), uvs);
-        AddTexture(BlockManager.I.blocktype[(int)blockID].GetTextureFace(BlockType.faceIndex.top), uvs);
+        AddTexture(BlockManager.I.GetBlockData(blockID).GetTextureFace(BlockManager.faceIndex.front), uvs);
+        AddTexture(BlockManager.I.GetBlockData(blockID).GetTextureFace(BlockManager.faceIndex.left), uvs);
+        AddTexture(BlockManager.I.GetBlockData(blockID).GetTextureFace(BlockManager.faceIndex.top), uvs);
 
         mesh.subMeshCount = 2;
         mesh.SetTriangles(triangles, 0);

@@ -21,7 +21,7 @@ public class BlockBedrock : BaseBlock
 
     public override EnumGameData.ItemType EfficientTool()
     {
-        return EnumGameData.ItemType.Null;
+        return EnumGameData.ItemType.Hand;
     }
 
     public override float DestructionTime()

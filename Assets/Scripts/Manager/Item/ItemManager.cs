@@ -33,7 +33,7 @@ public class ItemManager : Singleton<ItemManager>
     {
         switch (itemType)
         {
-            case EnumGameData.ItemType.Null:
+            case EnumGameData.ItemType.Hand:
                 return 0;
 
             case EnumGameData.ItemType.meleeWeapon:
@@ -67,7 +67,7 @@ public class ItemManager : Singleton<ItemManager>
     {
         switch (itemType)
         {
-            case EnumGameData.ItemType.Null:
+            case EnumGameData.ItemType.Hand:
                 return null;
 
             case EnumGameData.ItemType.meleeWeapon:
@@ -123,7 +123,7 @@ public class ItemManager : Singleton<ItemManager>
     {
         switch (itemType)
         {
-            case EnumGameData.ItemType.Null:
+            case EnumGameData.ItemType.Hand:
                 break;
 
             case EnumGameData.ItemType.meleeWeapon:
@@ -157,7 +157,7 @@ public class ItemManager : Singleton<ItemManager>
     {
         switch (itemType)
         {
-            case EnumGameData.ItemType.Null:
+            case EnumGameData.ItemType.Hand:
                 break;
 
             case EnumGameData.ItemType.meleeWeapon:
@@ -200,7 +200,7 @@ public class ItemManager : Singleton<ItemManager>
         else if (id >= 1)
             return EnumGameData.ItemType.meleeWeapon;
         else
-            return EnumGameData.ItemType.Null;
+            return EnumGameData.ItemType.Hand;
     }
 
     public EnumGameData.BlockID BlockIDFromItemID(EnumGameData.ItemID itemID)

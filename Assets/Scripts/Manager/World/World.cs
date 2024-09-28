@@ -354,10 +354,10 @@ public class World : Singleton<World>
             return false;
 
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
-            return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].isSolid;
+            return BlockManager.I.GetBlockData(chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)).IsSolid();
 
         chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
-        return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].isSolid;
+        return BlockManager.I.GetBlockData(chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)).IsSolid();
     }
 
     public bool CheckIfVoxelTransparent(Vector3 pos)
@@ -368,14 +368,31 @@ public class World : Singleton<World>
             return false;
 
         if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
-            return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].isTransparent;
+            return BlockManager.I.GetBlockData(chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)).IsTransparent();
 
         if (chunks[thisChunk.x, thisChunk.z] == null)
         {
             chunks[thisChunk.x, thisChunk.z] = new Chunk(thisChunk);
         }
         chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
-        return BlockManager.I.blocktype[chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)].isTransparent;
+        return BlockManager.I.GetBlockData(chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)).IsTransparent();
+    }
+    public bool CheckIfVoxelDisplay(Vector3 pos)
+    {
+        ChunkCoord thisChunk = new ChunkCoord(pos);
+
+        if (!IsChunkInWorld(thisChunk) || pos.y < 0 || pos.y > VoxelData.Hight)
+            return false;
+
+        if (chunks[thisChunk.x, thisChunk.z] != null && chunks[thisChunk.x, thisChunk.z].isVoxelMapPopulated)
+            return BlockManager.I.GetBlockData(chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)).IsDisplay();
+
+        if (chunks[thisChunk.x, thisChunk.z] == null)
+        {
+            chunks[thisChunk.x, thisChunk.z] = new Chunk(thisChunk);
+        }
+        chunks[thisChunk.x, thisChunk.z].InitVoxelMap(pos);
+        return BlockManager.I.GetBlockData(chunks[thisChunk.x, thisChunk.z].GetVoxelFromGlobalVector3(pos)).IsDisplay();
     }
 
     public int CheckForBlockID(Vector3 pos)

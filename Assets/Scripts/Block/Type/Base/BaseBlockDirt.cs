@@ -29,6 +29,6 @@ public abstract class BaseBlockDirt : BaseBlock
 
     public override float DestructionTime()
     {
-        return 0.4f;
+        return 0.5f;
     }
 }

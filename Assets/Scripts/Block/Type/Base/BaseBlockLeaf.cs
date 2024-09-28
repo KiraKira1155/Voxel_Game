@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockSnow : BaseBlock
+public abstract class BaseBlockLeaf : BaseBlock
 {
+    protected abstract EnumGameData.BlockID id { get; set; }
+    protected abstract (int back, int front, int top, int bottom, int left, int right) texture { get; set; }
+
     public override EnumGameData.BlockID ID()
     {
-        return EnumGameData.BlockID.snow;
+        return id;
     }
 
     public override (int back, int front, int top, int bottom, int left, int right) SetTexture()
     {
-        return (4, 4, 4, 4, 4, 4);
+        return texture;
     }
 
     public override byte NeedRarity()
@@ -21,11 +24,21 @@ public class BlockSnow : BaseBlock
 
     public override EnumGameData.ItemType EfficientTool()
     {
-        return EnumGameData.ItemType.shovel;
+        return EnumGameData.ItemType.hoe;
     }
 
     public override float DestructionTime()
     {
         return 0.2f;
+    }
+
+    public override bool IsTransparent()
+    {
+        return true;
+    }
+
+    public override bool Burning()
+    {
+        return true;
     }
 }

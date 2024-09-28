@@ -17,8 +17,6 @@ public class Slot : MonoBehaviour
             Transform childTransform = gameObject.transform.GetChild(i);
             eachSlot[i] = childTransform.gameObject;
         }
-        Transform highlightTransform = gameObject.transform.GetChild(childObjCnt);
-        highlight = highlightTransform.gameObject;
     }
 
     public void DoStart()

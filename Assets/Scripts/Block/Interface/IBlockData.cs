@@ -12,16 +12,13 @@ public interface IBlockData
     abstract byte NeedRarity();
 
     /// <summary>
-    /// 適正ツール、pickaxeの場合は必要時間が伸びる
+    /// 適正ツール
     /// </summary>
     /// <returns></returns>
     abstract EnumGameData.ItemType EfficientTool();
 
     /// <summary>
-    /// NeedRarityが同じ対応ツール使用時の破壊時間。
-    /// <para>
-    /// NeedRarityが０の場合はレアリティが1の対応ツール使用時
-    /// </para>
+    /// 基本破壊時間
     /// </summary>
     /// <returns></returns>
     abstract float DestructionTime();

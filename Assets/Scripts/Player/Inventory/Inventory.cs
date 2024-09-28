@@ -41,12 +41,12 @@ public class Inventory : Singleton<Inventory>
 
     private void CreativeInventory()
     {
-        for (int i = 1; i < BlockManager.I.blocktype.Length; i++)
+        for (int i = 1; i < BlockManager.I.allBlockNum; i++)
         {
             GameObject newSlot = Instantiate(slotPrefab, transform);
             newSlot.transform.GetChild(0).GetComponent<ItemBlockUI>().DoAwake();
 
-            ItemStack stack = new ItemStack(EnumGameData.ItemKinds.blockItem, (EnumGameData.BlockID)i, BlockManager.I.blocktype[i].stackMaxSize);
+            ItemStack stack = new ItemStack(EnumGameData.ItemKinds.blockItem, (EnumGameData.BlockID)i, 64);
             ItemSlot slot = new ItemSlot(newSlot.GetComponent<UIItemSlot>(), stack);
             slot.isCreative = creative;
         }
@@ -123,7 +123,7 @@ public class Inventory : Singleton<Inventory>
     public (EnumGameData.ItemType, EnumGameData.ItemID) GetToolBarSlotsItemID(int slotID)
     {
         if (toolBarSlots[slotID].stack == null)
-            return (EnumGameData.ItemType.Null, EnumGameData.ItemID.None);
+            return (EnumGameData.ItemType.Hand, EnumGameData.ItemID.None);
 
         return (toolBarSlots[slotID].stack.itemType, toolBarSlots[slotID].stack.itemID);
     }

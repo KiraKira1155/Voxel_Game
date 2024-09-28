@@ -56,8 +56,8 @@ public class BlockInfoManager : Singleton<BlockInfoManager>
 
         blockIcon.UpdateUI((EnumGameData.BlockID)blockID);
 
-        needRearity = BlockManager.I.blocktype[blockID].needRarity;
-        efficientTool = BlockManager.I.blocktype[blockID].efficientTool;
+        needRearity = BlockManager.I.GetBlockData(blockID).NeedRarity(); ;
+        efficientTool = BlockManager.I.GetBlockData(blockID).EfficientTool();
         int rearity = (needRearity == 0) ? 0 : needRearity - 1;
         toolIcon.UpdateUI(efficientTool, (EnumGameData.ItemID)rearity);
 
@@ -144,19 +144,19 @@ public class BlockInfoManager : Singleton<BlockInfoManager>
 
     private void CheckChengeItem()
     {
-        if (PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack == null)
+        if (!PlayerManager.I.toolBar.CheckHaveItem())
         {
             previousItem = EnumGameData.ItemID.None;
         }
-        else if (previousItem == PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemID
-            && previousSlotIndex == PlayerManager.I.toolBar.slotIndex)
+        else if (previousItem == PlayerManager.I.toolBar.CheckHaveItemID()
+            && previousSlotIndex == PlayerManager.I.toolBar.CheckSlotIndex())
         {
             return;
         }
         else
         {
-            previousSlotIndex = PlayerManager.I.toolBar.slotIndex;
-            previousItem = PlayerManager.I.toolBar.slot.toolbarSlots[PlayerManager.I.toolBar.slotIndex].itemSlot.stack.itemID;
+            previousSlotIndex = PlayerManager.I.toolBar.CheckSlotIndex();
+            previousItem = PlayerManager.I.toolBar.CheckHaveItemID();
         }
         destructionTime = PlayerManager.I.playerAgainstBlcks.destructionTime;
         InfoText();
@@ -164,7 +164,7 @@ public class BlockInfoManager : Singleton<BlockInfoManager>
 
     private void InfoText()
     {
-        blockNameTex.text = BlockManager.I.blocktype[blockID].name;
+        blockNameTex.text = BlockManager.I.GetBlockData(blockID).ID().ToString();
         destructionTimeTex.text = destructionTime.ToString();
     }
 

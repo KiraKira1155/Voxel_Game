@@ -8,7 +8,7 @@ public class PlayerManager : Singleton<PlayerManager>
     private PlayerVision playerVision = new PlayerVision();
     private PlayerMove playerMove = new PlayerMove();
     public PlayerAgainstBlcks playerAgainstBlcks { get; private set; } = new PlayerAgainstBlcks();
-    public ToolBar toolBar { get; private set; } = new ToolBar();
+    public PlayerToolBar toolBar { get; private set; } = new PlayerToolBar();
 
     [SerializeField] private GameObject _cam;
     public GameObject cam { get { return _cam; } private set { _cam = value; } }

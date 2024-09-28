@@ -41,7 +41,7 @@ public class BlockMesh
 	}
 	private void UpdateMeshData(Vector3 pos, int blockID)
     {
-        bool isTransparent = BlockManager.I.blocktype[blockID].isTransparent;
+        bool isTransparent = BlockManager.I.GetBlockData(blockID).IsTransparent();
         for (int p = 0; p < 6; p++)
 		{
             vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 0]]);
@@ -49,7 +49,7 @@ public class BlockMesh
             vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 2]]);
             vertices.Add(pos + VoxelData.voxelVerts[VoxelData.voxelTris[p, 3]]);
 
-            AddTexture(BlockManager.I.blocktype[blockID].GetTextureFace((BlockType.faceIndex)p));
+            AddTexture(BlockManager.I.GetBlockData(blockID).GetTextureFace((BlockManager.faceIndex)p));
 
             if (!isTransparent)
             {

@@ -2,30 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockSnow : BaseBlock
+public abstract class BaseBlockOreBlock : BaseBlock
 {
+    protected abstract EnumGameData.BlockID id { get; set; }
+    protected abstract (int back, int front, int top, int bottom, int left, int right) texture { get; set; }
+    protected abstract byte needRarity { get; set; }
+
     public override EnumGameData.BlockID ID()
     {
-        return EnumGameData.BlockID.snow;
+        return id;
     }
 
     public override (int back, int front, int top, int bottom, int left, int right) SetTexture()
     {
-        return (4, 4, 4, 4, 4, 4);
+        return texture;
     }
 
     public override byte NeedRarity()
     {
-        return 0;
+        return needRarity;
     }
 
     public override EnumGameData.ItemType EfficientTool()
     {
-        return EnumGameData.ItemType.shovel;
+        return EnumGameData.ItemType.pickaxe;
     }
 
     public override float DestructionTime()
     {
-        return 0.2f;
+        return 5.0f;
     }
 }

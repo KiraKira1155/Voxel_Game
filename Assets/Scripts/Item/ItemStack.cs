@@ -18,7 +18,7 @@ public class ItemStack
         this.blockID = blockID;
         this.amount = amount;
         durability = -1;
-        itemType = EnumGameData.ItemType.Null;
+        itemType = EnumGameData.ItemType.Hand;
         itemID = EnumGameData.ItemID.None;
     }
 

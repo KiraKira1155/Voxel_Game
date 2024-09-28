@@ -30,6 +30,6 @@ public abstract class BaseBlockOre : BaseBlock
 
     public override float DestructionTime()
     {
-        return 2.0f;
+        return 3.0f;
     }
 }
