@@ -7,8 +7,7 @@ public class DebugScreenManager : Singleton<DebugScreenManager>
 {
     private TextMeshPro text;
 
-    private float frameRate;
-    private float timer;
+    private float preTime;
 
     private int worldSizeVoxels;
     private int worldSizeChunks;
@@ -65,18 +64,13 @@ public class DebugScreenManager : Singleton<DebugScreenManager>
 
     private string DebugFPS()
     {
-        if (timer > 0.25f)
-        {
-            frameRate = (int)(1f / Time.unscaledDeltaTime);
-            timer = 0;
-        }
-        else
-        {
-            timer += Time.deltaTime;
-        }
+        float time = Time.realtimeSinceStartup;
+        float dffTime = time - preTime;
+
+        preTime = time;
 
         return
-        string.Format("{0}fps", frameRate.ToString());
+        string.Format("{0}fps {1}Sec", (1.0f / dffTime).ToString(), dffTime.ToString());
     }
 
     private string DebugPlayerPos()
