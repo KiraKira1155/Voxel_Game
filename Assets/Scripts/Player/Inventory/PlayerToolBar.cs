@@ -89,6 +89,10 @@ public class PlayerToolBar
             return EnumGameData.ItemKinds.Hand;
     }
 
+    /// <summary>
+    /// 現在選択中のスロットのアイテムIDを確認
+    /// </summary>
+    /// <returns></returns>
     public EnumGameData.ItemID CheckHaveItemID()
     {
         if (CheckHaveItem())
@@ -97,6 +101,10 @@ public class PlayerToolBar
             return EnumGameData.ItemID.None;
     }
 
+    /// <summary>
+    /// 現在選択中のスロットのブロックIDを確認
+    /// </summary>
+    /// <returns></returns>
     public EnumGameData.BlockID CheckHaveBlockID()
     {
         if (CheckHaveItem())
@@ -105,6 +113,10 @@ public class PlayerToolBar
             return EnumGameData.BlockID.air;
     }
 
+    /// <summary>
+    /// 現在選択中スロットのアイテムの耐久値を使用
+    /// </summary>
+    /// <param name="decreaseDurability"></param>
     public void UseHaveTool(int decreaseDurability)
     {
         if (CheckHaveItem())
@@ -112,6 +124,10 @@ public class PlayerToolBar
                 slot.toolbarSlots[slotIndex].itemSlot.UseTool(decreaseDurability);
     }
 
+    /// <summary>
+    /// 現在選択中スロットのアイテムを使用
+    /// </summary>
+    /// <param name="amount"></param>
     public void UseHaveItem(int amount)
     {
         if (CheckHaveItem())

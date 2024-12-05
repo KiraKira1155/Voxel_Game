@@ -19,8 +19,8 @@ public class BlockMesh
         meshRenderer = thisObj.AddComponent<MeshRenderer>();
 		meshFilter = thisObj.AddComponent<MeshFilter>();
 
-        materials[0] = World.I.material;
-        materials[1] = World.I.transparentMaterial;
+        materials[0] = WorldManager.I.material;
+        materials[1] = WorldManager.I.transparentMaterial;
         meshRenderer.materials = materials;
 
         UpdateMeshData(thisObj.transform.position, (int)blockID);

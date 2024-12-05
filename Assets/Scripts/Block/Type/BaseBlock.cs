@@ -66,4 +66,12 @@ public abstract class BaseBlock : IBaseBlock
         }
     }
 
+    public virtual void RightClickIvent()
+    {
+    }
+
+    public virtual bool CheckRightClickIvent()
+    {
+        return false;
+    }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using static ConfigManager;
 
-public class World : Singleton<World>
+public class WorldManager : Singleton<WorldManager>
 {
     public float seed { get; private set; }
     public BiomeAttributes[] biome;
@@ -164,6 +164,7 @@ public class World : Singleton<World>
                 if (!chunks[x, z].isInit)
                     chunks[x, z].Init();
                 activeChunk.Add(new ChunkCoord(x, z));
+
                 yield return null;
             }
         }
@@ -283,7 +284,6 @@ public class World : Singleton<World>
                     chunks[x, z].CheckModifications();
                 }
             }
-
             yield return null;
         }
     }

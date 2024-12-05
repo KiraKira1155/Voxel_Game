@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst;
 using UnityEngine;
 
 public static class VoxelData
@@ -17,7 +18,7 @@ public static class VoxelData
 		get { return 1f / (float)TextureAtlasSizeInBlocks; }
 	}
 
-	public static readonly Vector3[] voxelVerts = new Vector3[8] {
+    public static readonly Vector3[] voxelVerts = new Vector3[8] {
 
 		new Vector3(0.0f, 0.0f, 0.0f),
 		new Vector3(1.0f, 0.0f, 0.0f),

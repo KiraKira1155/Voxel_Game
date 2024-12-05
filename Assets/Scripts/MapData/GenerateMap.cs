@@ -44,10 +44,10 @@ public class GenerateMap : Singleton<GenerateMap>
 
     public void DoAwake()
     {
-        biomeNum = World.I.biome.Length;
-        biome = World.I.biome;
-        oceanBiomeNum = World.I.oceanBiome.Length;
-        oceanBiome = World.I.oceanBiome;
+        biomeNum = WorldManager.I.biome.Length;
+        biome = WorldManager.I.biome;
+        oceanBiomeNum = WorldManager.I.oceanBiome.Length;
+        oceanBiome = WorldManager.I.oceanBiome;
         seed = ConfigManager.seed;
 
         DebugBiome = new int[biomeNum];

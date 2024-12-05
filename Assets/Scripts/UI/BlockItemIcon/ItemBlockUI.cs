@@ -11,12 +11,11 @@ public class ItemBlockUI : MonoBehaviour
 
     public void DoAwake()
     {
-
         meshRenderer = GetComponent<MeshRenderer>();
         meshFilter = GetComponent<MeshFilter>();
 
-        materials[0] = World.I.material;
-        materials[1] = World.I.transparentMaterial;
+        materials[0] = WorldManager.I.material;
+        materials[1] = WorldManager.I.transparentMaterial;
         meshRenderer.materials = materials;
 
     }

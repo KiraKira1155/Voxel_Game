@@ -7,7 +7,7 @@ public class GameManager : Singleton<GameManager>
     public ConfigManager configManager = new ConfigManager();
 
     [SerializeField] private PlayerManager player;
-    [SerializeField] private World world;
+    [SerializeField] private WorldManager world;
     [SerializeField] private DebugScreenManager debugScreen;
     [SerializeField] private ItemManager item;
     [SerializeField] private BlockManager block;

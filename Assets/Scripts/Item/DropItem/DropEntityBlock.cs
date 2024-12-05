@@ -46,7 +46,7 @@ public class DropEntityBlock : MonoBehaviour
     private void Conduct()
     {
         float gravity = Time.fixedDeltaTime * PlayerStatus.Gravity / 2;
-        if (World.I.CheckForVoxel(new Vector3(thisPos.x, thisPos.y + gravity, thisPos.z)))
+        if (WorldManager.I.CheckForVoxel(new Vector3(thisPos.x, thisPos.y + gravity, thisPos.z)))
         {
             transform.position = new Vector3(thisPos.x, Mathf.FloorToInt(thisPos.y), thisPos.z);
             gravity = 0;
@@ -63,7 +63,7 @@ public class DropEntityBlock : MonoBehaviour
         Vector3 distancePos = playerPos - thisPos;
         if (distancePos.y >= 0)
         {
-            if (!World.I.CheckForVoxel(thisPos + new Vector3(0, speed, 0)))
+            if (!WorldManager.I.CheckForVoxel(thisPos + new Vector3(0, speed, 0)))
             {
                 transform.position += new Vector3(0, Time.fixedDeltaTime * -PlayerStatus.Gravity / 2, 0);
             }
@@ -75,14 +75,14 @@ public class DropEntityBlock : MonoBehaviour
 
         if (distancePos.x < 0)
         {
-            if (!World.I.CheckForVoxel(thisPos + new Vector3(-speed -body, 0, 0)))
+            if (!WorldManager.I.CheckForVoxel(thisPos + new Vector3(-speed -body, 0, 0)))
             {
                 transform.position += new Vector3(-speed, 0, 0);
             }
         }
         else if (distancePos.x > 0)
         {
-            if (!World.I.CheckForVoxel(thisPos + new Vector3(speed + body, 0, 0)))
+            if (!WorldManager.I.CheckForVoxel(thisPos + new Vector3(speed + body, 0, 0)))
             {
                 transform.position += new Vector3(speed, 0, 0);
             }
@@ -90,14 +90,14 @@ public class DropEntityBlock : MonoBehaviour
 
         if (distancePos.z < 0)
         {
-            if (!World.I.CheckForVoxel(thisPos + new Vector3(0, 0, -speed - body)))
+            if (!WorldManager.I.CheckForVoxel(thisPos + new Vector3(0, 0, -speed - body)))
             {
                 transform.position += new Vector3(0, 0, -speed);
             }
         }
         else if (distancePos.z > 0)
         {
-            if (!World.I.CheckForVoxel(thisPos + new Vector3(0, 0, speed + body)))
+            if (!WorldManager.I.CheckForVoxel(thisPos + new Vector3(0, 0, speed + body)))
             {
                 transform.position += new Vector3(0, 0, speed);
             }

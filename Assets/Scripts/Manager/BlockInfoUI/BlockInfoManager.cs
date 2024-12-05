@@ -52,7 +52,7 @@ public class BlockInfoManager : Singleton<BlockInfoManager>
     {
 
         previousHighlightBlockPos = PlayerManager.I.highlightBlock.transform.position;
-        blockID = World.I.CheckForBlockID(previousHighlightBlockPos);
+        blockID = WorldManager.I.CheckForBlockID(previousHighlightBlockPos);
 
         blockIcon.UpdateUI((EnumGameData.BlockID)blockID);
 
@@ -61,7 +61,7 @@ public class BlockInfoManager : Singleton<BlockInfoManager>
         int rearity = (needRearity == 0) ? 0 : needRearity - 1;
         toolIcon.UpdateUI(efficientTool, (EnumGameData.ItemID)rearity);
 
-        destructionTime = PlayerManager.I.playerAgainstBlcks.destructionTime;
+        destructionTime = PlayerManager.I.playerAgainstBlocks.destructionTime;
         destructionTimeUI.value = 0;
 
         InfoText();
@@ -122,7 +122,7 @@ public class BlockInfoManager : Singleton<BlockInfoManager>
 
     private void UpdateBlockInfo()
     {
-        destructionTimeUI.value = PlayerManager.I.playerAgainstBlcks.miningTime / destructionTime;
+        destructionTimeUI.value = PlayerManager.I.playerAgainstBlocks.miningTime / destructionTime;
     }
 
     public void DoUpdate()
@@ -158,7 +158,7 @@ public class BlockInfoManager : Singleton<BlockInfoManager>
             previousSlotIndex = PlayerManager.I.toolBar.CheckSlotIndex();
             previousItem = PlayerManager.I.toolBar.CheckHaveItemID();
         }
-        destructionTime = PlayerManager.I.playerAgainstBlcks.destructionTime;
+        destructionTime = PlayerManager.I.playerAgainstBlocks.destructionTime;
         InfoText();
     }
 

@@ -7,12 +7,15 @@ public class DebugScreenManager : Singleton<DebugScreenManager>
 {
     private TextMeshPro text;
 
+    private const float SIMPLE_FPS_INTERVAL = 0.25f;
+    private float simpleDffTime;
     private float preTime;
+    private float dffTime;
+    private float elapsedTime;
 
     private int worldSizeVoxels;
     private int worldSizeChunks;
 
-    [SerializeField] private Transform highlightBlock; 
     StringBuilder debugText = new StringBuilder(20);
 
     private void Awake()
@@ -37,7 +40,11 @@ public class DebugScreenManager : Singleton<DebugScreenManager>
     {
         debugText.Clear();
 
+        debugText.Append(DebugSimpleFPS());
+        debugText.Append(NewLine());
         debugText.Append(DebugFPS());
+        debugText.Append(NewLine());
+        debugText.Append(DebugFrameSeconds());
         debugText.Append(NewLine());
         debugText.Append(DebugSeed());
         debugText.Append(NewLine());
@@ -54,23 +61,42 @@ public class DebugScreenManager : Singleton<DebugScreenManager>
     private string DebugBlockType()
     {
         string blockName = "null";
-        if (highlightBlock.gameObject.activeSelf)
+        if (PlayerManager.I.highlightBlock.activeSelf)
         {
-            blockName = BlockManager.I.GetBlockData(World.I.CheckForBlockID(highlightBlock.transform.position)).ID().ToString();
+            blockName = BlockManager.I.GetBlockData(WorldManager.I.CheckForBlockID(PlayerManager.I.highlightBlock.transform.position)).ID().ToString();
         }
         return
         string.Format("BlockName: {0}", blockName);
     }
 
+    private string DebugSimpleFPS()
+    {
+        if(elapsedTime >= SIMPLE_FPS_INTERVAL)
+        {
+            elapsedTime = 0.0f;
+            simpleDffTime = dffTime;
+        }
+        return
+        string.Format("{0} fps  {1} Sec  : interval {2}", (1.0f / simpleDffTime).ToString("0.00"), simpleDffTime.ToString("0.00000"), SIMPLE_FPS_INTERVAL);
+    }
+
     private string DebugFPS()
     {
         float time = Time.realtimeSinceStartup;
-        float dffTime = time - preTime;
+        dffTime = time - preTime;
+
+        elapsedTime += dffTime;
 
         preTime = time;
 
         return
-        string.Format("{0}fps {1}Sec", (1.0f / dffTime).ToString(), dffTime.ToString());
+        string.Format("{0} fps", (1.0f / dffTime).ToString("0.00"));
+    }
+
+    private string DebugFrameSeconds()
+    {
+        return
+        string.Format("{0} Sec", dffTime.ToString("0.00000"));
     }
 
     private string DebugPlayerPos()

@@ -7,7 +7,7 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField] BlockInfoManager blockInfoManager;
     private PlayerVision playerVision = new PlayerVision();
     private PlayerMove playerMove = new PlayerMove();
-    public PlayerAgainstBlcks playerAgainstBlcks { get; private set; } = new PlayerAgainstBlcks();
+    public PlayerAgainstBlocks playerAgainstBlocks { get; private set; } = new PlayerAgainstBlocks();
     public PlayerToolBar toolBar { get; private set; } = new PlayerToolBar();
 
     [SerializeField] private GameObject _cam;
@@ -31,7 +31,7 @@ public class PlayerManager : Singleton<PlayerManager>
     [SerializeField] private GameObject cursorSlot;
 
     public PlayerDirection playerDirection;
-    public PlayerAgainstBlcks.CursorFaceDirection cursorFaceDirection;
+    public PlayerAgainstBlocks.CursorFaceDirection cursorFaceDirection;
     [SerializeField] private float viewingAngle;
     public enum PlayerDirection
     {
@@ -59,7 +59,7 @@ public class PlayerManager : Singleton<PlayerManager>
 
     public void DoStart()
     {
-        playerAgainstBlcks.DoStart();
+        playerAgainstBlocks.DoStart();
         slot.DoStart();
         toolBar.DoStart();
         dragAndDropHandlar.DoStart();
@@ -93,7 +93,7 @@ public class PlayerManager : Singleton<PlayerManager>
             playerVision.DoUpdate();
             ViewingAngle();
             playerMove.DoUpdate();
-            playerAgainstBlcks.DoUpdate();
+            playerAgainstBlocks.DoUpdate();
             BlockInfoManager.I.DoUpdate();
             crosshair.SetActive(true);
         }

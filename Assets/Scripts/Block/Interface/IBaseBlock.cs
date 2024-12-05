@@ -34,4 +34,8 @@ public interface IBaseBlock : IBlockData
     abstract bool CheckDirection();
 
     abstract EnumGameData.BlockID GetTextureFace(BlockManager.faceIndex faceIndex);
+
+    abstract void RightClickIvent();
+
+    abstract bool CheckRightClickIvent();
 }

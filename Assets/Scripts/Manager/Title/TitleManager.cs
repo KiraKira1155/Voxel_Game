@@ -28,7 +28,9 @@ public class TitleManager : Singleton<TitleManager>
     [SerializeField] private EndMenu endMenu = new EndMenu();
 
     [SerializeField] private TextMeshProUGUI loadTime;
-    float loadTimeCnt;
+    private float loadTimeCnt;
+    private float startTime;
+    private bool startCnt;
 
     public enum Menu
     {
@@ -132,7 +134,12 @@ public class TitleManager : Singleton<TitleManager>
 
     public void LoadCnt()
     {
-        loadTimeCnt += Time.deltaTime;
+        if (!startCnt)
+        {
+            startCnt = true;
+            startTime = Time.realtimeSinceStartup;
+        }
+        loadTimeCnt = Time.realtimeSinceStartup - startTime;
         loadTime.text = loadTimeCnt.ToString() + "s";
     }
 

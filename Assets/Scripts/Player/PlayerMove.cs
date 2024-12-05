@@ -176,10 +176,10 @@ public class PlayerMove
     private float PlayerDownSpeed(float downSpeed)
     {
         if (
-              (World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x - PlayerStatus.Width, PlayerManager.I.transform.position.y + downSpeed, PlayerManager.I.transform.position.z - PlayerStatus.Width)) && (!left && !back)) ||
-              (World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x + PlayerStatus.Width, PlayerManager.I.transform.position.y + downSpeed, PlayerManager.I.transform.position.z - PlayerStatus.Width)) && (!right && !back)) ||
-              (World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x + PlayerStatus.Width, PlayerManager.I.transform.position.y + downSpeed, PlayerManager.I.transform.position.z + PlayerStatus.Width)) && (!right && !front)) ||
-              (World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x - PlayerStatus.Width, PlayerManager.I.transform.position.y + downSpeed, PlayerManager.I.transform.position.z + PlayerStatus.Width)) && (!left && !front))
+              (WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x - PlayerStatus.Width, PlayerManager.I.transform.position.y + downSpeed, PlayerManager.I.transform.position.z - PlayerStatus.Width)) && (!left && !back)) ||
+              (WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x + PlayerStatus.Width, PlayerManager.I.transform.position.y + downSpeed, PlayerManager.I.transform.position.z - PlayerStatus.Width)) && (!right && !back)) ||
+              (WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x + PlayerStatus.Width, PlayerManager.I.transform.position.y + downSpeed, PlayerManager.I.transform.position.z + PlayerStatus.Width)) && (!right && !front)) ||
+              (WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x - PlayerStatus.Width, PlayerManager.I.transform.position.y + downSpeed, PlayerManager.I.transform.position.z + PlayerStatus.Width)) && (!left && !front))
              )
         {
             PlayerStatus.isGrounded = true;
@@ -194,10 +194,10 @@ public class PlayerMove
     private float PlayerUpSpeed(float upSpeed)
     {
         if (
-              (World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x - PlayerStatus.Width, PlayerManager.I.transform.position.y + PlayerStatus.Height + upSpeed, PlayerManager.I.transform.position.z - PlayerStatus.Width)) && (!left && !back)) ||
-              (World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x + PlayerStatus.Width, PlayerManager.I.transform.position.y + PlayerStatus.Height + upSpeed, PlayerManager.I.transform.position.z - PlayerStatus.Width)) && (!right && !back)) ||
-              (World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x + PlayerStatus.Width, PlayerManager.I.transform.position.y + PlayerStatus.Height + upSpeed, PlayerManager.I.transform.position.z + PlayerStatus.Width)) && (!right && !front)) ||
-              (World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x - PlayerStatus.Width, PlayerManager.I.transform.position.y + PlayerStatus.Height + upSpeed, PlayerManager.I.transform.position.z + PlayerStatus.Width)) && (!left && !front))
+              (WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x - PlayerStatus.Width, PlayerManager.I.transform.position.y + PlayerStatus.Height + upSpeed, PlayerManager.I.transform.position.z - PlayerStatus.Width)) && (!left && !back)) ||
+              (WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x + PlayerStatus.Width, PlayerManager.I.transform.position.y + PlayerStatus.Height + upSpeed, PlayerManager.I.transform.position.z - PlayerStatus.Width)) && (!right && !back)) ||
+              (WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x + PlayerStatus.Width, PlayerManager.I.transform.position.y + PlayerStatus.Height + upSpeed, PlayerManager.I.transform.position.z + PlayerStatus.Width)) && (!right && !front)) ||
+              (WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x - PlayerStatus.Width, PlayerManager.I.transform.position.y + PlayerStatus.Height + upSpeed, PlayerManager.I.transform.position.z + PlayerStatus.Width)) && (!left && !front))
              )
         {
             verticalMomentum = 0; //プレイヤーの頭上にブロックがあるときに落下するように
@@ -214,8 +214,8 @@ public class PlayerMove
         get
         {
             if (
-                World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x, PlayerManager.I.transform.position.y, PlayerManager.I.transform.position.z + PlayerStatus.Width)) ||
-                World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x, PlayerManager.I.transform.position.y + 1f, PlayerManager.I.transform.position.z + PlayerStatus.Width))
+                WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x, PlayerManager.I.transform.position.y, PlayerManager.I.transform.position.z + PlayerStatus.Width)) ||
+                WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x, PlayerManager.I.transform.position.y + 1f, PlayerManager.I.transform.position.z + PlayerStatus.Width))
                 )
                 return true;
             else 
@@ -227,8 +227,8 @@ public class PlayerMove
         get
         {
             if (
-                World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x, PlayerManager.I.transform.position.y, PlayerManager.I.transform.position.z - PlayerStatus.Width)) ||
-                World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x, PlayerManager.I.transform.position.y + 1f, PlayerManager.I.transform.position.z - PlayerStatus.Width))
+                WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x, PlayerManager.I.transform.position.y, PlayerManager.I.transform.position.z - PlayerStatus.Width)) ||
+                WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x, PlayerManager.I.transform.position.y + 1f, PlayerManager.I.transform.position.z - PlayerStatus.Width))
                 )
                 return true;
             else
@@ -240,8 +240,8 @@ public class PlayerMove
         get
         {
             if (
-                World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x + PlayerStatus.Width, PlayerManager.I.transform.position.y, PlayerManager.I.transform.position.z )) ||
-                World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x + PlayerStatus.Width, PlayerManager.I.transform.position.y + 1f, PlayerManager.I.transform.position.z))
+                WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x + PlayerStatus.Width, PlayerManager.I.transform.position.y, PlayerManager.I.transform.position.z )) ||
+                WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x + PlayerStatus.Width, PlayerManager.I.transform.position.y + 1f, PlayerManager.I.transform.position.z))
                 )
                 return true;
             else
@@ -253,8 +253,8 @@ public class PlayerMove
         get
         {
             if (
-                World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x - PlayerStatus.Width, PlayerManager.I.transform.position.y, PlayerManager.I.transform.position.z)) ||
-                World.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x - PlayerStatus.Width, PlayerManager.I.transform.position.y + 1f, PlayerManager.I.transform.position.z))
+                WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x - PlayerStatus.Width, PlayerManager.I.transform.position.y, PlayerManager.I.transform.position.z)) ||
+                WorldManager.I.CheckForVoxel(new Vector3(PlayerManager.I.transform.position.x - PlayerStatus.Width, PlayerManager.I.transform.position.y + 1f, PlayerManager.I.transform.position.z))
                 )
                 return true;
             else

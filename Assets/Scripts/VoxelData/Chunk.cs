@@ -62,11 +62,11 @@ public class Chunk
         meshRenderer = thisObj.AddComponent<MeshRenderer>();
 		meshFilter = thisObj.AddComponent<MeshFilter>();
 
-		materials[0] = World.I.material;
-		materials[1] = World.I.transparentMaterial;
+		materials[0] = WorldManager.I.material;
+		materials[1] = WorldManager.I.transparentMaterial;
 		meshRenderer.materials = materials;
 
-		thisObj.transform.SetParent(World.I.transform);
+		thisObj.transform.SetParent(WorldManager.I.transform);
 		thisObj.name = "Chunk" + coord.x + ", " + coord.z;
 
         task.Wait();
@@ -92,7 +92,7 @@ public class Chunk
             heightMap[(int)voxelPos.x, (int)voxelPos.z] = GenerateMap.I.GetSolidGroundHight(new Vector2(position.x + (int)voxelPos.x, position.z + (int)voxelPos.z), biomeMap[(int)voxelPos.x, (int)voxelPos.z]);
 
 
-        voxelMap[(int)voxelPos.x, (int)voxelPos.y, (int)voxelPos.z] = World.I.GetVoxel(new Vector3((int)voxelPos.x, (int)voxelPos.y, (int)voxelPos.z) + position, biomeMap[(int)voxelPos.x, (int)voxelPos.z], OceanMap[(int)voxelPos.x, (int)voxelPos.z], heightMap[(int)voxelPos.x, (int)voxelPos.z]);
+        voxelMap[(int)voxelPos.x, (int)voxelPos.y, (int)voxelPos.z] = WorldManager.I.GetVoxel(new Vector3((int)voxelPos.x, (int)voxelPos.y, (int)voxelPos.z) + position, biomeMap[(int)voxelPos.x, (int)voxelPos.z], OceanMap[(int)voxelPos.x, (int)voxelPos.z], heightMap[(int)voxelPos.x, (int)voxelPos.z]);
     }
 
     private void PopulateVoxelMap()
@@ -112,7 +112,7 @@ public class Chunk
 			for (int x = 0; x < Width; x++)
 				for (int z = 0; z < Width; z++)
 				{
-                    voxelMap[x, y, z] = World.I.GetVoxel(new Vector3(x, y, z) + position, biomeMap[x, z], OceanMap[x, z], heightMap[x, z]);
+                    voxelMap[x, y, z] = WorldManager.I.GetVoxel(new Vector3(x, y, z) + position, biomeMap[x, z], OceanMap[x, z], heightMap[x, z]);
                 }
 
         isVoxelMapPopulated = true;
@@ -135,6 +135,7 @@ public class Chunk
     public void UpdateChunk()
     {
         mesh.Clear();
+
         var task = Task.Run(() =>
         {
             ClearMeshData();
@@ -220,7 +221,7 @@ public class Chunk
 
             if (!IsVoxelInChunk((int)currentVoxel.x, (int)currentVoxel.y, (int)currentVoxel.z))
             {
-                World.I.GetChunkFromVector3(currentVoxel + position).UpdateChunk();
+                WorldManager.I.GetChunkFromVector3(currentVoxel + position).UpdateChunk();
             }
 		}
 	}
@@ -233,7 +234,7 @@ public class Chunk
 		int z = Mathf.FloorToInt(pos.z);
 
 		if(!IsVoxelInChunk(x, y, z))
-			return World.I.CheckIfVoxelTransparent(pos + position);
+			return WorldManager.I.CheckIfVoxelTransparent(pos + position);
 
 		return BlockManager.I.GetBlockData(voxelMap[x, y, z]).IsTransparent();
 	}
@@ -245,7 +246,7 @@ public class Chunk
 		int z = Mathf.FloorToInt(pos.z);
 
 		if (!IsVoxelInChunk(x, y, z))
-			return World.I.CheckIfVoxelDisplay(pos + position);
+			return WorldManager.I.CheckIfVoxelDisplay(pos + position);
 
 		return BlockManager.I.GetBlockData(voxelMap[x, y, z]).IsDisplay();
 	}
@@ -257,7 +258,7 @@ public class Chunk
         int z = Mathf.FloorToInt(pos.z);
 
         if (!IsVoxelInChunk(x, y, z))
-            return World.I.CheckForBlockID(pos + position);
+            return WorldManager.I.CheckForBlockID(pos + position);
 
         return voxelMap[x, y, z];
     }
